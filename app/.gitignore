@@ -1,4 +1,3 @@
-*.log
 .DS_Store
 .env
 .env.backup
@@ -11,7 +10,7 @@
 /.phpunit.cache
 /.vscode
 /.zed
-/auth.json
+/bootstrap/ssr
 /node_modules
 /public/build
 /public/hot
@@ -19,6 +18,8 @@
 /storage/*.key
 /storage/pail
 /vendor
+auth.json
 Homestead.json
 Homestead.yaml
-Thumbs.db
+npm-debug.log
+yarn-error.log
