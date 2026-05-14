@@ -8,7 +8,9 @@ services:
     restart: unless-stopped
     working_dir: /var/www/html
     volumes:
-      - ./app:/var/www/html:Z
+      - ./app:/var/www/html:z
+      - vendor:/var/www/html/vendor
+      - node_modules:/var/www/html/node_modules
     ports:
       - "8000:8000"
       - "5173:5173"
@@ -22,8 +24,11 @@ services:
         condition: service_healthy
     command: >
       bash -c "
+        chmod a+r .env.docker 2>/dev/null || true
         if [ ! -f .env ]; then cp .env.docker .env; fi
         if grep -qE '^APP_KEY=$' .env; then php artisan key:generate --ansi; fi
+        composer install --no-interaction
+        npm install
         php artisan migrate --graceful --ansi
         npx concurrently -c '#93c5fd,#c4b5fd,#fb7185,#fdba74' 'php artisan serve --host=0.0.0.0' 'php artisan queue:listen --tries=1' 'php artisan pail --timeout=0' 'npm run dev' --names=server,queue,logs,vite
       "
@@ -52,6 +57,10 @@ services:
 
 volumes:
   pgsql-data:
+    driver: local
+  vendor:
+    driver: local
+  node_modules:
     driver: local
 
 networks:
