@@ -1,0 +1,17 @@
+node_modules/
+vendor/
+storage/framework/cache/
+storage/framework/sessions/
+storage/framework/views/
+storage/logs/*
+bootstrap/cache/*
+.phpunit.result.cache
+*.log
+.env
+.git
+.github
+tests
+phpunit.xml
+.eslint*
+.prettier*
+.editorconfig

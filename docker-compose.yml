@@ -1,0 +1,59 @@
+services:
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+      target: dev
+    container_name: centelha-app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./app:/var/www/html
+    ports:
+      - "8000:8000"
+      - "5173:5173"
+    environment:
+      - VITE_HOST=0.0.0.0
+      - VITE_HMR_HOST=localhost
+    env_file:
+      - ./app/.env.docker
+    depends_on:
+      pgsql:
+        condition: service_healthy
+    command: >
+      bash -c "
+        if [ ! -f .env ]; then cp .env.docker .env; fi
+        if grep -qE '^APP_KEY=$' .env; then php artisan key:generate --ansi; fi
+        php artisan migrate --graceful --ansi
+        npx concurrently -c '#93c5fd,#c4b5fd,#fb7185,#fdba74' 'php artisan serve --host=0.0.0.0' 'php artisan queue:listen --tries=1' 'php artisan pail --timeout=0' 'npm run dev' --names=server,queue,logs,vite
+      "
+    networks:
+      - centelha
+
+  pgsql:
+    image: postgres:16-alpine
+    container_name: centelha-pgsql
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: centelha
+      POSTGRES_USER: centelha
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgsql-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U centelha -d centelha"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - centelha
+
+volumes:
+  pgsql-data:
+    driver: local
+
+networks:
+  centelha:
+    driver: bridge

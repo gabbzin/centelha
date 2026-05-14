@@ -15,6 +15,12 @@ export default defineConfig({
         react(),
         tailwindcss(),
     ],
+    server: {
+        host: process.env.VITE_HOST || 'localhost',
+        hmr: {
+            host: process.env.VITE_HMR_HOST || 'localhost',
+        },
+    },
     esbuild: {
         jsx: 'automatic',
     },
