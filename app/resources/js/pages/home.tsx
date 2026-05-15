@@ -4,7 +4,7 @@ import { FinalCardSection } from '@/components/landing/sections/final-card-secti
 import { HeroSection } from '@/components/landing/sections/hero-section';
 import { StepsSection } from '@/components/landing/sections/steps-section';
 import { Logo } from '@/components/logo';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Head, Link } from '@inertiajs/react';
 import { CalendarClock, HandCoins, HeartHandshake } from 'lucide-react';
 import React, { useRef } from 'react';
@@ -109,12 +109,12 @@ export default function Home() {
             </nav>
 
             <div className="flex items-center gap-2">
-              <Button variant={'ghost'} className="hidden rounded-full sm:block">
+              <Link href={route('login')} className={buttonVariants({ variant: 'ghost', className: 'hidden rounded-full sm:inline-flex' })}>
                 Entrar
-              </Button>
-              <Button variant={'default'} className="rounded-full">
+              </Link>
+              <Link href={route('login')} className={buttonVariants({ variant: 'default', className: 'rounded-full' })}>
                 Começar
-              </Button>
+              </Link>
             </div>
           </div>
         </header>
