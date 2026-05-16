@@ -1,6 +1,6 @@
 FROM node:22-bookworm AS node
 
-FROM php:8.2-fpm-bookworm AS base
+FROM php:8.4-fpm-bookworm AS base
 
 RUN apt-get update && apt-get install -y \
     git \
@@ -40,7 +40,7 @@ COPY . .
 
 RUN npm run build
 
-FROM php:8.2-fpm-bookworm AS production
+FROM php:8.4-fpm-bookworm AS production
 
 RUN apt-get update && apt-get install -y \
     libpng-dev \
