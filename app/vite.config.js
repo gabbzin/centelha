@@ -7,7 +7,7 @@ import {
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, '.', '');
+    const env = loadEnv(mode, '.', 'VITE_');
 
     return {
         plugins: [
