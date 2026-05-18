@@ -28,9 +28,10 @@ services:
         if [ ! -f .env ]; then cp .env.docker .env; fi
         if [ ! -f vendor/autoload.php ]; then composer install --no-interaction --prefer-dist; fi
         if [ ! -d node_modules ]; then npm install; fi
+        npm run build
         if grep -qE '^APP_KEY=$' .env; then php artisan key:generate --ansi; fi
         php artisan migrate --graceful --ansi
-        npx concurrently -c '#93c5fd,#c4b5fd,#fb7185,#fdba74' 'php artisan serve --host=0.0.0.0' 'php artisan queue:listen --tries=1' 'php artisan pail --timeout=0' 'npm run dev' --names=server,queue,logs,vite
+        npx concurrently -c '#93c5fd,#c4b5fd,#fb7185' 'php artisan serve --host=0.0.0.0' 'php artisan queue:listen --tries=1' 'php artisan pail --timeout=0' --names=server,queue,logs
       "
     networks:
       - centelha

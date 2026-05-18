@@ -43,7 +43,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
         <Card className="border-0 shadow-[0_20px_60px_-40px_rgba(24,49,84,0.55)]">
           <CardContent className="px-10 py-12">
             <div className="flex flex-col items-center gap-5 text-center">
-              <img src="/logo.svg" alt="Centelha" className="h-24 w-auto" />
+              <img src="/logo.svg" alt="Centelha" className="h-20 w-auto" />
               <div className="space-y-2">
                 <h1 className="text-[22px] font-semibold text-slate-700">Bem-vindo ao Centelha</h1>
                 <p className="text-sm text-slate-400">Acesse sua conta para gerenciar as atividades comunitarias.</p>
