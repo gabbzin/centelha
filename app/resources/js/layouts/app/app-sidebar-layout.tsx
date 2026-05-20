@@ -1,7 +1,7 @@
-import { AppShell } from '@/components/app-shell';
-import { AppSidebar } from@/components/laravel/app-shellebar';
-import { AppSidebarHeader } @/components/laravel/app-sidebaridebar-header';
-import { AppContent } from '@/comp@/components/laravel/app-sidebar-header
+import { AppContent } from '@/components/laravel/app-content';
+import { AppShell } from '@/components/laravel/app-shell';
+import { AppSidebar } from '@/components/laravel/app-sidebar';
+import { AppSidebarHeader } from '@/components/laravel/app-sidebar-header';
 import { type BreadcrumbItem } from '@/types';
 
 export default function AppSidebarLayout({

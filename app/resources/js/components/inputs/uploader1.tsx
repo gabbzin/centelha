@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { useFileUpload } from '@/hooks/inputs/use-file-upload';
+import { Trash2Icon } from 'lucide-react';
 
 export default function Uploader1() {
   const [{ files }, { removeFile, openFileDialog, getInputProps }] = useFileUpload({
@@ -26,23 +27,25 @@ export default function Uploader1() {
             </div>
           )}
         </div>
-        <div className="relative inline-block">
+        <div className="relative inline-flex items-center gap-2">
           <Button aria-haspopup="dialog" variant={'outline'} onClick={openFileDialog}>
             {fileName ? 'Trocar ícone' : 'Carregar Ícone'}
           </Button>
           <input {...getInputProps()} aria-label="Upload image file" className="sr-only" tabIndex={-1} />
+          {fileName && (
+            <div className="inline-flex text-xs">
+              <Button
+                aria-label={`Remove ${fileName}`}
+                variant={'destructive'}
+                size={'icon-lg'}
+                onClick={() => removeFile(files[0]?.id)}
+              >
+                <Trash2Icon />
+              </Button>
+            </div>
+          )}
         </div>
       </div>
-      {fileName && (
-        <div className="inline-flex gap-2 text-xs">
-          <p aria-live="polite" className="text-muted-foreground truncate">
-            {fileName}
-          </p>{' '}
-          <Button aria-label={`Remove ${fileName}`} variant={'destructive'} onClick={() => removeFile(files[0]?.id)}>
-            Remover
-          </Button>
-        </div>
-      )}
     </div>
   );
 }

@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
 import { Head } from '@inertiajs/react';
 import { ArrowLeftIcon, BrushIcon, Plus, Share2Icon, WrenchIcon } from 'lucide-react';
 import { TtIcon } from './Tt-icon';
@@ -53,7 +54,7 @@ export default function ConfiguracoesGerais() {
                     <Uploader2 />
                   </div>
 
-                  <div className="space-y-8">
+                  <div className="space-y-8 md:col-span-2">
                     <div className="space-y-2">
                       <Label>Ícone do Navegador (Favicon)</Label>
                       <div>
@@ -74,18 +75,21 @@ export default function ConfiguracoesGerais() {
                 <div className="space-y-4">
                   <div>
                     <Label>NOME DA PLATAFORMA</Label>
-                    <Input className="mt-2" placeholder="Centelha Administrative System" />
+                    <Input className="border-border mt-2 border" placeholder="Centelha Administrative System" />
                   </div>
 
                   <div>
                     <Label>SLOGAN / DESCRIÇÃO CURTA</Label>
-                    <Input  className="mt-2" placeholder="Gestão inteligente e eficiente de dados." />
+                    <Textarea
+                      className="border-border mt-2 resize-none border"
+                      placeholder="Gestão inteligente e eficiente de dados."
+                    />
                   </div>
 
                   <div>
                     <Label>TEXTO RODAPÉ</Label>
-                    <Input
-                      className="mt-2"
+                    <Textarea
+                      className="border-border mt-2 resize-none border"
                       placeholder="© 2026 Centelha Administrative System. Todos os direitos reservados."
                     />
                   </div>

@@ -23,7 +23,7 @@ export default function Uploader2() {
       <div className="relative">
         {/* Drop area */}
         <div
-          className="border-border has-[input:focus]:border-ring has-[input:focus]:ring-ring/50 data-[dragging=true]:bg-accent/50 relative flex min-h-24 flex-col items-center justify-center overflow-hidden rounded-xl border border-dashed p-4 transition-colors has-[input:focus]:ring-[3px]"
+          className="border-border has-[input:focus]:border-ring has-[input:focus]:ring-ring/50 data-[dragging=true]:bg-accent/50 relative flex min-h-24 flex-col items-center justify-center overflow-hidden rounded-xl border border-dashed p-11 transition-colors has-[input:focus]:ring-[3px]"
           data-dragging={isDragging || undefined}
           onDragEnter={handleDragEnter}
           onDragLeave={handleDragLeave}
