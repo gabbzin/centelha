@@ -1,15 +1,20 @@
+import Uploader1 from '@/components/inputs/uploader1';
+import Uploader2 from '@/components/inputs/uploader2';
 import { Header } from '@/components/layout/header';
 import SettingsPanelCard from '@/components/settings-panel-card';
 import SocialInputRow from '@/components/social-input-row';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Toggle } from '@/components/ui/toggle';
+import { Switch } from '@/components/ui/switch';
 import { Head } from '@inertiajs/react';
-import { ArrowLeftIcon, Plus } from 'lucide-react';
+import { ArrowLeftIcon, BrushIcon, Plus, Share2Icon, WrenchIcon } from 'lucide-react';
 
 export default function ConfiguracoesGerais() {
+  const classIcons = 'size-5';
+
   return (
     <>
       <Head title="Configurações Visuais e Textos" />
@@ -21,9 +26,9 @@ export default function ConfiguracoesGerais() {
           <section className="pb-6">
             <div className="flex items-center gap-2">
               <Button size={'icon-lg'} variant={'destructive'}>
-                <ArrowLeftIcon fontWeight={800} className='size-6' />
+                <ArrowLeftIcon className="size-6" />
               </Button>
-              <h1 className="text-heading text-2xl/8 font-bold tracking-[-0.02em] uppercase">
+              <h1 className="text-heading text-2xl font-bold tracking-[-0.02em] uppercase">
                 CONFIGURAÇÕES VISUAIS E TEXTOS
               </h1>
             </div>
@@ -34,37 +39,37 @@ export default function ConfiguracoesGerais() {
 
           <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
             <div className="lg:col-span-2">
-              <SettingsPanelCard title="Identidade Visual" icon={<svg className="h-4 w-4" />}>
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+              <SettingsPanelCard title="Identidade Visual" icon={<BrushIcon className={classIcons} />}>
+                <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-4">
                   <div className="md:col-span-2">
-                    <div className="border-border rounded-md border border-dashed p-6 text-center">
-                      <div className="text-muted mb-4">Arraste uma imagem ou clique para selecionar</div>
-                      <Button variant="secondary">ALTERAR LOGO</Button>
-                    </div>
+                    <Uploader2 />
                   </div>
 
                   <div className="space-y-4">
-                    <div>
+                    <div className="space-y-2">
                       <Label>Ícone do Navegador (Favicon)</Label>
-                      <Button className="mt-2" variant="outline">
-                        Carregar Ícone
-                      </Button>
+                      <div>
+                        <Uploader1 />
+                      </div>
                     </div>
 
-                    <div>
+                    <div className="space-y-2">
                       <Label>Fonte da Plataforma</Label>
-                      <Input className="mt-2" placeholder="Inter" />
+                      <select name="font" id="font">
+                        <option value="inter">Inter</option>
+                        <option value="roboto">Roboto</option>
+                      </select>
                     </div>
                   </div>
                 </div>
               </SettingsPanelCard>
 
               <div className="mt-4">
-                <SettingsPanelCard title="Redes Sociais" icon={<svg className="h-4 w-4" />}>
+                <SettingsPanelCard title="Redes Sociais" icon={<Share2Icon className={classIcons} />}>
                   <div className="space-y-3">
-                    <SocialInputRow placeholder="https://instagram.com/centelha" />
-                    <SocialInputRow placeholder="https://linkedin.com/company/centelha" />
-                    <SocialInputRow placeholder="URL do YouTube" />
+                    <SocialInputRow network="instagram" placeholder="https://instagram.com/centelha" />
+                    <SocialInputRow network="linkedin" placeholder="https://linkedin.com/company/centelha" />
+                    <SocialInputRow network="youtube" placeholder="URL do YouTube" />
 
                     <Button variant="ghost" className="mt-2 inline-flex items-center gap-2">
                       <Plus className="h-4 w-4" /> ADICIONAR REDE SOCIAL
@@ -72,28 +77,10 @@ export default function ConfiguracoesGerais() {
                   </div>
                 </SettingsPanelCard>
               </div>
-
-              <div className="mt-4">
-                <SettingsPanelCard title="Manutenção da Plataforma" icon={<svg className="h-4 w-4" />}>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-foreground/75 text-sm/5">
-                        Ative esta opção para suspender temporariamente o acesso de usuários comuns à plataforma.
-                        Administradores ainda poderão fazer login.
-                      </p>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <span className="text-foreground/60 text-sm/5">MODO DE MANUTENÇÃO</span>
-                      <Toggle />
-                    </div>
-                  </div>
-                </SettingsPanelCard>
-              </div>
             </div>
 
             <div>
-              <SettingsPanelCard title="Textos da Interface" icon={<svg className="h-4 w-4" />}>
+              <SettingsPanelCard title="Textos da Interface" icon={<svg className={classIcons} />}>
                 <div className="space-y-4">
                   <div>
                     <Label>NOME DA PLATAFORMA</Label>
@@ -109,13 +96,40 @@ export default function ConfiguracoesGerais() {
                     <Label>TEXTO RODAPÉ</Label>
                     <Input
                       className="mt-2"
-                      placeholder="© 2024 Centelha Administrative System. Todos os direitos reservados."
+                      placeholder="© 2026 Centelha Administrative System. Todos os direitos reservados."
                     />
                   </div>
                 </div>
               </SettingsPanelCard>
             </div>
           </section>
+
+          <div className="mt-4">
+            <Card variant={'basic'}>
+              <CardContent className="flex items-start gap-4">
+                <div className="bg-destructive/40 flex items-center justify-center rounded-md p-2">
+                  <WrenchIcon className={`${classIcons} text-destructive scale-x-[-1]`} />
+                </div>
+                <div className="grid w-full max-w-full items-start gap-1 pb-2">
+                  <h3 className="text-heading text-lg font-semibold">Manutenção da Plataforma</h3>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-foreground/75 text-sm">
+                        Ative esta opção para suspender temporariamente o acesso de usuários comuns à plataforma.
+                        <br />
+                        Administradores ainda poderão fazer login.
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <span className="text-foreground/60 text-sm">MODO DE MANUTENÇÃO</span>
+                      <Switch />
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
           <Separator className="my-6" />
 
