@@ -1,5 +1,5 @@
 import { BellIcon, MoonIcon } from 'lucide-react';
-import { Logo } from '../logo';
+import { Logo } from '../laravel/logo';
 import { SidebarMenu } from '../sidebar/sidebar-menu';
 import { Button } from '../ui/button';
 

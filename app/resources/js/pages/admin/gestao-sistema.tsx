@@ -1,5 +1,5 @@
+import { SystemManagementCard } from '@/components/laravel/system-management-card';
 import { Header } from '@/components/layout/header';
-import { SystemManagementCard } from '@/components/system-management-card';
 import { Head } from '@inertiajs/react';
 import { Command, Settings, Users } from 'lucide-react';
 

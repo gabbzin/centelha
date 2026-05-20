@@ -3,7 +3,7 @@ import { FeaturesSection } from '@/components/landing/sections/features-section'
 import { FinalCardSection } from '@/components/landing/sections/final-card-section';
 import { HeroSection } from '@/components/landing/sections/hero-section';
 import { StepsSection } from '@/components/landing/sections/steps-section';
-import { Logo } from '@/components/logo';
+import { Logo } from '@/components/laravel/logo';
 import { buttonVariants } from '@/components/ui/button';
 import { Head, Link } from '@inertiajs/react';
 import { CalendarClock, HandCoins, HeartHandshake } from 'lucide-react';
@@ -109,7 +109,10 @@ export default function Home() {
             </nav>
 
             <div className="flex items-center gap-2">
-              <Link href={route('login')} className={buttonVariants({ variant: 'ghost', className: 'hidden rounded-full sm:inline-flex' })}>
+              <Link
+                href={route('login')}
+                className={buttonVariants({ variant: 'ghost', className: 'hidden rounded-full sm:inline-flex' })}
+              >
                 Entrar
               </Link>
               <Link href={route('login')} className={buttonVariants({ variant: 'default', className: 'rounded-full' })}>

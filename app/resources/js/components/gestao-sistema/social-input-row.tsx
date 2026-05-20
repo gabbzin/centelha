@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Trash } from 'lucide-react';
+import { Trash2Icon } from 'lucide-react';
 import { SocialIcon } from 'react-social-icons';
 
 interface SocialInputRowProps {
@@ -23,19 +23,22 @@ export function SocialInputRow({
       <SocialIcon
         network={network}
         url={`http://${network}.com`}
-        borderRadius={"8px"}
+        borderRadius={'8px'}
         bgColor="#E8E9EA"
         fgColor="#000000"
         style={{
           fontWeight: 'bolder',
         }}
       />
-      <Input value={value} onChange={(e) => onChange?.(e.target.value)} placeholder={placeholder} />
-      <Button variant="ghost" onClick={onDelete} className="h-10 w-10 p-2">
-        <Trash className="h-4 w-4" />
+      <Input
+        value={value}
+        onChange={(e) => onChange?.(e.target.value)}
+        placeholder={placeholder}
+        className="border-border border"
+      />
+      <Button variant="ghost" onClick={onDelete} size={'icon-lg'} className="p-2">
+        <Trash2Icon className="size-4" />
       </Button>
     </div>
   );
 }
-
-export default SocialInputRow;

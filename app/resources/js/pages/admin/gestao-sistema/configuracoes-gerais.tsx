@@ -1,8 +1,9 @@
+import SettingsPanelCard from '@/components/gestao-sistema/settings-panel-card';
+import { SocialInputRow } from '@/components/gestao-sistema/social-input-row';
+import { InputSelect } from '@/components/inputs/input-select';
 import Uploader1 from '@/components/inputs/uploader1';
 import Uploader2 from '@/components/inputs/uploader2';
 import { Header } from '@/components/layout/header';
-import SettingsPanelCard from '@/components/settings-panel-card';
-import SocialInputRow from '@/components/social-input-row';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -11,6 +12,13 @@ import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { Head } from '@inertiajs/react';
 import { ArrowLeftIcon, BrushIcon, Plus, Share2Icon, WrenchIcon } from 'lucide-react';
+import { TtIcon } from './Tt-icon';
+
+const options = [
+  { value: 'geist', label: 'Geist' },
+  { value: 'inter', label: 'Inter' },
+  { value: 'roboto', label: 'Roboto' },
+];
 
 export default function ConfiguracoesGerais() {
   const classIcons = 'size-5';
@@ -40,12 +48,12 @@ export default function ConfiguracoesGerais() {
           <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
             <div className="lg:col-span-2">
               <SettingsPanelCard title="Identidade Visual" icon={<BrushIcon className={classIcons} />}>
-                <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-4">
-                  <div className="md:col-span-2">
+                <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-5">
+                  <div className="md:col-span-3">
                     <Uploader2 />
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="space-y-8">
                     <div className="space-y-2">
                       <Label>Ícone do Navegador (Favicon)</Label>
                       <div>
@@ -55,32 +63,14 @@ export default function ConfiguracoesGerais() {
 
                     <div className="space-y-2">
                       <Label>Fonte da Plataforma</Label>
-                      <select name="font" id="font">
-                        <option value="inter">Inter</option>
-                        <option value="roboto">Roboto</option>
-                      </select>
+                      <InputSelect options={options} />
                     </div>
                   </div>
                 </div>
               </SettingsPanelCard>
-
-              <div className="mt-4">
-                <SettingsPanelCard title="Redes Sociais" icon={<Share2Icon className={classIcons} />}>
-                  <div className="space-y-3">
-                    <SocialInputRow network="instagram" placeholder="https://instagram.com/centelha" />
-                    <SocialInputRow network="linkedin" placeholder="https://linkedin.com/company/centelha" />
-                    <SocialInputRow network="youtube" placeholder="URL do YouTube" />
-
-                    <Button variant="ghost" className="mt-2 inline-flex items-center gap-2">
-                      <Plus className="h-4 w-4" /> ADICIONAR REDE SOCIAL
-                    </Button>
-                  </div>
-                </SettingsPanelCard>
-              </div>
             </div>
-
-            <div>
-              <SettingsPanelCard title="Textos da Interface" icon={<svg className={classIcons} />}>
+            <div className="col-span-1">
+              <SettingsPanelCard title="Textos da Interface" icon={<TtIcon />}>
                 <div className="space-y-4">
                   <div>
                     <Label>NOME DA PLATAFORMA</Label>
@@ -89,7 +79,7 @@ export default function ConfiguracoesGerais() {
 
                   <div>
                     <Label>SLOGAN / DESCRIÇÃO CURTA</Label>
-                    <Input className="mt-2" placeholder="Gestão inteligente e eficiente de dados." />
+                    <Input  className="mt-2" placeholder="Gestão inteligente e eficiente de dados." />
                   </div>
 
                   <div>
@@ -103,6 +93,19 @@ export default function ConfiguracoesGerais() {
               </SettingsPanelCard>
             </div>
           </section>
+          <div className="mt-4">
+            <SettingsPanelCard title="Redes Sociais" icon={<Share2Icon className={classIcons} />}>
+              <div className="space-y-3">
+                <SocialInputRow network="instagram" placeholder="https://instagram.com/centelha" />
+                <SocialInputRow network="linkedin" placeholder="https://linkedin.com/company/centelha" />
+                <SocialInputRow network="youtube" placeholder="URL do YouTube" />
+
+                <Button variant="ghost" className="mt-2 inline-flex items-center gap-2">
+                  <Plus className="h-4 w-4" /> ADICIONAR REDE SOCIAL
+                </Button>
+              </div>
+            </SettingsPanelCard>
+          </div>
 
           <div className="mt-4">
             <Card variant={'basic'}>
