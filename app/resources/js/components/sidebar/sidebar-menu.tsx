@@ -2,8 +2,7 @@ import { cn } from '@/lib/utils';
 import { Link, usePage } from '@inertiajs/react';
 import { MenuIcon } from 'lucide-react';
 import { Button } from '../ui/button';
-import { Separator } from '../ui/separator';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '../ui/sheet';
+import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '../ui/sheet';
 import { BenefityIcon, DashboardIcon, DeliveryIcon, FamilyIcon, ManagementIcon } from './icons';
 
 const LINKS = [
@@ -20,7 +19,7 @@ export function SidebarMenu() {
   const url = usePage().url;
 
   return (
-    <Sheet open={true}>
+    <Sheet>
       <SheetTrigger
         render={
           <Button
@@ -32,11 +31,10 @@ export function SidebarMenu() {
           </Button>
         }
       />
-      <SheetContent side="left">
-        <SheetHeader className="mt-3 py-2">
-          <SheetTitle className={'font-primary text-lg font-semibold'}>Menu de navegação</SheetTitle>
+      <SheetContent side={'right'}>
+        <SheetHeader className="mt-1 border-b border-[#C2C6D2]">
+          <SheetTitle className={'text-lg font-semibold text-[#094785]'}>Menu de navegação</SheetTitle>
         </SheetHeader>
-        <Separator />
         <div className="space-y-2 p-3">
           {LINKS.map(({ id, label, icon: Icon, href }) => (
             <Link
@@ -52,6 +50,15 @@ export function SidebarMenu() {
             </Link>
           ))}
         </div>
+        <SheetFooter className="border-t border-[#C2C6D2] p-4">
+          <div className="ml-2 flex items-center gap-4 rounded-lg p-1">
+            <div className="rounded-lg bg-[#2E5F9E] p-2 text-base font-semibold text-white">TV</div>
+            <div>
+              <h4>Thalita Veras</h4>
+              <p className="text-muted-foreground text-xs">VER PERFIL</p>
+            </div>
+          </div>
+        </SheetFooter>
       </SheetContent>
     </Sheet>
   );
