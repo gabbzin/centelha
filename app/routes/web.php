@@ -7,10 +7,6 @@ Route::get('/', function () {
     return Inertia::render('home');
 })->name('home');
 
-Route::get('gestao-sistema', function () {
-    return Inertia::render('gestao-sistema');
-})->name('gestao-sistema');
-
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
@@ -19,3 +15,4 @@ Route::middleware(['auth'])->group(function () {
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
+require __DIR__.'/admin.php';

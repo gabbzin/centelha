@@ -23,7 +23,7 @@ const cardVariants = cva("flex flex-col rounded-xl border py-5 shadow-sm", {
         "bg-red-50 text-red-700 border-red-200",
         "dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20",
       ),
-      basic: cn("bg-background text-primary border-foreground/15 shadow-md"),
+      basic: cn("bg-background text-foreground border-foreground/15 shadow-md"),
     },
   },
   defaultVariants: {

@@ -2,8 +2,8 @@ import { Head, useForm } from '@inertiajs/react';
 import { Eye, EyeOff, LoaderCircle, Lock, Mail } from 'lucide-react';
 import { FormEventHandler, useState } from 'react';
 
-import InputError from '@/components/input-error';
-import TextLink from '@/components/text-link';
+import InputError from '@/components/laravel/input-error';
+import TextLink from '@/components/laravel/text-link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
