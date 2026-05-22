@@ -7,9 +7,11 @@ Route::get('/', function () {
     return Inertia::render('home');
 })->name('home');
 
-Route::get('gestao-sistema', function () {
-    return Inertia::render('gestao-sistema');
-})->name('gestao-sistema');
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('gestao-sistema', function () {
+        return Inertia::render('gestao-sistema');
+    })->name('gestao-sistema');
+});
 
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', function () {
