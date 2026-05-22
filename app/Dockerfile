@@ -23,7 +23,6 @@ FROM base AS dev
 
 RUN pecl install xdebug && docker-php-ext-enable xdebug
 
-COPY docker/php/php.dev.ini /usr/local/etc/php/conf.d/99-app.ini
 COPY docker/php/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
@@ -48,7 +47,6 @@ RUN npm run build
 
 FROM base AS production
 
-COPY docker/php/php.prod.ini /usr/local/etc/php/conf.d/99-app.ini
 COPY --from=builder /var/www/html /var/www/html
 COPY docker/php/entrypoint.sh /entrypoint.sh
 
