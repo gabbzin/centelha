@@ -1,6 +1,7 @@
-import { BellIcon, MoonIcon } from 'lucide-react';
+import { BellIcon } from 'lucide-react';
 import { Logo } from '../laravel/logo';
 import { SidebarMenu } from '../sidebar/sidebar-menu';
+import { AnimatedThemeToggler } from '../ui/animated-theme-toggler';
 import { Button } from '../ui/button';
 
 export function Header() {
@@ -13,13 +14,7 @@ export function Header() {
         </a>
 
         <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="icon-sm"
-            className="border-foreground/40 text-foreground hover:bg-background h-9 w-10 rounded-lg bg-transparent"
-          >
-            <MoonIcon className="h-4 w-4" />
-          </Button>
+          <AnimatedThemeToggler />
           <Button
             variant="outline"
             size="icon-sm"

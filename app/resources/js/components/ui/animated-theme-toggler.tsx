@@ -3,6 +3,7 @@ import { Moon, Sun } from "lucide-react"
 import { flushSync } from "react-dom"
 
 import { cn } from "@/lib/utils"
+import { Button } from "./button"
 
 export type TransitionVariant =
   | "circle"
@@ -239,15 +240,16 @@ export const AnimatedThemeToggler = ({
   }, [shape, fromCenter, duration, isDark])
 
   return (
-    <button
-      type="button"
+    <Button
       ref={buttonRef}
       onClick={toggleTheme}
-      className={cn(className)}
+      variant="outline"
+      className={cn(className, "border-foreground/40 text-foreground hover:bg-background h-9 w-10 rounded-lg bg-transparent")}
       {...props}
+      size={"icon-sm"}
     >
       {isDark ? <Sun /> : <Moon />}
       <span className="sr-only">Toggle theme</span>
-    </button>
+    </Button>
   )
 }
