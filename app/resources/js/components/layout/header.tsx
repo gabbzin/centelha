@@ -1,5 +1,6 @@
-import { BellIcon, MenuIcon, MoonIcon } from 'lucide-react';
-import { Logo } from '../logo';
+import { BellIcon, MoonIcon } from 'lucide-react';
+import { Logo } from '../laravel/logo';
+import { SidebarMenu } from '../sidebar/sidebar-menu';
 import { Button } from '../ui/button';
 
 export function Header() {
@@ -26,13 +27,7 @@ export function Header() {
           >
             <BellIcon className="h-4 w-4" />
           </Button>
-          <Button
-            variant="outline"
-            size="icon-sm"
-            className="border-foreground/40 text-foreground hover:bg-background h-9 w-10 rounded-lg bg-transparent"
-          >
-            <MenuIcon className="h-4 w-4" />
-          </Button>
+          <SidebarMenu />
         </div>
       </div>
     </header>

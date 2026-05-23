@@ -1,0 +1,5 @@
+export { BenefityIcon } from './benefity-icon';
+export { DashboardIcon } from './dashboard-icon';
+export { DeliveryIcon } from './delivery-icon';
+export { FamilyIcon } from './family-icon';
+export { ManagementIcon } from './management-icon';
