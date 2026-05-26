@@ -1,21 +1,25 @@
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { LayoutBase } from '@/layouts/layout';
-import { BanknoteIcon, MapIcon, UserIcon } from 'lucide-react';
+import { ArchiveIcon, BanknoteIcon, CheckCircle2Icon, MapIcon, UserIcon, UsersIcon } from 'lucide-react';
 
-export default function FamilyInfoPage() {
+interface FamilyInfoPageProps {
+  id: string;
+}
+
+export default function FamilyInfoPage({ id }: FamilyInfoPageProps) {
   return (
     <LayoutBase
       title="Informações da Família"
       titlePage="Detalhes da Família"
       description={
         <div className="flex items-center gap-2">
-          ID: <Badge variant={'gray'}>#F-0842</Badge>
+          ID: <Badge variant={'gray'}>#F-{id}</Badge>
         </div>
       }
     >
-      <div className="grid grid-cols-1 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
         <Card variant={'basic'}>
           <CardContent>
             <div>
@@ -66,15 +70,67 @@ export default function FamilyInfoPage() {
           </CardContent>
         </Card>
 
-        
+        <aside className="grid gap-4">
+          <Card>
+            <CardHeader>
+              <HeadingCard icon={<UsersIcon className="size-4" />} title="Composição Familiar" />
+            </CardHeader>
+            <div className="max-h-42 overflow-y-auto">
+              {membrosMock.map((membro, index) => (
+                <InlineItems key={index} className="border-t p-4 last:pb-0">
+                  <p className="text-lg font-semibold">{membro.nome}</p>
+                  <p className="text-muted-foreground text-xs">{membro.idade} anos</p>
+                </InlineItems>
+              ))}
+            </div>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <HeadingCard icon={<ArchiveIcon className="size-4" />} title="Histórico de Benefícios" primary={false} />
+            </CardHeader>
+            <CardContent className="max-h-42 space-y-4 overflow-y-auto">
+              {beneficiosMock.map((beneficio, index) => (
+                <InlineItems key={index} className="rounded-lg border p-4">
+                  <div className="flex items-center gap-4">
+                    <div className="rounded-md border border-green-900 p-1 text-xs font-bold uppercase">
+                      <CheckCircle2Icon className="size-5 rounded-full bg-green-900 text-white" />
+                    </div>
+                    <p className="text-lg font-semibold">{beneficio.nome}</p>
+                  </div>
+                  <p className="text-muted-foreground text-xs">{beneficio.entregue}</p>
+                </InlineItems>
+              ))}
+            </CardContent>
+          </Card>
+        </aside>
       </div>
     </LayoutBase>
   );
 }
 
-function HeadingCard({ icon, title }: { icon: React.ReactNode; title: string }) {
+const membrosMock = [
+  { nome: 'João', idade: 12 },
+  { nome: 'Maria', idade: 8 },
+  { nome: 'Maria', idade: 8 },
+  { nome: 'Maria', idade: 8 },
+  { nome: 'Maria', idade: 8 },
+  { nome: 'Maria', idade: 8 },
+  { nome: 'Maria', idade: 8 },
+  { nome: 'Maria', idade: 8 },
+];
+
+const beneficiosMock = [
+  { nome: 'Cesta Básica', entregue: '10/10/2025', status: 'Entregue' },
+  { nome: 'Auxilio Gás', entregue: '10/11/2025', status: 'Entregue' },
+  { nome: 'Auxilio Gás', entregue: '10/11/2025', status: 'Entregue' },
+  { nome: 'Auxilio Gás', entregue: '10/11/2025', status: 'Entregue' },
+  { nome: 'Auxilio Gás', entregue: '10/11/2025', status: 'Entregue' },
+];
+
+function HeadingCard({ icon, title, primary = true }: { icon: React.ReactNode; title: string; primary?: boolean }) {
   return (
-    <div className="text-primary mb-4 flex items-center gap-2">
+    <div className={`mb-4 flex items-center gap-2 ${primary ? 'text-primary' : 'text-[#673D00]'}`}>
       {icon}
       <h4 className="text-lg font-semibold uppercase">{title}</h4>
     </div>
@@ -90,6 +146,6 @@ function InfoItem({ className, label, value }: { className?: string; label: stri
   );
 }
 
-function InlineItems({ children }: { children: React.ReactNode }) {
-  return <div className="flex items-center justify-between">{children}</div>;
+function InlineItems({ children, className }: { children: React.ReactNode; className?: string }) {
+  return <div className={`flex items-center justify-between ${className}`}>{children}</div>;
 }
