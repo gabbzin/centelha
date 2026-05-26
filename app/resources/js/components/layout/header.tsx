@@ -6,8 +6,8 @@ import { Button } from '../ui/button';
 
 export function Header() {
   return (
-    <header className="border-border bg-muted border-b">
-      <div className="max-w-lm mx-auto flex items-center justify-between px-8 py-2">
+    <header className="border-border bg-muted border-b px-4">
+      <div className="max-w-lm mx-auto flex items-center justify-between py-2">
         <a href="#" className="flex items-center gap-3.5">
           <Logo width={42} height={46} />
           <span className="text-heading text-[22px] font-bold tracking-[0.01em]">Centelha</span>
