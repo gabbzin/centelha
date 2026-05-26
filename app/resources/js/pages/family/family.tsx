@@ -41,72 +41,72 @@ export default function Family() {
           <FamilyCard
             id="20248842"
             cpf="12345678900"
-            status="Ativo"
-            familyName="Sailva Santos"
+            status="ativo"
+            familyName="Silva Santos"
             membersCount={6}
             location="Jardim Industrial"
           />
           <FamilyCard
             id="20248842"
             cpf="12345678900"
-            status="Ativo"
-            familyName="Sailva Santos"
+            status="ativo"
+            familyName="Silva Santos"
             membersCount={6}
             location="Jardim Industrial"
           />
           <FamilyCard
             id="20248842"
             cpf="12345678900"
-            status="Ativo"
-            familyName="Sailva Santos"
+            status="ativo"
+            familyName="Silva Santos"
             membersCount={6}
             location="Jardim Industrial"
           />
           <FamilyCard
             id="20248842"
             cpf="12345678900"
-            status="Ativo"
-            familyName="Sailva Santos"
+            status="ativo"
+            familyName="Silva Santos"
             membersCount={6}
             location="Jardim Industrial"
           />
           <FamilyCard
             id="20248842"
             cpf="12345678900"
-            status="Ativo"
-            familyName="Sailva Santos"
+            status="ativo"
+            familyName="Silva Santos"
             membersCount={6}
             location="Jardim Industrial"
           />
           <FamilyCard
             id="20248842"
             cpf="12345678900"
-            status="Ativo"
-            familyName="Sailva Santos"
+            status="ativo"
+            familyName="Silva Santos"
             membersCount={6}
             location="Jardim Industrial"
           />
           <FamilyCard
             id="20248842"
             cpf="12345678900"
-            status="Ativo"
-            familyName="Sailva Santos"
+            status="ativo"
+            familyName="Silva Santos"
             membersCount={6}
             location="Jardim Industrial"
           />
           <FamilyCard
             id="20248842"
             cpf="12345678900"
-            status="Ativo"
-            familyName="Sailva Santos"
+            status="ativo"
+            familyName="Silva Santos"
             membersCount={6}
             location="Jardim Industrial"
           />
           <FamilyCard
             id="20248842"
             cpf="12345678900"
-            status="Ativo"
-            familyName="Sailva Santos"
+            status="ativo"
+            familyName="Silva Santos"
             membersCount={6}
             location="Jardim Industrial"
           />

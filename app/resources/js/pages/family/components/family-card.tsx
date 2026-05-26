@@ -1,12 +1,13 @@
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { formatCPF, formatProtocol } from '@/utils/formatters';
-import { Badge, IdCardIcon, MapPinIcon, Trash2Icon, UsersIcon } from 'lucide-react';
+import { IdCardIcon, MapPinIcon, Trash2Icon, UsersIcon } from 'lucide-react';
 
 interface FamilyCardProps {
   id: string;
   cpf: string;
-  status: 'Ativo' | 'Inativo' | 'Aguardando';
+  status: 'ativo' | 'inativo' | 'aguardando';
   familyName: string;
   membersCount: number;
   location: string;
@@ -36,7 +37,7 @@ export function FamilyCard({ id, cpf, status, familyName, membersCount, location
           variant={'outline'}
         >
           Ver Informações
-        </Button>
+        </Button>{' '}
         <Button
           className={
             'border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground px-3 py-5'
