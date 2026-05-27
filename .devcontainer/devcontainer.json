@@ -2,6 +2,8 @@
     "name": "Centelha Dev",
     "dockerComposeFile": "../docker-compose.yml",
     "service": "app",
+    "remoteUser": "node",
+    "updateRemoteUserUID": true,
     "workspaceFolder": "/var/www/html",
     "customizations": {
         "vscode": {
