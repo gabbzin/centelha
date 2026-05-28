@@ -1,13 +1,15 @@
+import { type SharedData } from '@/types';
 import Heading from '@/components/layout/heading';
 import { Main } from '@/components/layout/main';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import { ListFilterIcon, SearchIcon } from 'lucide-react';
 import { FamilyCard } from './components/family-card';
 
 export default function Family() {
+  const { communityCenter } = usePage<SharedData>().props;
   return (
     <>
       <Head title="Módulo Familia" />
@@ -16,7 +18,7 @@ export default function Family() {
         <div className="flex items-center justify-between gap-4">
           <Heading
             title="Gestão de Familias"
-            description="Gerencie e acompanhe o cadastro das famílias atendidas pela rede Centelha"
+            description={`Gerencie e acompanhe o cadastro das famílias atendidas pela rede ${communityCenter?.name ?? 'Centelha'}`}
           />
 
           <Button variant={'default'}>Nova Família +</Button>
