@@ -4,15 +4,16 @@ import { Head } from '@inertiajs/react';
 
 interface LayoutBaseProps {
   children: React.ReactNode;
-  title?: string;
   titlePage: string;
+  tagTitle?: string;
   description?: string | React.ReactNode;
 }
 
-export function LayoutBase({ children, title, titlePage, description }: LayoutBaseProps) {
+export function LayoutBase({ children, tagTitle: title, titlePage, description }: LayoutBaseProps) {
   return (
     <>
       <Head title={title} />
+      {/* O Header já está dentro do Main */}
       <Main>
         <div className="flex items-center justify-between gap-4">
           <Heading title={titlePage} description={description} />

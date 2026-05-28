@@ -11,7 +11,7 @@ interface FamilyInfoPageProps {
 export default function FamilyInfoPage({ id }: FamilyInfoPageProps) {
   return (
     <LayoutBase
-      title="Informações da Família"
+      tagTitle="Informações da Família"
       titlePage="Detalhes da Família"
       description={
         <div className="flex items-center gap-2">
