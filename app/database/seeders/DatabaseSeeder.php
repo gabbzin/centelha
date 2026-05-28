@@ -29,5 +29,9 @@ class DatabaseSeeder extends Seeder
             'fontFamily' => 'Inter',
             'settings' => [],
         ]);
+
+        $this->call([
+            FamilySeeder::class,
+        ]);
     }
 }

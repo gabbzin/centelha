@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\FamilyController;
 
 Route::get('/', function () {
     return Inertia::render('home');
@@ -13,13 +14,8 @@ Route::middleware(['auth'])->group(function () {
     })->name('dashboard');
 });
 
-Route::get('family', function () {
-    return Inertia::render('family/family');
-})->name('family');
-
-Route::get('family/{id}', function ($id) {
-    return Inertia::render('family/[id]/family-info', ['id' => $id]);
-})->name('family.info');
+Route::get('family', [FamilyController::class, 'index'])->name('family');
+Route::get('family/{id}', [FamilyController::class, 'show'])->name('family.info');
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
