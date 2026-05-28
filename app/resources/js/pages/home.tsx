@@ -3,7 +3,7 @@ import { FeaturesSection } from '@/components/landing/sections/features-section'
 import { FinalCardSection } from '@/components/landing/sections/final-card-section';
 import { HeroSection } from '@/components/landing/sections/hero-section';
 import { StepsSection } from '@/components/landing/sections/steps-section';
-import { Logo } from '@/components/laravel/logo';
+import { Logo } from '@/components/logo';
 import { buttonVariants } from '@/components/ui/button';
 import { Head, Link } from '@inertiajs/react';
 import { CalendarClock, HandCoins, HeartHandshake } from 'lucide-react';

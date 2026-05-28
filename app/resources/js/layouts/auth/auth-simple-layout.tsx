@@ -1,4 +1,4 @@
-import AppLogoIcon from '@/components/laravel/app-logo-icon';
+import AppLogoIcon from '@/components/app/app-logo-icon';
 import { Link } from '@inertiajs/react';
 
 interface AuthLayoutProps {

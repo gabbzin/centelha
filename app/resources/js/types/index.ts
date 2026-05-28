@@ -21,10 +21,25 @@ export interface NavItem {
     isActive?: boolean;
 }
 
+export interface CommunityCenter {
+    id: number;
+    name: string;
+    location: string;
+    slogan: string;
+    rodape_text: string;
+    logo_path: string;
+    favicon_path: string;
+    fontFamily: string;
+    settings: Record<string, unknown>;
+    created_at: string;
+    updated_at: string;
+}
+
 export interface SharedData {
     name: string;
     quote: { message: string; author: string };
     auth: Auth;
+    communityCenter: CommunityCenter | null;
     [key: string]: unknown;
 }
 

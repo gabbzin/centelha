@@ -1,5 +1,5 @@
 import { BellIcon } from 'lucide-react';
-import { Logo } from '../laravel/logo';
+import AppLogo from '../app/app-logo';
 import { SidebarMenu } from '../sidebar/sidebar-menu';
 import { AnimatedThemeToggler } from '../ui/animated-theme-toggler';
 import { Button } from '../ui/button';
@@ -7,11 +7,8 @@ import { Button } from '../ui/button';
 export function Header() {
   return (
     <header className="border-border bg-muted border-b px-4">
-      <div className="max-w-lm mx-auto flex items-center justify-between py-2">
-        <a href="#" className="flex items-center gap-3.5">
-          <Logo width={42} height={46} />
-          <span className="text-heading text-[22px] font-bold tracking-[0.01em]">Centelha</span>
-        </a>
+      <div className="max-w-lm mx-auto flex items-center justify-between py-2 px-4">
+        <AppLogo />
 
         <div className="flex items-center gap-2">
           <AnimatedThemeToggler />
