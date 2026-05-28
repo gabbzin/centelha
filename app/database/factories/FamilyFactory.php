@@ -15,7 +15,7 @@ class FamilyFactory extends Factory
             'responsible_birth_date' => fake()->dateTimeBetween('-60 years', '-18 years')->format('Y-m-d'),
             'responsible_phone' => fake()->phoneNumber(),
             'is_active' => true,
-            'total_income' => fake()->randomFloat(2, 500, 3000),
+            'total_income' => fake()->numberBetween(50000, 300000), // Valor em centavos (500,00 a 3000,00)
             'income_source' => fake()->randomElement(['Informal', 'Formal', 'Desempregado']),
             'receives_government_aid' => $aid,
             'government_aid_description' => $aid ? fake()->randomElement(['Bolsa Família', 'Auxílio Gás']) : null,

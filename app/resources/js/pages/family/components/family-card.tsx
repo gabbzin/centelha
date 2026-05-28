@@ -10,7 +10,7 @@ interface FamilyCardProps {
   status: 'ativo' | 'inativo' | 'aguardando';
   familyName: string;
   membersCount: number;
-  location: string;
+  location: string | undefined;
 }
 
 export function FamilyCard({ id, cpf, status, familyName, membersCount, location }: FamilyCardProps) {
@@ -28,7 +28,7 @@ export function FamilyCard({ id, cpf, status, familyName, membersCount, location
         <ul className="space-y-3">
           <InfoCardItem icon={<IdCardIcon className={sizeIcons} />} text={formatCPF(cpf)} />
           <InfoCardItem icon={<UsersIcon className={sizeIcons} />} text={`${membersCount} membros`} />
-          <InfoCardItem icon={<MapPinIcon className={sizeIcons} />} text={location} />
+          <InfoCardItem icon={<MapPinIcon className={sizeIcons} />} text={location || 'Endereço não informado'} />
         </ul>
       </CardContent>
       <CardFooter className="mt-2 flex items-center gap-4 *:rounded-md">

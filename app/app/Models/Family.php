@@ -17,7 +17,7 @@ class Family extends Model
             'responsible_birth_date' => 'date',
             'is_active' => 'boolean',
             'receives_government_aid' => 'boolean',
-            'total_income' => 'decimal:2',
+            'total_income' => 'integer',
         ];
     }
 

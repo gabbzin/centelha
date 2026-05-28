@@ -13,7 +13,8 @@ class AddressFactory extends Factory
             'street' => fake()->streetName(),
             'number' => fake()->buildingNumber(),
             'neighborhood' => fake()->citySuffix(),
-            'city_state' => fake()->city() . ' / ' . fake()->stateAbbr(),
+            'city' => fake()->city(),
+            'state' => fake()->stateAbbr(),
         ];
     }
 }

@@ -43,6 +43,26 @@ export interface SharedData {
     [key: string]: unknown;
 }
 
+export interface PaginatedData<T> {
+    current_page: number;
+    data: T[];
+    first_page_url: string;
+    from: number | null;
+    last_page: number;
+    last_page_url: string;
+    links: {
+        url: string | null;
+        label: string;
+        active: boolean;
+    }[];
+    next_page_url: string | null;
+    path: string;
+    per_page: number;
+    prev_page_url: string | null;
+    to: number | null;
+    total: number;
+}
+
 export interface User {
     id: number;
     name: string;
@@ -52,4 +72,59 @@ export interface User {
     created_at: string;
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
+}
+
+export interface SpecificNeed {
+    id: number;
+    name: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface FamilyMember {
+    id: number;
+    family_id: number;
+    name: string;
+    birth_date: string | null;
+    relationship: string;
+    cpf: string | null;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Address {
+    id: number;
+    family_id: number;
+    zipcode: string | null;
+    street: string;
+    number: string | null;
+    neighborhood: string;
+    city: string;
+    state: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Family {
+    id: number;
+    responsible_name: string;
+    responsible_cpf: string;
+    responsible_birth_date: string;
+    responsible_phone: string;
+    responsible_email: string | null;
+    is_active: boolean;
+    total_income: number; // Decimal returns as string or number depending on DB driver, but usually number in frontend
+    income_source: string | null;
+    receives_government_aid: boolean;
+    government_aid_description: string | null;
+    housing_condition: string | null;
+    general_observations: string | null;
+    created_at: string;
+    updated_at: string;
+    
+    // Relacionamentos (carregados via Eager Loading 'with')
+    address?: Address;
+    members?: FamilyMember[];
+    members_count?: number; // Contagem adicionada pelo withCount()
+    specific_needs?: SpecificNeed[];
 }

@@ -1,14 +1,18 @@
-import { type SharedData } from '@/types';
 import Heading from '@/components/layout/heading';
 import { Main } from '@/components/layout/main';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
+import { type Family, type PaginatedData, type SharedData } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import { ListFilterIcon, SearchIcon } from 'lucide-react';
 import { FamilyCard } from './components/family-card';
 
-export default function Family() {
+interface FamilyProps {
+  families: PaginatedData<Family>;
+}
+
+export default function Family({ families }: FamilyProps) {
   const { communityCenter } = usePage<SharedData>().props;
   return (
     <>
@@ -40,78 +44,17 @@ export default function Family() {
         </Card>
 
         <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <FamilyCard
-            id="20248842"
-            cpf="12345678900"
-            status="ativo"
-            familyName="Silva Santos"
-            membersCount={6}
-            location="Jardim Industrial"
-          />
-          <FamilyCard
-            id="20248842"
-            cpf="12345678900"
-            status="ativo"
-            familyName="Silva Santos"
-            membersCount={6}
-            location="Jardim Industrial"
-          />
-          <FamilyCard
-            id="20248842"
-            cpf="12345678900"
-            status="ativo"
-            familyName="Silva Santos"
-            membersCount={6}
-            location="Jardim Industrial"
-          />
-          <FamilyCard
-            id="20248842"
-            cpf="12345678900"
-            status="ativo"
-            familyName="Silva Santos"
-            membersCount={6}
-            location="Jardim Industrial"
-          />
-          <FamilyCard
-            id="20248842"
-            cpf="12345678900"
-            status="ativo"
-            familyName="Silva Santos"
-            membersCount={6}
-            location="Jardim Industrial"
-          />
-          <FamilyCard
-            id="20248842"
-            cpf="12345678900"
-            status="ativo"
-            familyName="Silva Santos"
-            membersCount={6}
-            location="Jardim Industrial"
-          />
-          <FamilyCard
-            id="20248842"
-            cpf="12345678900"
-            status="ativo"
-            familyName="Silva Santos"
-            membersCount={6}
-            location="Jardim Industrial"
-          />
-          <FamilyCard
-            id="20248842"
-            cpf="12345678900"
-            status="ativo"
-            familyName="Silva Santos"
-            membersCount={6}
-            location="Jardim Industrial"
-          />
-          <FamilyCard
-            id="20248842"
-            cpf="12345678900"
-            status="ativo"
-            familyName="Silva Santos"
-            membersCount={6}
-            location="Jardim Industrial"
-          />
+          {families.data.map((family) => (
+            <FamilyCard
+              id={family.id.toString()}
+              key={family.id}
+              cpf={family.responsible_cpf}
+              status={family.is_active ? 'ativo' : 'inativo'}
+              familyName={family.responsible_name}
+              membersCount={family.members_count || 0}
+              location={family.address?.neighborhood}
+            />
+          ))}
         </div>
       </Main>
     </>

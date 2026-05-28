@@ -19,7 +19,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             
             // Dados Socioeconômicos
-            $table->decimal('total_income', 10, 2)->default(0);
+            $table->integer('total_income')->default(0); // Valor em centavos
             $table->string('income_source')->nullable(); // Ex: Informal, Formal
             $table->boolean('receives_government_aid')->default(false);
             $table->string('government_aid_description')->nullable(); // Ex: Bolsa Família

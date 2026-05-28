@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('street');
             $table->string('number')->nullable();
             $table->string('neighborhood');
-            $table->string('city_state'); // Ex: São Paulo / SP
+            $table->string('city');
+            $table->string('state', 2); // UF, ex: SP, RJ
             
             $table->timestamps();
         });

@@ -2,13 +2,17 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { LayoutBase } from '@/layouts/layout';
+import { Family } from '@/types';
+import { calcAge } from '@/utils/calcAge';
+import { formatBRL } from '@/utils/formatters';
 import { ArchiveIcon, BanknoteIcon, CheckCircle2Icon, MapIcon, UserIcon, UsersIcon } from 'lucide-react';
 
 interface FamilyInfoPageProps {
   id: string;
+  family: Family;
 }
 
-export default function FamilyInfoPage({ id }: FamilyInfoPageProps) {
+export default function FamilyInfoPage({ id, family }: FamilyInfoPageProps) {
   return (
     <LayoutBase
       tagTitle="Informações da Família"
@@ -26,20 +30,20 @@ export default function FamilyInfoPage({ id }: FamilyInfoPageProps) {
               <section>
                 <HeadingCard icon={<UserIcon className="size-4" />} title="Informações Pessoais" />
 
-                <InfoItem label="Nome do responsável" value="Mariana Silva" />
+                <InfoItem label="Nome do responsável" value={family.responsible_name} />
                 <InlineItems>
-                  <InfoItem label="CPF" value="123.456.***-00" />
+                  <InfoItem label="CPF" value={family.responsible_cpf} />
                   <InfoItem
                     className="flex flex-col items-end"
                     label="Status"
                     value={
                       <Badge variant={'success'} className="rounded-sm border-green-800 px-4 font-bold uppercase">
-                        Ativo
+                        {family.is_active ? 'Ativo' : 'Inativo'}
                       </Badge>
                     }
                   />
                 </InlineItems>
-                <InfoItem label="Telefone" value="(11) 99999-9999" />
+                <InfoItem label="Telefone" value={family.responsible_phone} />
               </section>
 
               <Separator className={'my-1'} />
@@ -48,9 +52,10 @@ export default function FamilyInfoPage({ id }: FamilyInfoPageProps) {
                 <HeadingCard icon={<BanknoteIcon className="size-4" />} title="Dados Socioeconômicos" />
 
                 <InlineItems>
-                  <InfoItem label="Recebe Auxílio" value="Sim" />
-                  <InfoItem label="Tipo de moradia" value="Alugada" />
-                  <InfoItem label="Fonte de Renda Principal" value="Emprego Informal" />
+                  <InfoItem label="Recebe Auxílio" value={family.receives_government_aid ? 'Sim' : 'Não'} />
+                  <InfoItem label="Tipo de moradia" value={family.housing_condition} />
+                  <InfoItem label="Fonte de Renda Principal" value={family.income_source} />
+                  <InfoItem label="Renda total" value={formatBRL(family.total_income)} />
                 </InlineItems>
               </section>
 
@@ -59,11 +64,11 @@ export default function FamilyInfoPage({ id }: FamilyInfoPageProps) {
               <section>
                 <HeadingCard icon={<MapIcon className="size-4" />} title="Endereço Residencial" />
 
-                <InfoItem label="Logradouro" value="Rua das Palmeiras, 142" />
-                <InfoItem label="Bairro / Comunidade" value="Jardim das Flores" />
+                <InfoItem label="Logradouro" value={family.address?.street} />
+                <InfoItem label="Bairro / Comunidade" value={family.address?.neighborhood} />
                 <InlineItems>
-                  <InfoItem label="CEP" value="01310-100" />
-                  <InfoItem label="Cidade/UF" value="São Paulo / SP" />
+                  <InfoItem label="CEP" value={family.address?.zipcode} />
+                  <InfoItem label="Cidade/UF" value={`${family.address?.city}/${family.address?.state}`} />
                 </InlineItems>
               </section>
             </div>
@@ -76,10 +81,12 @@ export default function FamilyInfoPage({ id }: FamilyInfoPageProps) {
               <HeadingCard icon={<UsersIcon className="size-4" />} title="Composição Familiar" />
             </CardHeader>
             <div className="max-h-42 overflow-y-auto">
-              {membrosMock.map((membro, index) => (
+              {family.members?.map((membro, index) => (
                 <InlineItems key={index} className="border-t p-4 last:pb-0">
-                  <p className="text-lg font-semibold">{membro.nome}</p>
-                  <p className="text-muted-foreground text-xs">{membro.idade} anos</p>
+                  <p className="text-lg font-semibold">{membro.name}</p>
+                  <p className="text-muted-foreground text-xs">
+                    {membro.birth_date ? `${calcAge(new Date(), membro.birth_date)} anos` : 'Não informado'}
+                  </p>
                 </InlineItems>
               ))}
             </div>
@@ -108,17 +115,6 @@ export default function FamilyInfoPage({ id }: FamilyInfoPageProps) {
     </LayoutBase>
   );
 }
-
-const membrosMock = [
-  { nome: 'João', idade: 12 },
-  { nome: 'Maria', idade: 8 },
-  { nome: 'Maria', idade: 8 },
-  { nome: 'Maria', idade: 8 },
-  { nome: 'Maria', idade: 8 },
-  { nome: 'Maria', idade: 8 },
-  { nome: 'Maria', idade: 8 },
-  { nome: 'Maria', idade: 8 },
-];
 
 const beneficiosMock = [
   { nome: 'Cesta Básica', entregue: '10/10/2025', status: 'Entregue' },
