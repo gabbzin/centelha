@@ -38,6 +38,7 @@ class FamilyController extends Controller
         $family = Family::with(['address', 'members', 'specificNeeds'])->findOrFail($id);
 
         return Inertia::render('family/[id]/family-info', [
+            'backUrl' => url()->previous(),
             'id' => $id,
             'family' => $family
         ]);

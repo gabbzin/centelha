@@ -11,16 +11,13 @@ class Family extends Model
 
     protected $guarded = ['id'];
 
-    protected function casts(): array
-    {
-        return [
-            'responsible_birth_date' => 'date',
-            'is_active' => 'boolean',
-            'receives_government_aid' => 'boolean',
-            'total_income' => 'integer',
-        ];
-    }
-
+    protected $casts = [
+        'responsible_birth_date' => 'date',
+        'is_active' => 'boolean',
+        'receives_government_aid' => 'boolean',
+        'total_income' => 'integer',
+        'responsible_cpf' => \App\Casts\MaskedCpf::class,
+    ];
     public function address()
     {
         return $this->hasOne(Address::class);

@@ -11,13 +11,10 @@ class FamilyMember extends Model
 
     protected $guarded = ['id'];
 
-    protected function casts(): array
-    {
-        return [
-            'birth_date' => 'date',
-        ];
-    }
-
+    protected $casts = [
+        'birth_date' => 'date',
+        'cpf' => \App\Casts\MaskedCpf::class,
+    ];
     public function family()
     {
         return $this->belongsTo(Family::class);
