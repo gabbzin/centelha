@@ -1,43 +1,60 @@
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { LayoutBase } from '@/layouts/layout';
 import { Family } from '@/types';
 import { calcAge } from '@/utils/calcAge';
 import { formatBRL } from '@/utils/formatters';
-import { ArchiveIcon, BanknoteIcon, CheckCircle2Icon, MapIcon, UserIcon, UsersIcon } from 'lucide-react';
-
+import {
+  ArchiveIcon,
+  ArrowLeftIcon,
+  BanknoteIcon,
+  CheckCircle2Icon,
+  MapIcon,
+  PlusIcon,
+  UserIcon,
+  UsersIcon,
+} from 'lucide-react';
 interface FamilyInfoPageProps {
   id: string;
   family: Family;
 }
-
 export default function FamilyInfoPage({ id, family }: FamilyInfoPageProps) {
   return (
     <LayoutBase
-      tagTitle="Informações da Família"
-      titlePage="Detalhes da Família"
       description={
         <div className="flex items-center gap-2">
           ID: <Badge variant={'gray'}>#F-{id}</Badge>
         </div>
       }
+      tagTitle="Informações da Família"
+      titlePage="Detalhes da Família"
     >
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
         <Card variant={'basic'}>
           <CardContent>
             <div>
               <section>
-                <HeadingCard icon={<UserIcon className="size-4" />} title="Informações Pessoais" />
+                <HeadingCard
+                  icon={<UserIcon className="size-4" />}
+                  title="Informações Pessoais"
+                />
 
-                <InfoItem label="Nome do responsável" value={family.responsible_name} />
+                <InfoItem
+                  label="Nome do responsável"
+                  value={family.responsible_name}
+                />
                 <InlineItems>
                   <InfoItem label="CPF" value={family.responsible_cpf} />
                   <InfoItem
                     className="flex flex-col items-end"
                     label="Status"
                     value={
-                      <Badge variant={'success'} className="rounded-sm border-green-800 px-4 font-bold uppercase">
+                      <Badge
+                        className="rounded-sm border-green-800 px-4 font-bold uppercase"
+                        variant={'success'}
+                      >
                         {family.is_active ? 'Ativo' : 'Inativo'}
                       </Badge>
                     }
@@ -49,26 +66,50 @@ export default function FamilyInfoPage({ id, family }: FamilyInfoPageProps) {
               <Separator className={'my-1'} />
 
               <section>
-                <HeadingCard icon={<BanknoteIcon className="size-4" />} title="Dados Socioeconômicos" />
+                <HeadingCard
+                  icon={<BanknoteIcon className="size-4" />}
+                  title="Dados Socioeconômicos"
+                />
 
                 <InlineItems>
-                  <InfoItem label="Recebe Auxílio" value={family.receives_government_aid ? 'Sim' : 'Não'} />
-                  <InfoItem label="Tipo de moradia" value={family.housing_condition} />
-                  <InfoItem label="Fonte de Renda Principal" value={family.income_source} />
-                  <InfoItem label="Renda total" value={formatBRL(family.total_income)} />
+                  <InfoItem
+                    label="Recebe Auxílio"
+                    value={family.receives_government_aid ? 'Sim' : 'Não'}
+                  />
+                  <InfoItem
+                    label="Tipo de moradia"
+                    value={family.housing_condition}
+                  />
+                  <InfoItem
+                    label="Fonte de Renda Principal"
+                    value={family.income_source}
+                  />
+                  <InfoItem
+                    label="Renda total"
+                    value={formatBRL(family.total_income)}
+                  />
                 </InlineItems>
               </section>
 
               <Separator className={'my-1'} />
 
               <section>
-                <HeadingCard icon={<MapIcon className="size-4" />} title="Endereço Residencial" />
+                <HeadingCard
+                  icon={<MapIcon className="size-4" />}
+                  title="Endereço Residencial"
+                />
 
                 <InfoItem label="Logradouro" value={family.address?.street} />
-                <InfoItem label="Bairro / Comunidade" value={family.address?.neighborhood} />
+                <InfoItem
+                  label="Bairro / Comunidade"
+                  value={family.address?.neighborhood}
+                />
                 <InlineItems>
                   <InfoItem label="CEP" value={family.address?.zipcode} />
-                  <InfoItem label="Cidade/UF" value={`${family.address?.city}/${family.address?.state}`} />
+                  <InfoItem
+                    label="Cidade/UF"
+                    value={`${family.address?.city}/${family.address?.state}`}
+                  />
                 </InlineItems>
               </section>
             </div>
@@ -78,14 +119,19 @@ export default function FamilyInfoPage({ id, family }: FamilyInfoPageProps) {
         <aside className="grid gap-4">
           <Card>
             <CardHeader>
-              <HeadingCard icon={<UsersIcon className="size-4" />} title="Composição Familiar" />
+              <HeadingCard
+                icon={<UsersIcon className="size-4" />}
+                title="Composição Familiar"
+              />
             </CardHeader>
             <div className="max-h-42 overflow-y-auto">
               {family.members?.map((membro, index) => (
                 <InlineItems key={index} className="border-t p-4 last:pb-0">
                   <p className="text-lg font-semibold">{membro.name}</p>
                   <p className="text-muted-foreground text-xs">
-                    {membro.birth_date ? `${calcAge(new Date(), membro.birth_date)} anos` : 'Não informado'}
+                    {membro.birth_date
+                      ? `${calcAge(new Date(), membro.birth_date)} anos`
+                      : 'Não informado'}
                   </p>
                 </InlineItems>
               ))}
@@ -94,7 +140,11 @@ export default function FamilyInfoPage({ id, family }: FamilyInfoPageProps) {
 
           <Card>
             <CardHeader>
-              <HeadingCard icon={<ArchiveIcon className="size-4" />} title="Histórico de Benefícios" primary={false} />
+              <HeadingCard
+                icon={<ArchiveIcon className="size-4" />}
+                primary={false}
+                title="Histórico de Benefícios"
+              />
             </CardHeader>
             <CardContent className="max-h-42 space-y-4 overflow-y-auto">
               {beneficiosMock.map((beneficio, index) => (
@@ -105,35 +155,81 @@ export default function FamilyInfoPage({ id, family }: FamilyInfoPageProps) {
                     </div>
                     <p className="text-lg font-semibold">{beneficio.nome}</p>
                   </div>
-                  <p className="text-muted-foreground text-xs">{beneficio.entregue}</p>
+                  <p className="text-muted-foreground text-xs">
+                    {beneficio.entregue}
+                  </p>
                 </InlineItems>
               ))}
             </CardContent>
           </Card>
         </aside>
       </div>
+
+      <footer className="mt-12 flex items-center gap-4 justify-end">
+        <Button onClick={() => window.history.back()} variant={'outline'}>
+          <ArrowLeftIcon /> Voltar
+        </Button>
+        <Button variant={'primary'}>
+          <PlusIcon /> Registrar nova entrega
+        </Button>
+      </footer>
     </LayoutBase>
   );
 }
-
 const beneficiosMock = [
-  { nome: 'Cesta Básica', entregue: '10/10/2025', status: 'Entregue' },
-  { nome: 'Auxilio Gás', entregue: '10/11/2025', status: 'Entregue' },
-  { nome: 'Auxilio Gás', entregue: '10/11/2025', status: 'Entregue' },
-  { nome: 'Auxilio Gás', entregue: '10/11/2025', status: 'Entregue' },
-  { nome: 'Auxilio Gás', entregue: '10/11/2025', status: 'Entregue' },
+  {
+    nome: 'Cesta Básica',
+    entregue: '10/10/2025',
+    status: 'Entregue',
+  },
+  {
+    nome: 'Auxilio Gás',
+    entregue: '10/11/2025',
+    status: 'Entregue',
+  },
+  {
+    nome: 'Auxilio Gás',
+    entregue: '10/11/2025',
+    status: 'Entregue',
+  },
+  {
+    nome: 'Auxilio Gás',
+    entregue: '10/11/2025',
+    status: 'Entregue',
+  },
+  {
+    nome: 'Auxilio Gás',
+    entregue: '10/11/2025',
+    status: 'Entregue',
+  },
 ];
-
-function HeadingCard({ icon, title, primary = true }: { icon: React.ReactNode; title: string; primary?: boolean }) {
+function HeadingCard({
+  icon,
+  title,
+  primary = true,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  primary?: boolean;
+}) {
   return (
-    <div className={`mb-4 flex items-center gap-2 ${primary ? 'text-primary' : 'text-[#673D00]'}`}>
+    <div
+      className={`mb-4 flex items-center gap-2 ${primary ? 'text-primary' : 'text-[#673D00]'}`}
+    >
       {icon}
       <h4 className="text-lg font-semibold uppercase">{title}</h4>
     </div>
   );
 }
-
-function InfoItem({ className, label, value }: { className?: string; label: string; value: string | React.ReactNode }) {
+function InfoItem({
+  className,
+  label,
+  value,
+}: {
+  className?: string;
+  label: string;
+  value: string | React.ReactNode;
+}) {
   return (
     <div className={`mb-2 ${className}`}>
       <h6 className="text-muted-foreground text-xs uppercase">{label}</h6>
@@ -141,7 +237,16 @@ function InfoItem({ className, label, value }: { className?: string; label: stri
     </div>
   );
 }
-
-function InlineItems({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={`flex items-center justify-between ${className}`}>{children}</div>;
+function InlineItems({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={`flex items-center justify-between ${className}`}>
+      {children}
+    </div>
+  );
 }

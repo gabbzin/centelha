@@ -8,7 +8,7 @@ import {
   InputGroupInput,
 } from '@/components/ui/input-group';
 import { type Family, type PaginatedData, type SharedData } from '@/types';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import { ListFilterIcon, SearchIcon } from 'lucide-react';
 import { FamilyCard } from './components/family-card';
 interface FamilyProps {
@@ -27,7 +27,12 @@ export default function Family({ families }: FamilyProps) {
             title="Gestão de Familias"
           />
 
-          <Button variant={'default'}>Nova Família +</Button>
+          <Button
+            onClick={() => router.visit('/family/register')}
+            variant={'default'}
+          >
+            Nova Família +
+          </Button>
         </div>
 
         <Card variant={'basic'}>
