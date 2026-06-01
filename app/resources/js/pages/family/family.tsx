@@ -29,6 +29,7 @@ export default function Family({ families }: FamilyProps) {
           />
 
           <Button
+            className={'uppercase'}
             onClick={() => router.visit('/family/register')}
             variant={'default'}
           >
@@ -64,7 +65,11 @@ export default function Family({ families }: FamilyProps) {
             />
           ))}
         </div>
-        <PaginationConsul links={families.links} prev_page_url={families.prev_page_url} next_page_url={families.next_page_url} />
+        <PaginationConsul
+          links={families.links}
+          next_page_url={families.next_page_url}
+          prev_page_url={families.prev_page_url}
+        />
       </Main>
     </>
   );
