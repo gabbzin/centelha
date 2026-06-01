@@ -16,7 +16,7 @@ class FamilyController extends Controller
         // Trazendo as famílias paginadas, com relacionamentos básicos e a contagem dos membros
         $families = Family::with(['address', 'specificNeeds'])
             ->withCount('members')
-            ->paginate(10);
+            ->paginate(6);
 
         // Recalculando a contagem dos membros, pra contar com o responsável
         $families->getCollection()->transform(function ($family) {

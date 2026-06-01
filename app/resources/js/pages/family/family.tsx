@@ -11,6 +11,7 @@ import { type Family, type PaginatedData, type SharedData } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
 import { ListFilterIcon, SearchIcon } from 'lucide-react';
 import { FamilyCard } from './components/family-card';
+import { PaginationConsul } from '@/components/layout/pagination';
 interface FamilyProps {
   families: PaginatedData<Family>;
 }
@@ -63,6 +64,7 @@ export default function Family({ families }: FamilyProps) {
             />
           ))}
         </div>
+        <PaginationConsul links={families.links} prev_page_url={families.prev_page_url} next_page_url={families.next_page_url} />
       </Main>
     </>
   );
