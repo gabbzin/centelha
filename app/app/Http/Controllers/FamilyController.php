@@ -13,10 +13,16 @@ class FamilyController extends Controller
      */
     public function index()
     {
-        // Trazendo as famílias paginadas, com relacionamentos básicos e a CONTAGEM de membros
+        // Trazendo as famílias paginadas, com relacionamentos básicos e a contagem dos membros
         $families = Family::with(['address', 'specificNeeds'])
             ->withCount('members')
             ->paginate(10);
+
+        // Recalculando a contagem dos membros, pra contar com o responsável
+        $families->getCollection()->transform(function ($family) {
+            $family->total_members_count = ($family->members_count ?? 0) + 1;
+            return $family;
+        });
 
         return Inertia::render('family/family', [
             'families' => $families

@@ -1,0 +1,55 @@
+.swal2-title {
+  font-size: 24px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #0F172A;
+}
+
+.confirm-button-success {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 12px;
+  font-weight: bold;
+  color: white;
+  background-color: #10B981;
+}
+
+.confirm-button-success:hover {
+  background-color: #059669;
+}
+
+.confirm-button-error {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 12px;
+  font-weight: bold;
+  color: white;
+  background-color: #EF4444;
+}
+
+.confirm-button-error:hover {
+  background-color: #DC2626;
+}
+
+.confirm-button-info {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 12px;
+  font-weight: bold;
+  color: white;
+  background-color: #1558D6;
+}
+
+.confirm-button-info:hover {
+  background-color: #1E40AF;
+}
+
+.swal2-actions {
+  display: flex;
+  width: 90%;
+}
+
+.swal2-popup {
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}

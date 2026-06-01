@@ -18,6 +18,7 @@ import {
 import { Step1 } from './form-steps/step1';
 import { RequiredInputPhrase } from './required-input';
 import { Step2 } from './form-steps/step2';
+import { toaster } from '@/components/toasters/toast-alert';
 interface FamilyFormProps {
   step: number;
   totalSteps: number;
@@ -36,8 +37,12 @@ export function FamilyForm({
     resolver: zodResolver(familySchema) as unknown as Resolver<FormData>,
     defaultValues,
   });
-  const onSubmit = form.handleSubmit((data) => {
-    console.log('Enviar formulário', data);
+  const onSubmit = form.handleSubmit(async (data) => {
+    await toaster.createSuccess(
+      'Sucesso!',
+      'Cadastro da família concluído com sucesso!',
+    );
+    console.log('Form Data:', data);
   });
   const STEPS = [
     {
@@ -86,7 +91,7 @@ export function FamilyForm({
             Próximo Passo <ArrowRightIcon />
           </Button>
         ) : (
-          <Button onClick={onSubmit} type="button" variant={'primary'}>
+          <Button onClick={onSubmit} type="submit" variant={'primary'}>
             Finalizar Cadastro
           </Button>
         )}
