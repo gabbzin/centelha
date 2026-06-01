@@ -9,13 +9,17 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+Route::get('dashboard', function () {
+return Inertia::render('dashboard');
+})->name('dashboard');
 });
 
 Route::get('family', [FamilyController::class, 'index'])->name('family');
-Route::get('family/{id}', [FamilyController::class, 'show'])->name('family.info');
+Route::get('family/details/{id}', [FamilyController::class, 'show'])->name('family.info');
+Route::get('family/register', function () {
+    return Inertia::render('family/form/register');
+})->name('family.register');
+
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
