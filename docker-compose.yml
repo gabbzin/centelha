@@ -16,7 +16,7 @@ services:
       - "5173:5173"
     environment:
       - VITE_HOST=0.0.0.0
-      - VITE_HMR_HOST=localhost
+      - VITE_HMR_HOST=10.8.1.79
     env_file:
       - ./app/.env.docker
     depends_on:
