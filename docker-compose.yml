@@ -4,7 +4,7 @@ services:
     container_name: centelha-nginx
     restart: unless-stopped
     ports:
-      - "80:80"
+      - "8080:80"
     volumes:
       - ./app:/var/www/html:ro,z
       - ./app/public:/var/www/html/public:ro,z

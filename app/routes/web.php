@@ -14,6 +14,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('beneficios', function () {
+        return Inertia::render('beneficios');
+    })->name('beneficios');
+
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
