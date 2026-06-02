@@ -185,38 +185,31 @@ Este sistema inicialmente contará com sete telas principais, cada uma desempenh
 * Ao clicar no botão “Ver como funciona” ele redireciona o usuário para seção da página nomeada “Como Funciona”.  
 * Nesta tela possui alguns textos, cards informativos explicando as funcionalidades do sistema.
 
- **Tela de Gestão de Famílias (Beneficiários)**: é um conjunto completo de funcionalidades que facilitam o gerenciamento das famílias cadastradas, trazendo um CRUD completo.
+ **Tela de gestão de beneficiários** é um conjunto completo de funcionalidades que facilitam o gerenciamento das famílias cadastradas (ou beneficiários cadastrados), trazendo um CRUD completo, que permite aos usuários: visualizar as informações, cadastra novas famílias, editar suas informações e desconectá-las da plataforma com autorização de entidades superiores.
 
-* A tela possui uma barra de busca (por família, CPF ou protocolo) e um botão de filtro para facilitar a localização dos registros.
-* Esta tela demonstra as famílias cadastradas em formato de cards. Cada card exibe: Número do Protocolo, Status (Ativo, Aguardando, Inativo), Nome da família, CPF (mascarado), Quantidade de membros e Bairro.
-* Abaixo das informações de cada família possui o botão “VER INFORMAÇÕES” (que detalha informações pessoais, endereço, composição familiar e benefícios) e um botão com ícone de lixeira para inativar/excluir o registro.
-* A tela conta com paginação no rodapé para navegação entre os registros.
-* Possui um botão “NOVA FAMÍLIA” no canto superior, que redireciona para o cadastro de uma nova família.
+* Esta tela demonstra todas as famílias cadastradas e suas informações no centro comunitário.  
+* Abaixo de cada família possui o botão “Editar” nele é demonstrado as informações pessoais, endereço a composição familiar (Os Dependentes), e os benefícios atribuídos a esta família.  
+* Dentro de “Editar” possui um botão “Voltar”, ele redireciona para a visualização geral de todas as famílias.  
+* Dentro de “Editar” possui um botão “Nova família”, ele redireciona para o cadastro de uma nova família.
 
-**Tela de Cadastro de Famílias**: Formulário com múltiplos passos que cadastra famílias ao sistema, coletando informações relevantes socioeconômicas, de saúde e educação para validação de benefícios.
+**Tela de Cadastro de Famílias**:  Formulário com múltiplos passos que cadastram famílias ao sistema, coletando informações relevantes que permite o órgão administrador (a empresa que tá usando) conhecer com mais detalhes a família e validar quais benefícios ela precisa e se realmente precisa
 
-* Esta tela possui uma barra lateral com as seções do cadastro (ex: 01 Identificação e Família, 02 Endereço, 03 Anexos), permitindo a navegação entre as etapas.
-* **Etapa 1 (Identificação e Família)**: Coleta os dados do responsável (Nome, CPF, Data de Nascimento, Telefone, E-mail), permite adicionar membros/dependentes diretamente nesta etapa (Nome, CPF, Relação de parentesco) e possui um campo para observações adicionais. Também coleta dados detalhados individuais como: Saúde (deficiência, doença crônica, uso de medicação contínua), Educação (escolaridade, se está estudando, frequência) e Situação de trabalho/Renda individual.
-* **Etapa 2 (Endereço)**: Coleta CEP, Rua/Número/Complemento, Bairro, Cidade/Estado e Tipo de moradia (própria, alugada, cedida).
-* **Resumo e Renda Familiar**: Coleta quantidade de membros, renda total familiar, fonte de renda, emprego formal/informal, benefícios sociais e auxílios.
-* **Etapa 3 (Anexos)**: Espaço reservado para o envio de documentos comprobatórios.
+* Esta tela possui uma barra lateral com as seções do cadastro, esta barra permite a navegação entre as partes do cadastro de uma família.  
+* Esta tela coleta informações como: Dados do responsável, que consiste no CPF, Nome completo, Data de Nascimento, Telefone, E-mail (opcional), Dados do Endereço, que consiste no CEP, Rua / Bairro / Complemento, Cidade / Estado, Dados do Resumo da Família que consiste na quantidade de membros, renda total familiar, Dados da Renda Familiar que consiste na fonte de renda, empregos, benefícios sociais, recebe auxílio? (Sim/não, se sim qual).
 
-**Tela de Controle de Benefícios**: Gerencia todo o estoque dos recursos disponíveis que são entregues como benefício do centro comunitário.
+**Tela de Controle de Benefícios**:  Gerencia todo o estoque dos recursos disponíveis que são entregues como benefício do centro comunitário
 
-* A tela possui uma barra de busca (Buscar por benefícios...) e um filtro por Categorias.
-* Demonstra o inventário com as informações: “Código”, “Benefício”, “Categoria”, “Em Estoque”.
-* Cada benefício possui três botões de ações: “Visualizar” (ícone de olho), “Editar” e “Excluir”.
-* Possui no rodapé “Mostrando x a y de z registros” e paginação para navegar entre as páginas de registros.
-* Ao clicar em “Adicionar novo benefício” é aberto o cadastro, que exige o preenchimento do nome do benefício, quantidade em estoque, categoria, atribuição a uma família e descrição/informações adicionais, devendo clicar em “Salvar Cadastro”.
+* Esta tela demonstra o inventário de todos os benefícios disponíveis.  
+* Cada benefício possui informações que são demonstradas, sendo elas “Código”, “Benefício”, “Categoria”, “Em Estoque”.  
+* Cada benefício possui dois botões de ações, sendo eles “Editar” e “Excluir”.  
+* Esta tela possui no rodapé “Mostrar x de y registros” sendo x a quantidade de registros na tela, e y sendo a quantidade de registros totais.  
+* Esta tela no rodapé possui uma seção com botões para navegar entre as páginas de registros de benefícios “1 … 12”.  
+* Ao clicar em “Novo Benefício” é redirecionado para o cadastro de Novo benefício.  
+* Na seção de Novo Benefício possui campos a serem preenchidos sendo eles o nome do benefício, a quantidade em estoque, a categoria, atribuir a uma família e a descrição do benefício ou informações adicionais, sendo obrigatório clicar no botão “Salvar Cadastro” para salvar este benefício.
 
 **Dashboard**: Trata-se de um painel de controle visual responsável por apresentar informações relevantes de forma clara, organizada e de fácil interpretação, permitindo ao usuário o acompanhamento de dados e indicadores em um único ambiente, com o objetivo de otimizar a análise e a tomada de decisões.
 
-**Tela de Administração (Gestão Global do Sistema)**: Interface destinada ao gerenciamento e configuração de funcionalidades da plataforma Centelha, dividida em quatro módulos principais:
-
-* **Configurações Gerais**: Gestão de voluntários/agentes e vinculação de famílias para atendimento focado.
-* **Aparência**: Personalização das cores utilizadas na interface da plataforma.
-* **Usuários e Permissões**: Gerenciamento de usuários, perfis de acesso e permissões granulares.
-* **Painel de Customização por tela**: Permite alterar textos e informações específicas de cada tela do sistema.
+**Tela de Administração**: Interface do sistema destinada ao gerenciamento e configuração de funcionalidades, permitindo ao usuário administrador realizar operações como cadastro, edição, exclusão e monitoramento de dados e usuários, alterar informações do sistema, como a logo, a paleta de cores e informações de texto.
 
 12. Revisão de Literatura
 

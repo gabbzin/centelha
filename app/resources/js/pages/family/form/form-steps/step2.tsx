@@ -2,7 +2,7 @@ import { RentedHouseIcon } from '@/components/icons/rented-house-icon';
 import { InputLabel } from '@/components/inputs/input-label';
 import { RadioInput } from '@/components/inputs/radio-group';
 import { Separator } from '@/components/ui/separator';
-import { HandshakeIcon, HomeIcon, KeyIcon } from 'lucide-react';
+import { HandshakeIcon, HomeIcon } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
 export function Step2() {
   const {

@@ -10,13 +10,13 @@ A atualização do módulo de "Cadastro de Família" representa a transição de
 - CPF
 - Data de Nascimento
 - Telefone
-- Email
-- Status
+- Email (Opcional)
+- Status (Não é pedido em formulário)
 
 ### Dados de Endereço
 - CEP
 - Logradouro
-- Número/Comp
+- Número/Comp (Opcional)
 - Bairro
 - Cidade/UF
 
@@ -24,17 +24,17 @@ A atualização do módulo de "Cadastro de Família" representa a transição de
 - Renda Total
 - Fonte de Renda
 - Auxílio Governamental
-- **Condição de Moradia**
+- Condição de Moradia
 
 ### [NOVO] Saúde e Necessidades Específicas
 - Tags de Necessidades
-- Observações Gerais
+- Observações Gerais (Opcional)
 
 ### Composição Familiar
 - Nome
 - Idade/Data de Nascimento
 - Grau de Parentesco
-- **CPF Opcional**
+- CPF (Opcional)
 
 ## 3. Atualização nas Regras de Negócio (RNs)
 - **RN26:** O sistema deve permitir o registro de necessidades específicas e observações médicas/alimentares para a família via Tags gerenciáveis.

@@ -22,7 +22,7 @@ export default defineConfig(({ mode }) => {
         server: {
             host: env.VITE_HOST || '0.0.0.0',
             hmr: {
-                host: env.VITE_HMR_HOST || '10.8.1.79',
+                host: env.VITE_HMR_HOST || 'localhost',
             },
         },
         esbuild: {
