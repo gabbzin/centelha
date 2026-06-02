@@ -1,6 +1,6 @@
-import type { Benefit, PaginationResult } from './types'
+import type { Benefit, PaginationResult } from './types';
 
-export const LOW_STOCK_THRESHOLD = 20
+export const LOW_STOCK_THRESHOLD = 20;
 
 export const BENEFITS: Benefit[] = [
   { code: '#BNF-001', name: 'Cesta básica padrão', category: 'Alimentação', stock: 145, status: 'Ativo' },
@@ -21,7 +21,7 @@ export const BENEFITS: Benefit[] = [
   { code: '#BNF-016', name: 'Curso profissionalizante', category: 'Educação', stock: 25, status: 'Ativo' },
   { code: '#BNF-017', name: 'Kit cama e mesa', category: 'Vestuário', stock: 3, status: 'Inativo' },
   { code: '#BNF-018', name: 'Voucher R$ 50', category: 'Financeiro', stock: 110, status: 'Ativo' },
-]
+];
 
 export const CATEGORY_OPTIONS: { value: string; label: string }[] = [
   { value: 'all', label: 'Todas as Categorias' },
@@ -30,41 +30,35 @@ export const CATEGORY_OPTIONS: { value: string; label: string }[] = [
   { value: 'Saúde', label: 'Saúde' },
   { value: 'Vestuário', label: 'Vestuário' },
   { value: 'Educação', label: 'Educação' },
-]
+];
 
 export function filterBenefits(
   benefits: Benefit[],
   { search, category }: { search: string; category: string },
 ): Benefit[] {
-  let result = benefits
+  let result = benefits;
 
   if (category && category !== 'all') {
-    result = result.filter((b) => b.category === category)
+    result = result.filter((b) => b.category === category);
   }
 
   if (search.trim()) {
-    const q = search.toLowerCase().trim()
+    const q = search.toLowerCase().trim();
     result = result.filter(
       (b) =>
-        b.name.toLowerCase().includes(q) ||
-        b.code.toLowerCase().includes(q) ||
-        b.category.toLowerCase().includes(q),
-    )
+        b.name.toLowerCase().includes(q) || b.code.toLowerCase().includes(q) || b.category.toLowerCase().includes(q),
+    );
   }
 
-  return result
+  return result;
 }
 
-export function paginate<T>(
-  items: T[],
-  currentPage: number,
-  pageSize: number,
-): PaginationResult<T> {
-  const total = items.length
-  const totalPages = Math.max(1, Math.ceil(total / pageSize))
-  const safePage = Math.min(Math.max(1, currentPage), totalPages)
-  const startIndex = (safePage - 1) * pageSize + 1
-  const endIndex = Math.min(safePage * pageSize, total)
+export function paginate<T>(items: T[], currentPage: number, pageSize: number): PaginationResult<T> {
+  const total = items.length;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const safePage = Math.min(Math.max(1, currentPage), totalPages);
+  const startIndex = (safePage - 1) * pageSize + 1;
+  const endIndex = Math.min(safePage * pageSize, total);
 
   return {
     items: items.slice((safePage - 1) * pageSize, safePage * pageSize),
@@ -72,5 +66,5 @@ export function paginate<T>(
     totalPages,
     startIndex: total === 0 ? 0 : startIndex,
     endIndex,
-  }
+  };
 }

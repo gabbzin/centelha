@@ -1,7 +1,7 @@
 import { Head } from '@inertiajs/react';
 
-import HeadingSmall from '@/components/laravel/heading-small';
 import AppearanceTabs from '@/components/laravel/appearance-tabs';
+import HeadingSmall from '@/components/laravel/heading-small';
 import { type BreadcrumbItem } from '@/types';
 
 import AppLayout from '@/layouts/app-layout';

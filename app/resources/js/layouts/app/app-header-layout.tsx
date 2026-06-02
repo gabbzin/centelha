@@ -1,6 +1,6 @@
-import { AppShell } from '@/components/laravel/app-shell';
 import { AppContent } from '@/components/laravel/app-content';
 import { AppHeader } from '@/components/laravel/app-header';
+import { AppShell } from '@/components/laravel/app-shell';
 import { type BreadcrumbItem } from '@/types';
 
 interface AppHeaderLayoutProps {
