@@ -10,7 +10,7 @@ import {
 import { TrendingDownIcon, TrendingUpIcon } from 'lucide-react';
 interface StatsCardProps {
   title: string;
-  value: string;
+  value: number | string;
   icon: ReactNode;
   percentageChange: number;
 }

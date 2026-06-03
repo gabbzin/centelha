@@ -3,15 +3,15 @@ import { Main } from '@/components/layout/main';
 import { Head } from '@inertiajs/react';
 interface LayoutBaseProps {
   children: React.ReactNode;
-  titlePage: string;
+  descriptionPage?: string | React.ReactNode;
   tagTitle?: string;
-  description?: string | React.ReactNode;
+  titlePage: string;
 }
 export function LayoutBase({
   children,
   tagTitle: title,
   titlePage,
-  description,
+  descriptionPage: description,
 }: LayoutBaseProps) {
   return (
     <>

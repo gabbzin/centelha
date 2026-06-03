@@ -23,7 +23,7 @@ interface FamilyInfoPageProps {
 export default function FamilyInfoPage({ id, family }: FamilyInfoPageProps) {
   return (
     <LayoutBase
-      description={
+      descriptionPage={
         <div className="flex items-center gap-2">
           ID: <Badge variant={'gray'}>#F-{id}</Badge>
         </div>
