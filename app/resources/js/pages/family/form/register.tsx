@@ -1,0 +1,56 @@
+import { Header } from '@/components/layout/header';
+import { Head } from '@inertiajs/react';
+import { IdCardIcon, MapPinHouseIcon, PaperclipIcon } from 'lucide-react';
+import { useState } from 'react';
+import { FamilyForm } from './family-form';
+const STEPS = [
+  {
+    icon: IdCardIcon,
+    title: '01 Identificação e Familia',
+  },
+  {
+    icon: MapPinHouseIcon,
+    title: '02 Endereço',
+  },
+  {
+    icon: PaperclipIcon,
+    title: '03 Anexos',
+  },
+];
+export default function RegisterFamilyPage() {
+  const [currentStep, setCurrentStep] = useState(0);
+  return (
+    <>
+      <Head title="Formulário" />
+      <div className="flex min-h-screen flex-col">
+        <Header />
+        <div className="grid flex-1 grid-cols-1 lg:grid-cols-[16%_1fr]">
+          <aside className="bg-surface border-border hidden lg:flex h-full flex-col gap-4 border-r pt-6">
+            <h3 className="text-center text-sm text-[#737781] uppercase">
+              Etapas do cadastro
+            </h3>
+
+            {STEPS.map((step, index) => (
+              <div
+                key={index}
+                className={`flex items-center gap-3 rounded-lg px-4 py-3 ${index === currentStep ? 'bg-[#094785] font-bold text-white' : 'hover:bg-muted'}`}
+              >
+                <step.icon className="size-6" />
+                <span className="text-xs">{step.title}</span>
+              </div>
+            ))}
+          </aside>
+
+          <main className="bg-surface flex h-full flex-col justify-between p-8">
+            <FamilyForm
+              onNext={() => setCurrentStep((s) => s + 1)}
+              onPrev={() => setCurrentStep((s) => s - 1)}
+              step={currentStep}
+              totalSteps={STEPS.length}
+            />
+          </main>
+        </div>
+      </div>
+    </>
+  );
+}

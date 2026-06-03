@@ -1,4 +1,4 @@
-import Heading from '@/components/laravel/heading';
+import Heading from '@/components/layout/heading';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';

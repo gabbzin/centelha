@@ -1,38 +1,57 @@
 services:
-  app:
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: centelha-nginx
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./app:/var/www/html:ro,z
+      - ./app/public:/var/www/html/public:ro,z
+      - ./app/docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php
+    networks:
+      - centelha
+
+  php:
     build:
       context: ./app
       dockerfile: Dockerfile
       target: dev
-    container_name: centelha-app
+    container_name: centelha-php
     restart: unless-stopped
     working_dir: /var/www/html
-    volumes:
-      - ./app:/var/www/html:z
-      - vendor:/var/www/html/vendor
-      - node_modules:/var/www/html/node_modules
-    ports:
-      - "8000:8000"
-      - "5173:5173"
-    environment:
-      - VITE_HOST=0.0.0.0
-      - VITE_HMR_HOST=localhost
     env_file:
       - ./app/.env.docker
+    environment:
+      RUN_MIGRATIONS: "1"
+      RUN_SEEDERS: "1"
+      APP_ENV: local
+      PHP_OPCACHE_VALIDATE_TIMESTAMPS: "1"
+    volumes:
+      - ./app:/var/www/html:z
+      - ./app/public:/var/www/html/public
     depends_on:
       pgsql:
         condition: service_healthy
-    command: >
-      bash -c "
-        chmod a+r .env.docker 2>/dev/null || true
-        if [ ! -f .env ]; then cp .env.docker .env; fi
-        if [ ! -f vendor/autoload.php ]; then composer install --no-interaction --prefer-dist; fi
-        if [ ! -d node_modules ]; then npm install; fi
-        npm run build
-        if grep -qE '^APP_KEY=$' .env; then php artisan key:generate --ansi; fi
-        php artisan migrate --graceful --ansi
-        npx concurrently -c '#93c5fd,#c4b5fd,#fb7185' 'php artisan serve --host=0.0.0.0' 'php artisan queue:listen --tries=1' 'php artisan pail --timeout=0' --names=server,queue,logs
-      "
+    networks:
+      - centelha
+
+  vite:
+    image: node:22-bookworm
+    container_name: centelha-vite
+    working_dir: /var/www/html
+    volumes:
+      - ./app:/var/www/html:z
+    environment:
+      - VITE_HOST=0.0.0.0
+      - VITE_HMR_HOST=localhost
+    command: ["sh", "-c", "npm install && npm run dev -- --host"]
+    ports:
+      - "5173:5173"
+    depends_on:
+      - php
     networks:
       - centelha
 
@@ -58,10 +77,6 @@ services:
 
 volumes:
   pgsql-data:
-    driver: local
-  vendor:
-    driver: local
-  node_modules:
     driver: local
 
 networks:

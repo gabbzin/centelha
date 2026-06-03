@@ -108,7 +108,7 @@
   --popover-foreground: #1E293B;
   --surface: #F8F9FA;
   --heading: #0F172A;
-  --border: #E2E8F0;
+  --border: #C2C6D2;
   --input: #FFFFFF;
   --ring: #1558D6;
   --destructive: #E44447;
@@ -116,6 +116,7 @@
   --success: #10B981;
   --warning: #F59E0B;
   --info: #3B82F6;
+  --button: #094785;
   --chart-1: #1558D6;
   --chart-2: #E2E8F0;
   --chart-3: #2E5F9E;
@@ -154,6 +155,7 @@
   --success: #34D399;
   --warning: #FBBF24;
   --info: #60A5FA;
+  --button: #094785;
   --chart-1: #1558D6;
   --chart-2: #E2E8F0;
   --chart-3: #2E5F9E;
@@ -190,6 +192,7 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
+  --color-button: var(--button);
   --color-chart-5: var(--chart-5);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);

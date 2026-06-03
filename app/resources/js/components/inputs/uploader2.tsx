@@ -1,7 +1,7 @@
-import { AlertCircleIcon, CloudUploadIcon, UploadIcon, XIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useFileUpload } from '@/hooks/inputs/use-file-upload';
 import { convertMB } from '@/utils/convertMb';
+import { AlertCircleIcon, CloudUploadIcon, UploadIcon, XIcon } from 'lucide-react';
 import { Label } from '../ui/label';
 
 export default function Uploader2() {
