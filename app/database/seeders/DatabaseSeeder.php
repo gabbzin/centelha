@@ -13,6 +13,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             AdminSeeder::class,
+            CommunityCenterSeeder::class,
+            FamilySeeder::class,
         ]);
     }
 }

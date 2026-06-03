@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
             tailwindcss(),
         ],
         server: {
-            host: env.VITE_HOST || 'localhost',
+            host: env.VITE_HOST || '0.0.0.0',
             hmr: {
                 host: env.VITE_HMR_HOST || 'localhost',
             },
