@@ -7,7 +7,7 @@ import {
   CardHeader,
 } from '@/components/ui/card';
 import { formatCPF, formatProtocol } from '@/utils/formatters';
-import { Link, router } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { IdCardIcon, MapPinIcon, Trash2Icon, UsersIcon } from 'lucide-react';
 interface FamilyCardProps {
   id: string;
@@ -27,7 +27,7 @@ export function FamilyCard({
 }: FamilyCardProps) {
   const sizeIcons = 'size-4';
   return (
-    <Card className="space-y-4" variant={'basic'}>
+    <Card className="space-y-3" variant={'basic'}>
       <CardHeader className="flex items-center justify-between">
         <p className="text-muted-foreground text-xs uppercase">
           Protocolo #{formatProtocol(id)}
@@ -36,10 +36,10 @@ export function FamilyCard({
           {status}
         </Badge>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-1">
         <h3 className="text-heading font-semibold">Família {familyName}</h3>
 
-        <ul className="space-y-3">
+        <ul className="space-y-2">
           <InfoCardItem
             icon={<IdCardIcon className={sizeIcons} />}
             text={formatCPF(cpf)}

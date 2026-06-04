@@ -23,18 +23,26 @@ export function PaginationConsul({
   next_page_url,
 }: PaginationConsulProps) {
   // Constantes
-  const first_page_index = 1; // Primeira paǵina pós (Previous)
-  const lastPageIndex = links.length - 2; // Ignora o último link (Next)
-  const active = links.findIndex((link) => link.active);
-  const pagesToShow = 2; // Quantidade de links a serem renderizados após o ativo
+  const firstPageIndex = 1;
+  const lastPageIndex = links.length - 2;
+  const activeIndex = links.findIndex((link) => link.active);
+  const active = activeIndex !== -1 ? activeIndex : 1;
+  const pagesToShow = 2;
 
-  // Verifica se deve mostrar a elipse antes dos últimos links
-  const ellipsisIndex = lastPageIndex - pagesToShow - 1;
-  const shouldShowEllipsis =
-    ellipsisIndex > first_page_index && !links[ellipsisIndex].active;
+  // Lógica de Gap (Buraco) para o final
+  const lastMappedIndex = active + pagesToShow;
 
-  // Verifica se deve mostrar o último link (caso ele seja ativo, não mostra)
-  const shouldLastItem = lastPageIndex > active + pagesToShow;
+  // Só mostra a elipse se houver pelo menos 1 página escondida entre o primeiro link e o ativo
+  const showEllipsisStart = active - firstPageIndex > 1;
+
+  // Só mostra a elipse se houver pelo menos 1 página escondida entre o map e o último link
+  const showEllipsisEnd = lastPageIndex - lastMappedIndex > 1;
+
+  // Só mostra o último link fixo se o map não tiver alcançado ele
+  const showLastItem = lastPageIndex - lastMappedIndex > 0;
+
+  // Condição para o primeiro item (esconde se o ativo for o primeiro)
+  const showFirstItem = !links[firstPageIndex].active;
 
   // Renderização
   return (
@@ -43,17 +51,22 @@ export function PaginationConsul({
         <PaginationItem>
           <PaginationPrevious href={prev_page_url ?? undefined} text="" />
         </PaginationItem>
-        {/* Ocula o primeiro link (caso ele seja ativo), deixei o trabalho pro map */}
-        <PaginationItem
-          className={links[first_page_index].active ? 'hidden' : 'block'}
-        >
-          <PaginationLink
-            href={links[first_page_index].url ?? undefined}
-            isActive={links[first_page_index].active}
-          >
-            {links[first_page_index].label}
-          </PaginationLink>
-        </PaginationItem>
+        {/* Oculta o primeiro link (caso ele seja ativo), deixei o trabalho pro map */}
+        {showFirstItem && (
+          <PaginationItem>
+            <PaginationLink
+              href={links[firstPageIndex].url ?? undefined}
+              isActive={links[firstPageIndex].active}
+            >
+              {links[firstPageIndex].label}
+            </PaginationLink>
+          </PaginationItem>
+        )}
+        {showEllipsisStart && (
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+        )}
         {links.map((link, index) => {
           if (index === 0 || index === links.length - 1) {
             return null; // Ignora o primeiro e o último link (Previous e Next)
@@ -76,12 +89,12 @@ export function PaginationConsul({
           );
         })}
         {/* Tiramos 3, para remover o gargalo e a separação entre os últimos */}
-        <PaginationItem className={shouldShowEllipsis ? 'block' : 'hidden'}>
+        <PaginationItem className={showEllipsisEnd ? '' : 'hidden'}>
           <PaginationEllipsis />
         </PaginationItem>
         <PaginationItem>
           <PaginationLink
-            className={shouldLastItem ? '' : 'hidden'}
+            className={showLastItem ? '' : 'hidden'}
             href={links[lastPageIndex].url ?? undefined}
             isActive={links[lastPageIndex].active}
           >

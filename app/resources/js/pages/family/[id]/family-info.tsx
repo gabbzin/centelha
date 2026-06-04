@@ -1,3 +1,4 @@
+import { AlertButton } from '@/components/buttons/alertButton';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -6,12 +7,14 @@ import { LayoutBase } from '@/layouts/layout';
 import { Family } from '@/types';
 import { calcAge } from '@/utils/calcAge';
 import { formatBRL } from '@/utils/formatters';
+import { Link } from '@inertiajs/react';
 import {
   ArchiveIcon,
   ArrowLeftIcon,
   BanknoteIcon,
   CheckCircle2Icon,
   MapIcon,
+  PenIcon,
   PlusIcon,
   UserIcon,
   UsersIcon,
@@ -26,6 +29,27 @@ export default function FamilyInfoPage({ id, family }: FamilyInfoPageProps) {
       description={
         <div className="flex items-center gap-2">
           ID: <Badge variant={'gray'}>#F-{id}</Badge>
+        </div>
+      }
+      rightComponent={
+        <div className="flex items-center gap-2">
+          <Link>
+            <Button variant={'primary'}>
+              <PenIcon className="size-4" />
+              Editar informações
+            </Button>
+          </Link>
+          <AlertButton
+            actionText={family.is_active ? 'Desativar' : 'Ativar'}
+            cancelText="Cancelar"
+            description={`Tem certeza que deseja ${family.is_active ? 'desativar' : 'ativar'} esta família? Esta ação pode ser desfeita.`}
+            iconButton={<ArchiveIcon className="size-4" />}
+            onAction={() => {}}
+            textButton={
+              family.is_active ? 'Desativar Família' : 'Ativar Família'
+            }
+            title={family.is_active ? 'Desativar Família' : 'Ativar Família'}
+          />
         </div>
       }
       tagTitle="Informações da Família"
