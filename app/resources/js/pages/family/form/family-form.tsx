@@ -19,6 +19,7 @@ import { Step1 } from './form-steps/step1';
 import { RequiredInputPhrase } from './required-input';
 import { Step2 } from './form-steps/step2';
 import { toaster } from '@/components/toasters/toast-alert';
+import { Step3 } from './form-steps/step3';
 interface FamilyFormProps {
   step: number;
   totalSteps: number;
@@ -58,9 +59,10 @@ export function FamilyForm({
       component: <Step2 />,
     },
     {
-      title: 'Anexos',
-      description: 'Faça o upload dos documentos necessários para o cadastro',
-      component: <div>Anexos</div>,
+      title: 'Renda e Situação Econômica',
+      description:
+        'Informe os dados financeiros e recebimento de benefícios sociais para finalizar o cadastro',
+      component: <Step3 />,
     },
   ];
   return (

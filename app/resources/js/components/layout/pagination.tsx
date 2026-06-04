@@ -23,11 +23,11 @@ export function PaginationConsul({
   next_page_url,
 }: PaginationConsulProps) {
   // Constantes
-  const firstPageIndex = 1;
-  const lastPageIndex = links.length - 2;
+  const firstPageIndex = 1; // Ignorando o primeiro link, que é o "Previous"
+  const lastPageIndex = links.length - 2; // Ignorando o último link, que é o "Next"
   const activeIndex = links.findIndex((link) => link.active);
   const active = activeIndex !== -1 ? activeIndex : 1;
-  const pagesToShow = 2;
+  const pagesToShow = 2; // Mostramos o ativo e mais duas páginas pra frente, o restante vira elipse
 
   // Lógica de Gap (Buraco) para o final
   const lastMappedIndex = active + pagesToShow;

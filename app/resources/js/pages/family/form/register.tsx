@@ -1,6 +1,10 @@
 import { Header } from '@/components/layout/header';
 import { Head } from '@inertiajs/react';
-import { IdCardIcon, MapPinHouseIcon, PaperclipIcon } from 'lucide-react';
+import {
+  CircleDollarSignIcon,
+  IdCardIcon,
+  MapPinHouseIcon,
+} from 'lucide-react';
 import { useState } from 'react';
 import { FamilyForm } from './family-form';
 const STEPS = [
@@ -13,8 +17,8 @@ const STEPS = [
     title: '02 Endereço',
   },
   {
-    icon: PaperclipIcon,
-    title: '03 Anexos',
+    icon: CircleDollarSignIcon,
+    title: '03 Renda',
   },
 ];
 export default function RegisterFamilyPage() {
