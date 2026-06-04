@@ -1,5 +1,8 @@
+import { DatePicker } from '@/components/inputs/date-picker';
 import { InputLabel } from '@/components/inputs/input-label';
+import { InputSelect } from '@/components/inputs/input-select';
 import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import { Trash2Icon } from 'lucide-react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 export function Step1() {
@@ -51,14 +54,7 @@ export function Step1() {
           label="E-mail"
           placeholder="nome@email.com"
         />
-        {/* Trocar para um calendar Select */}
-        <InputLabel
-          {...register('data_nascimento')}
-          id="data_nascimento"
-          label="Data de Nascimento"
-          placeholder="00/00/0000"
-          required
-        />
+        <DatePicker label="Data de Nascimento" />
       </div>
 
       <div className="col-span-2 flex items-center justify-end text-xs font-bold text-[#094785] uppercase">
@@ -68,7 +64,7 @@ export function Step1() {
       <div className="col-span-2 space-y-2">
         {fields.map((field, index) => (
           <div key={field.id} className="flex items-end justify-between gap-4">
-            <div className="flex-1">
+            <div className="flex-3">
               <InputLabel
                 {...register(`family_members.${index}.name`)}
                 label="Nome do Membro Familiar"
@@ -87,11 +83,33 @@ export function Step1() {
               />
             </div>
             <div className="flex-1">
-              <InputLabel
+              <DatePicker
+                label="Data de nascimento"
                 {...register(`family_members.${index}.data_nascimento`)}
-                label="Data de Nascimento"
-                placeholder="00/00/0000"
+              />
+            </div>
+            <div className="flex-1">
+              <Label className="text-heading text-xs font-semibold">
+                Relação de Parentesco
+                <span className="text-destructive">*</span>
+              </Label>
+              <InputSelect
+                options={[
+                  {
+                    label: 'Pai',
+                    value: 'pai',
+                  },
+                  {
+                    label: 'Mãe',
+                    value: 'mae',
+                  },
+                  {
+                    label: 'Filho(a)',
+                    value: 'filho',
+                  },
+                ]}
                 required
+                {...register(`family_members.${index}.relacao_parentesco`)}
               />
             </div>
             <Button
@@ -111,6 +129,7 @@ export function Step1() {
               name: '',
               cpf: '',
               data_nascimento: '',
+              relacao_parentesco: '',
             });
           }}
           type="button"

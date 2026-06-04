@@ -70,7 +70,7 @@ export function FamilyForm({
       <div className="space-y-4">
         <Card className="bg-background space-y-6 rounded-lg h-150">
           <CardHeader className="border-border border-b shrink-0">
-            <CardTitle>{STEPS[step].title}</CardTitle>
+            <CardTitle className="text-xl">{STEPS[step].title}</CardTitle>
             <CardDescription>{STEPS[step].description}</CardDescription>
           </CardHeader>
           <CardContent className="min-h-0 flex-1 overflow-y-auto bg-background">
