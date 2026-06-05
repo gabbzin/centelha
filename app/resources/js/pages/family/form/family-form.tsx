@@ -6,6 +6,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { toaster } from '@/components/toasters/toast-alert';
+import { router } from '@inertiajs/react';
 import { ArrowRightIcon } from 'lucide-react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,9 +18,33 @@ import {
   type FormData,
 } from './schema/family-schema';
 import { Step1 } from './form-steps/step1';
-import { RequiredInputPhrase } from './required-input';
 import { Step2 } from './form-steps/step2';
-import { toaster } from '@/components/toasters/toast-alert';
+import { Step3 } from './form-steps/step3';
+import { RequiredInputPhrase } from './required-input';
+const STEP_FIELDS: Array<Array<keyof FormData>> = [
+  ['name', 'cpf', 'telefone', 'email', 'data_nascimento', 'family_members'],
+  ['cep', 'logradouro', 'numero', 'cidade', 'UF', 'bairro', 'moradia'],
+  ['fonte_renda', 'renda_familiar', 'recebe_auxilio', 'auxilios_recebidos'],
+];
+const STEPS = [
+  {
+    title: 'Dados do responsável familiar e informações da família',
+    description:
+      'Preencha as informações principais do títular do cadastro e da sua família',
+    component: <Step1 />,
+  },
+  {
+    title: 'Endereço',
+    description: 'Preencha as informações de endereço do responsável familiar',
+    component: <Step2 />,
+  },
+  {
+    title: 'Renda e Situação Econômica',
+    description:
+      'Informe os dados financeiros e recebimento de benefícios sociais para finalizar o cadastro',
+    component: <Step3 />,
+  },
+];
 interface FamilyFormProps {
   step: number;
   totalSteps: number;
@@ -33,42 +59,41 @@ export function FamilyForm({
 }: FamilyFormProps) {
   const form = useForm<FormData>({
     mode: 'onTouched',
-    // tipamos explicitamente o resolver para `FormData` para alinhar os tipos
     resolver: zodResolver(familySchema) as unknown as Resolver<FormData>,
     defaultValues,
   });
-  const onSubmit = form.handleSubmit(async (data) => {
-    await toaster.createSuccess(
-      'Sucesso!',
-      'Cadastro da família concluído com sucesso!',
+  const handleNext = async () => {
+    const isValid = await form.trigger(STEP_FIELDS[step]);
+    console.log(form.formState.errors[STEP_FIELDS[step][0]]?.message);
+    toaster.createError(
+      `Erro!`,
+      `${form.formState.errors[STEP_FIELDS[step][0]]?.message}`,
     );
-    console.log('Form Data:', data);
+    if (isValid) onNext();
+  };
+  const onSubmit = form.handleSubmit((data) => {
+    router.post('/family', data as never, {
+      onSuccess: () => {
+        toaster.createSuccess(
+          'Sucesso!',
+          'Cadastro da família concluído com sucesso!',
+        );
+        router.visit('family');
+      },
+      onError: () => {
+        toaster.createError(
+          'Erro!',
+          'Ocorreu um erro ao cadastrar a família. Verifique os dados e tente novamente.',
+        );
+      },
+    });
   });
-  const STEPS = [
-    {
-      title: 'Dados do responsável familiar e informações da família',
-      description:
-        'Preencha as informações principais do títular do cadastro e da sua família',
-      component: <Step1 />,
-    },
-    {
-      title: 'Endereço',
-      description:
-        'Preencha as informações de endereço do responsável familiar',
-      component: <Step2 />,
-    },
-    {
-      title: 'Anexos',
-      description: 'Faça o upload dos documentos necessários para o cadastro',
-      component: <div>Anexos</div>,
-    },
-  ];
   return (
     <>
       <div className="space-y-4">
         <Card className="bg-background space-y-6 rounded-lg h-150">
           <CardHeader className="border-border border-b shrink-0">
-            <CardTitle>{STEPS[step].title}</CardTitle>
+            <CardTitle className="text-xl">{STEPS[step].title}</CardTitle>
             <CardDescription>{STEPS[step].description}</CardDescription>
           </CardHeader>
           <CardContent className="min-h-0 flex-1 overflow-y-auto bg-background">
@@ -85,9 +110,8 @@ export function FamilyForm({
           Voltar
         </Button>
 
-        {/* O indice das steps começa com 0 (total vai ser 3), finaliza quando o indice for 2 */}
         {step < totalSteps - 1 ? (
-          <Button onClick={onNext} type="button" variant={'primary'}>
+          <Button onClick={handleNext} type="button" variant={'primary'}>
             Próximo Passo <ArrowRightIcon />
           </Button>
         ) : (

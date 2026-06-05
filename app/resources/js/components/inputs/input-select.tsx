@@ -1,18 +1,56 @@
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-
-export function InputSelect({ options }: { options: { value: string; label: string }[] }) {
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Control, Controller } from 'react-hook-form';
+interface InputSelectProps {
+  options: {
+    value: string;
+    label: string;
+  }[];
+  name: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control: Control<any>;
+  placeholder?: string;
+  required?: boolean;
+}
+export function InputSelect({
+  options,
+  control,
+  name,
+  placeholder,
+  required,
+}: InputSelectProps) {
   return (
-    <Select defaultValue={options[0].value}>
-      <SelectTrigger className={'border-border w-full border'}>
-        <SelectValue className={'capitalize'} />
-      </SelectTrigger>
-      <SelectContent>
-        {options.map((option) => (
-          <SelectItem key={option.value} value={option.value} className={'capitalize'}>
-            {option.label}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <Controller
+      control={control}
+      name={name}
+      render={({ field }) => (
+        <Select
+          defaultValue={options[0].value}
+          onValueChange={field.onChange}
+          required={required}
+          value={field.value}
+        >
+          <SelectTrigger className={'border-border w-full border'}>
+            <SelectValue className={'capitalize'} placeholder={placeholder} />
+          </SelectTrigger>
+          <SelectContent>
+            {options.map((option) => (
+              <SelectItem
+                key={option.value}
+                className={'capitalize'}
+                value={option.value}
+              >
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      )}
+    />
   );
 }

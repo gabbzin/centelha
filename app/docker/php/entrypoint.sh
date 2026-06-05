@@ -1,6 +1,11 @@
 #!/usr/bin/env sh
 set -e
 
+if [ ! -d "/var/www/html/vendor" ]; then
+  echo "[entrypoint] Pasta vendor não encontrada. Instalando dependências..."
+  composer install --no-interaction --no-progress
+fi
+
 if [ -f .env ]; then
   app_key=$(grep -E '^APP_KEY=' .env | cut -d '=' -f2- | tr -d '[:space:]')
   if [ -z "$app_key" ]; then

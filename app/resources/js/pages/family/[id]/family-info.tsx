@@ -1,3 +1,5 @@
+import { AlertButton } from '@/components/buttons/alertButton';
+import { toaster } from '@/components/toasters/toast-alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -5,13 +7,15 @@ import { Separator } from '@/components/ui/separator';
 import { LayoutBase } from '@/layouts/layout';
 import { Family } from '@/types';
 import { calcAge } from '@/utils/calcAge';
-import { formatBRL } from '@/utils/formatters';
+import { formatBRL, formatCEP, formatPhone } from '@/utils/formatters';
+import { Link, router } from '@inertiajs/react';
 import {
   ArchiveIcon,
   ArrowLeftIcon,
   BanknoteIcon,
   CheckCircle2Icon,
   MapIcon,
+  PenIcon,
   PlusIcon,
   UserIcon,
   UsersIcon,
@@ -21,11 +25,45 @@ interface FamilyInfoPageProps {
   family: Family;
 }
 export default function FamilyInfoPage({ id, family }: FamilyInfoPageProps) {
+  const handleToggleActive = () => {
+    // Flag para verificar se está ativa
+    const actived = family.is_active ? true : false;
+    if (actived) {
+      router.patch(`/family/${id}/deactivate`);
+    } else {
+      router.patch(`/family/${id}/activate`);
+    }
+    toaster.createSuccess(
+      `Sucesso!`,
+      `Família ${actived ? 'desativada' : 'ativada'} com sucesso.`,
+    );
+  };
   return (
     <LayoutBase
       descriptionPage={
         <div className="flex items-center gap-2">
           ID: <Badge variant={'gray'}>#F-{id}</Badge>
+        </div>
+      }
+      rightComponent={
+        <div className="flex items-center gap-2">
+          <Link>
+            <Button variant={'primary'}>
+              <PenIcon className="size-4" />
+              Editar informações
+            </Button>
+          </Link>
+          <AlertButton
+            actionText={family.is_active ? 'Desativar' : 'Ativar'}
+            cancelText="Cancelar"
+            description={`Tem certeza que deseja ${family.is_active ? 'desativar' : 'ativar'} esta família? Esta ação pode ser desfeita.`}
+            iconButton={<ArchiveIcon className="size-4" />}
+            onAction={handleToggleActive}
+            textButton={
+              family.is_active ? 'Desativar Família' : 'Ativar Família'
+            }
+            title={family.is_active ? 'Desativar Família' : 'Ativar Família'}
+          />
         </div>
       }
       tagTitle="Informações da Família"
@@ -52,15 +90,18 @@ export default function FamilyInfoPage({ id, family }: FamilyInfoPageProps) {
                     label="Status"
                     value={
                       <Badge
-                        className="rounded-sm border-green-800 px-4 font-bold uppercase"
-                        variant={'success'}
+                        className="rounded-sm px-4 font-bold uppercase"
+                        variant={family.is_active ? 'success' : 'destructive'}
                       >
                         {family.is_active ? 'Ativo' : 'Inativo'}
                       </Badge>
                     }
                   />
                 </InlineItems>
-                <InfoItem label="Telefone" value={family.responsible_phone} />
+                <InfoItem
+                  label="Telefone"
+                  value={formatPhone(family.responsible_phone)}
+                />
               </section>
 
               <Separator className={'my-1'} />
@@ -82,7 +123,7 @@ export default function FamilyInfoPage({ id, family }: FamilyInfoPageProps) {
                   />
                   <InfoItem
                     label="Fonte de Renda Principal"
-                    value={family.income_source}
+                    value={family.income_source?.replace('_', ' ')}
                   />
                   <InfoItem
                     label="Renda total"
@@ -105,7 +146,10 @@ export default function FamilyInfoPage({ id, family }: FamilyInfoPageProps) {
                   value={family.address?.neighborhood}
                 />
                 <InlineItems>
-                  <InfoItem label="CEP" value={family.address?.zipcode} />
+                  <InfoItem
+                    label="CEP"
+                    value={formatCEP(family.address?.zipcode)}
+                  />
                   <InfoItem
                     label="Cidade/UF"
                     value={`${family.address?.city}/${family.address?.state}`}
@@ -233,7 +277,7 @@ function InfoItem({
   return (
     <div className={`mb-2 ${className}`}>
       <h6 className="text-muted-foreground text-xs uppercase">{label}</h6>
-      <p className="text-heading text-lg font-semibold">{value}</p>
+      <p className="text-heading text-lg font-semibold capitalize">{value}</p>
     </div>
   );
 }

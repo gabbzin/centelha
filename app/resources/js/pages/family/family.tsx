@@ -87,7 +87,7 @@ export default function Family({ families }: FamilyProps) {
                 id={family.id.toString()}
                 location={family.address?.neighborhood}
                 membersCount={family.total_members_count || 0}
-                status={family.is_active ? 'ativo' : 'inativo'}
+                status={family.is_active}
               />
             );
           })}

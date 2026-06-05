@@ -4,14 +4,17 @@ import { Head } from '@inertiajs/react';
 interface LayoutBaseProps {
   children: React.ReactNode;
   descriptionPage?: string | React.ReactNode;
-  tagTitle?: string;
   titlePage: string;
+  tagTitle?: string;
+  description?: string | React.ReactNode;
+  rightComponent?: React.ReactNode;
 }
 export function LayoutBase({
   children,
   tagTitle: title,
   titlePage,
-  descriptionPage: description,
+  description,
+  rightComponent,
 }: LayoutBaseProps) {
   return (
     <>
@@ -20,6 +23,7 @@ export function LayoutBase({
       <Main>
         <div className="flex items-center justify-between gap-4">
           <Heading description={description} title={titlePage} />
+          {rightComponent}
         </div>
 
         <div className="flex flex-col">{children}</div>

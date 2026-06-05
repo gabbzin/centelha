@@ -1,8 +1,8 @@
 {
     "name": "Centelha Dev",
     "dockerComposeFile": "../docker-compose.yml",
-    "service": "app",
-    "updateRemoteUserUID": true,
+    "service": "php",
+    "updateRemoteUserUID": false,
     "workspaceFolder": "/var/www/html",
     "customizations": {
         "vscode": {
@@ -12,21 +12,17 @@
                 "bradlc.vscode-tailwindcss",
                 "dbaeumer.vscode-eslint",
                 "esbenp.prettier-vscode",
-                "ryanraposo.devcontainers"
             ],
             "settings": {
                 "editor.formatOnSave": true,
                 "editor.defaultFormatter": "esbenp.prettier-vscode",
                 "[php]": {
-                    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+                    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client",
                 },
-                "typescript.tsdk": "/var/www/html/node_modules/typescript/lib"
-            }
-        }
+                "typescript.tsdk": "/var/www/html/node_modules/typescript/lib",
+            },
+        },
     },
-    "postCreateCommand": "composer install && npm install",
-    "forwardPorts": [8000, 5173, 5432],
-    "features": {
-        "ghcr.io/devcontainers-extra/features/npm-package:1": {}
-    }
+    "postCreateCommand": ["sh", "-c", "composer install && npm install"],
+    "forwardPorts": [8080, 5173, 5432],
 }
