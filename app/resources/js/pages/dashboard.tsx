@@ -22,6 +22,7 @@ const OPTIONSSELECT = [
 ];
 import { LayoutBase } from '@/layouts/layout';
 import { Map } from '@/components/dashboard/map';
+import { AlertCard } from '@/components/dashboard/cards/alert-card';
 export default function Dashboard() {
   return (
     <LayoutBase
@@ -68,15 +69,31 @@ export default function Dashboard() {
           />
         </section>
 
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <Card>
+        <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <Card className="col-span-2">
             <CardContent>
               <Map />
             </CardContent>
           </Card>
-          <Card>
-            <CardContent>Outro card</CardContent>
-          </Card>
+          <div className="flex flex-col items-center justify-between">
+            <AlertCard
+              infos={[
+                {
+                  label: 'Cestas básicas',
+                  rest: 12,
+                  alertLevel: 'warning',
+                },
+                {
+                  label: 'Gás',
+                  rest: 8,
+                  alertLevel: 'critical',
+                },
+              ]}
+            />
+            <Card className="w-full">
+              <CardContent>Outro card</CardContent>
+            </Card>
+          </div>
         </section>
       </main>
     </LayoutBase>
