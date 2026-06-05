@@ -3,8 +3,15 @@ import { InputLabel } from '@/components/inputs/input-label';
 import { RadioInput } from '@/components/inputs/radio-group';
 import { Label } from '@/components/ui/label';
 import { useFormContext } from 'react-hook-form';
+import { useHookFormMask } from 'use-mask-input';
 export function Step3() {
+  // Puxando contexto do form
   const { control, register, watch } = useFormContext();
+
+  // Implementação da máscara
+  const registerWithMask = useHookFormMask(register);
+
+  // Render
   return (
     <div className="grid grid-cols-1 gap-6 p-1 *:space-y-2">
       <div className="col-span-2">
@@ -40,21 +47,17 @@ export function Step3() {
 
       <div className="col-span-2 flex items-center justify-between gap-4 *:flex-1">
         <InputLabel
-          label="Renda da familia (Valor máximo R$ 3.500,00)"
-          mask={'currency'}
-          maskOptions={{
-            prefix: 'R$ ',
-            displayFormat: 'BRL',
+          label="Renda média da familia (Valor máximo R$ 3.500,00)"
+          {...registerWithMask('renda_familiar', 'brl-currency', {
             groupSeparator: '.',
             inputType: 'number',
             min: 0,
             max: 3500,
             rightAlign: false,
             digits: 0,
-          }}
+          })}
           placeholder="Digite a renda familiar"
           required
-          {...register('renda_familiar')}
         />
         <div className="space-y-1">
           <LabelInput label="Categorias de Benefícios" />

@@ -1,3 +1,4 @@
+import { toaster } from '@/components/toasters/toast-alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,7 +13,7 @@ import { IdCardIcon, MapPinIcon, Trash2Icon, UsersIcon } from 'lucide-react';
 interface FamilyCardProps {
   id: string;
   cpf: string;
-  status: 'ativo' | 'inativo' | 'aguardando';
+  status: boolean; // true para ativo, false para inativo
   familyName: string;
   membersCount: number;
   location: string | undefined;
@@ -32,8 +33,11 @@ export function FamilyCard({
         <p className="text-muted-foreground text-xs uppercase">
           Protocolo #{formatProtocol(id)}
         </p>
-        <Badge className="rounded-2xl bg-[#83FC8E] text-[10px] text-green-900 uppercase">
-          {status}
+        <Badge
+          className={`rounded-2xl text-[10px] uppercase`}
+          variant={status ? 'success' : 'destructive'}
+        >
+          {status ? 'Ativo' : 'Inativo'}
         </Badge>
       </CardHeader>
       <CardContent className="space-y-1">
@@ -66,6 +70,12 @@ export function FamilyCard({
         <Button
           className={
             'border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground px-3 py-5'
+          }
+          onClick={() =>
+            toaster.createInfo(
+              'Manutenção!',
+              'Funcionalidade ainda não implementada.',
+            )
           }
           variant={'outline'}
         >
