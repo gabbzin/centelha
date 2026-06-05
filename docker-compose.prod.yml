@@ -1,0 +1,82 @@
+services:
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: centelha-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - app_public:/var/www/html/public:ro
+      - ./app/docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php
+    networks:
+      - centelha
+
+  php:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+      target: production
+    container_name: centelha-php
+    restart: unless-stopped
+    working_dir: /var/www/html
+    env_file:
+      - ./app/.env.docker
+    environment:
+      RUN_MIGRATIONS: "1"
+      RUN_SEEDERS: "1"
+      APP_ENV: production
+    volumes:
+      - app_public:/var/www/html/public
+    depends_on:
+      pgsql:
+        condition: service_healthy
+    networks:
+      - centelha
+
+  queue:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+      target: production
+    container_name: centelha-queue
+    restart: unless-stopped
+    working_dir: /var/www/html
+    env_file:
+      - ./app/.env.docker
+    command: ["php", "artisan", "queue:work", "--tries=3", "--timeout=90"]
+    volumes:
+      - app_public:/var/www/html/public
+    depends_on:
+      - php
+    networks:
+      - centelha
+
+  pgsql:
+    image: postgres:16-alpine
+    container_name: centelha-pgsql
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: centelha
+      POSTGRES_USER: centelha
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - pgsql-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U centelha -d centelha"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - centelha
+
+volumes:
+  pgsql-data:
+    driver: local
+  app_public:
+    driver: local
+
+networks:
+  centelha:
+    driver: bridge

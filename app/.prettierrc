@@ -3,8 +3,12 @@
   "singleQuote": true,
   "singleAttributePerLine": false,
   "htmlWhitespaceSensitivity": "css",
-  "printWidth": 120,
-  "plugins": ["prettier-plugin-organize-imports", "prettier-plugin-tailwindcss"],
+  "printWidth": 80,
+  "plugins": [
+    "prettier-plugin-organize-imports",
+    "prettier-plugin-tailwindcss",
+    "prettier-plugin-jsx-attr-sort"
+  ],
   "tailwindFunctions": ["clsx", "cn"],
   "tabWidth": 2,
   "overrides": [

@@ -5,7 +5,8 @@ import { HeroSection } from '@/components/landing/sections/hero-section';
 import { StepsSection } from '@/components/landing/sections/steps-section';
 import { Logo } from '@/components/logo';
 import { buttonVariants } from '@/components/ui/button';
-import { Head, Link } from '@inertiajs/react';
+import { type SharedData } from '@/types';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { CalendarClock, HandCoins, HeartHandshake } from 'lucide-react';
 import React, { useRef } from 'react';
 import { SocialIcon } from 'react-social-icons';
@@ -68,6 +69,7 @@ const footerColumns = [
 const links = ['https://instagram.com', 'https://linkedin.com', 'https://twitter.com'];
 
 export default function Home() {
+  const { communityCenter } = usePage<SharedData>().props;
   const inicioRef = useRef<HTMLDivElement | null>(null);
   const beneficiosRef = useRef<HTMLDivElement | null>(null);
   const comoFuncionaRef = useRef<HTMLDivElement | null>(null);
@@ -86,14 +88,14 @@ export default function Home() {
 
   return (
     <>
-      <Head title="Centelha" />
+      <Head title={communityCenter?.name ?? 'Centelha'} />
 
       <main className="bg-background text-foreground min-h-screen scroll-smooth">
         <header className="bg-background sticky top-0 z-50 border-b border-zinc-200 backdrop-blur-lg">
           <div className="max-w-lm mx-auto flex w-full items-center justify-between px-2 py-2 lg:px-10">
             <Link href="#" className="flex items-center gap-3">
               <Logo />
-              <p className="text-heading text-xl font-extrabold tracking-tight">Centelha</p>
+              <p className="text-heading text-xl font-extrabold tracking-tight">{communityCenter?.name ?? 'Centelha'}</p>
             </Link>
 
             <nav className="hidden items-center gap-8 lg:flex">
@@ -109,7 +111,10 @@ export default function Home() {
             </nav>
 
             <div className="flex items-center gap-2">
-              <Link href={route('login')} className={buttonVariants({ variant: 'ghost', className: 'hidden rounded-full sm:inline-flex' })}>
+              <Link
+                href={route('login')}
+                className={buttonVariants({ variant: 'ghost', className: 'hidden rounded-full sm:inline-flex' })}
+              >
                 Entrar
               </Link>
               <Link href={route('login')} className={buttonVariants({ variant: 'default', className: 'rounded-full' })}>
@@ -134,10 +139,10 @@ export default function Home() {
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <Logo width={32} height={32} />
-                <p className="text-xl font-semibold tracking-tight">Centelha</p>
+                <p className="text-xl font-semibold tracking-tight">{communityCenter?.name ?? 'Centelha'}</p>
               </div>
               <p className="max-w-xs text-sm text-white/70">
-                Tecnologia simples e poderosa para potencializar ações sociais e transformar comunidades.
+                {communityCenter?.slogan ?? 'Tecnologia simples e poderosa para potencializar ações sociais e transformar comunidades.'}
               </p>
             </div>
 
@@ -159,7 +164,7 @@ export default function Home() {
 
           <div className="border-t border-white/10">
             <div className="mx-auto flex w-full max-w-7xl flex-col gap-2 px-6 py-6 text-sm text-white/50 lg:flex-row lg:items-center lg:justify-between lg:px-10">
-              <p>© 2026 Centelha. Todos os direitos reservados.</p>
+              <p>{communityCenter?.rodape_text ?? `© ${new Date().getFullYear()} Centelha. Todos os direitos reservados.`}</p>
               <div>
                 {links.map((link) => (
                   <SocialIcon
@@ -175,7 +180,7 @@ export default function Home() {
                 ))}
               </div>
               <p>
-                Desenvolvido com <span className="text-white">💙</span> pela equipe Centelha
+                Desenvolvido com <span className="text-white">💙</span> pela equipe {communityCenter?.name ?? 'Centelha'}
               </p>
             </div>
           </div>

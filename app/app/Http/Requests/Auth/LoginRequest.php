@@ -49,6 +49,14 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        if (! Auth::user()->ativo) {
+            Auth::logout();
+
+            throw ValidationException::withMessages([
+                'email' => __('Conta desativada.'),
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 

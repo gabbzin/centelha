@@ -1,4 +1,3 @@
-
 // interface AboutSectionProps {}
 
 export function AboutSection() {
