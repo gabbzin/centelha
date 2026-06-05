@@ -2,7 +2,13 @@ import { FamilyIcon } from '@/components/dashboard/icons/family-icon';
 import { HandWithHeartIcon } from '@/components/dashboard/icons/hand-with-heart-icon';
 import { UserAddIcon } from '@/components/dashboard/icons/user-add-icon';
 import { StatsCard } from '@/components/dashboard/stats-card';
-import { Card, CardContent } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import {
   Select,
   SelectContent,
@@ -23,6 +29,8 @@ const OPTIONSSELECT = [
 import { LayoutBase } from '@/layouts/layout';
 import { Map } from '@/components/dashboard/map';
 import { AlertCard } from '@/components/dashboard/cards/alert-card';
+import { TopItensCard } from '@/components/dashboard/cards/top-itens-card';
+import SimpleBarChart from '@/components/dashboard/simple-bar-chart';
 export default function Dashboard() {
   return (
     <LayoutBase
@@ -71,6 +79,11 @@ export default function Dashboard() {
 
         <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <Card className="col-span-2">
+            <CardHeader>
+              <CardTitle className="font-bold text-lg uppercase font-heading">
+                Mapa de Distribuição
+              </CardTitle>
+            </CardHeader>
             <CardContent>
               <Map />
             </CardContent>
@@ -90,12 +103,63 @@ export default function Dashboard() {
                 },
               ]}
             />
-            <Card className="w-full">
-              <CardContent>Outro card</CardContent>
-            </Card>
+            <TopItensCard
+              itens={[
+                {
+                  name: 'Cestas básicas',
+                  quantity: 270,
+                  percentage: 75,
+                },
+                {
+                  name: 'Gás',
+                  quantity: 150,
+                  percentage: 60,
+                },
+              ]}
+            />
           </div>
+        </section>
+
+        <section>
+          <Card>
+            <CardHeader className="flex items-center justify-between border-b">
+              <CardTitle className="font-bold text-lg uppercase font-heading">
+                Comparativo de Entregas por Categoria (Mes Atual x Anterior)
+              </CardTitle>
+              <CardDescription className="flex items-center gap-2">
+                <div className="flex items-center gap-2">
+                  <div className="size-2 bg-chart-5" />
+                  Mês anterior (maio)
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="size-2 bg-chart-3" />
+                  Mês atual (junho)
+                </div>
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex items-center justify-center">
+              <SimpleBarChart data={data} />
+            </CardContent>
+          </Card>
         </section>
       </main>
     </LayoutBase>
   );
 }
+const data = [
+  {
+    name: 'Kit Higiene',
+    anterior: 250,
+    atual: 320,
+  },
+  {
+    name: 'Cestas básicas',
+    anterior: 300,
+    atual: 270,
+  },
+  {
+    name: 'Gás',
+    anterior: 200,
+    atual: 150,
+  },
+];

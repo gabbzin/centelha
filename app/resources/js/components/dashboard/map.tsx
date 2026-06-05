@@ -2,9 +2,9 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 export function Map() {
   return (
     <MapContainer
-      center={[-15.793, -47.882]} // Palmas-TO
+      center={[-15.793, -47.882]}
       style={{
-        height: '400px',
+        height: '500px',
         width: '100%',
       }}
       zoom={13}
