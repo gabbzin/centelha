@@ -13,7 +13,6 @@ services:
       - php
     networks:
       - centelha
-
   php:
     build:
       context: ./app
@@ -25,8 +24,8 @@ services:
     env_file:
       - ./app/.env.docker
     environment:
-      RUN_MIGRATIONS: "1"
-      RUN_SEEDERS: "1"
+      RUN_MIGRATIONS: "0"
+      RUN_SEEDERS: "0"
       APP_ENV: local
       PHP_OPCACHE_VALIDATE_TIMESTAMPS: "1"
     volumes:

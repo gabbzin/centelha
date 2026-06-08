@@ -26,6 +26,10 @@ const badgeVariants = cva(
           "bg-[#80F98B]/30 text-[#006E25] font-bold hover:bg-green-200",
         destructive_basic: 
           "bg-[#FFDAD6]/30 text-[#BA1A1A] font-bold hover:bg-red-200",
+        warning:
+          "bg-[#FFB868] text-[#2B1700] font-bold rounded-sm text-xs p-3",
+        destructive_warning:
+          "bg-[#BA1A1A] text-white font-bold rounded-sm text-xs p-3",
       },
     },
     defaultVariants: {

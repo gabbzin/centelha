@@ -10,7 +10,7 @@ import {
 import { TrendingDownIcon, TrendingUpIcon } from 'lucide-react';
 interface StatsCardProps {
   title: string;
-  value: string;
+  value: number | string;
   icon: ReactNode;
   percentageChange: number;
 }
@@ -36,7 +36,7 @@ export function StatsCard({
       </CardHeader>
       <CardContent>
         <p className="text-heading font-extrabold text-4xl">{value}</p>
-        <div className="absolute top-2 right-2 opacity-15">{icon}</div>
+        <div className="absolute top-3 right-3 opacity-15">{icon}</div>
       </CardContent>
       <CardFooter className="flex items-center gap-1">
         <Badge className="space-x-1 rounded-md" variant={badgeVariant}>

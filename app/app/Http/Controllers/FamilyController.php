@@ -2,45 +2,137 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreFamilyRequest;
+use App\Http\Requests\UpdateFamilyRequest;
 use App\Models\Family;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class FamilyController extends Controller
 {
-    /**
-     * Display a listing of the families.
-     */
     public function index()
     {
-        // Trazendo as famílias paginadas, com relacionamentos básicos e a contagem dos membros
         $families = Family::with(['address', 'specificNeeds'])
             ->withCount('members')
             ->paginate(6);
 
-        // Recalculando a contagem dos membros, pra contar com o responsável
         $families->getCollection()->transform(function ($family) {
             $family->total_members_count = ($family->members_count ?? 0) + 1;
             return $family;
         });
 
         return Inertia::render('family/family', [
-            'families' => $families
+            'families' => $families,
         ]);
     }
 
-    /**
-     * Display the specified family.
-     */
     public function show($id)
     {
-        // Busca a família no banco de dados trazendo todos os relacionamentos
         $family = Family::with(['address', 'members', 'specificNeeds'])->findOrFail($id);
 
         return Inertia::render('family/[id]/family-info', [
             'backUrl' => url()->previous(),
-            'id' => $id,
-            'family' => $family
+            'id'      => $id,
+            'family'  => $family,
         ]);
+    }
+
+    public function store(StoreFamilyRequest $request)
+    {
+        $data = $request->validated();
+
+        DB::transaction(function () use ($data) {
+            $family = Family::create([
+                'responsible_name'           => $data['name'],
+                'responsible_cpf'            => $data['cpf'],
+                'responsible_birth_date'     => $data['data_nascimento'],
+                'responsible_phone'          => $data['telefone'],
+                'responsible_email'          => $data['email'] ?? null,
+                'income_source'              => $data['fonte_renda'] ?? null,
+                'total_income'               => isset($data['renda_familiar']) ? (int) ($data['renda_familiar'] * 100) : 0,
+                'receives_government_aid'    => ($data['recebe_auxilio'] ?? 'nao') === 'sim',
+                'government_aid_description' => $data['auxilios_recebidos'] ?? null,
+                'housing_condition'          => $data['moradia'] ?? null,
+            ]);
+
+            $family->address()->create([
+                'zipcode'      => $data['cep'],
+                'street'       => $data['logradouro'],
+                'number'       => $data['numero'],
+                'neighborhood' => $data['bairro'],
+                'city'         => $data['cidade'],
+                'state'        => $data['UF'],
+            ]);
+
+            foreach ($data['family_members'] ?? [] as $member) {
+                $family->members()->create([
+                    'name'         => $member['name'],
+                    'cpf'          => $member['cpf'],
+                    'birth_date'   => $member['data_nascimento'],
+                    'relationship' => $member['relacao_parentesco'],
+                ]);
+            }
+        });
+
+        return redirect()->route('family');
+    }
+
+    public function update(UpdateFamilyRequest $request, Family $family)
+    {
+        $data = $request->validated();
+
+        DB::transaction(function () use ($data, $family) {
+            $family->update([
+                'responsible_name'           => $data['name'],
+                'responsible_cpf'            => $data['cpf'],
+                'responsible_birth_date'     => $data['data_nascimento'],
+                'responsible_phone'          => $data['telefone'],
+                'responsible_email'          => $data['email'] ?? null,
+                'income_source'              => $data['fonte_renda'] ?? null,
+                'total_income'               => isset($data['renda_familiar']) ? (int) ($data['renda_familiar'] * 100) : 0,
+                'receives_government_aid'    => ($data['recebe_auxilio'] ?? 'nao') === 'sim',
+                'government_aid_description' => $data['auxilios_recebidos'] ?? null,
+                'housing_condition'          => $data['moradia'] ?? null,
+            ]);
+
+            $family->address()->updateOrCreate(
+                ['family_id' => $family->id],
+                [
+                    'zipcode'      => $data['cep'],
+                    'street'       => $data['logradouro'],
+                    'number'       => $data['numero'],
+                    'neighborhood' => $data['bairro'],
+                    'city'         => $data['cidade'],
+                    'state'        => $data['UF'],
+                ]
+            );
+
+            $family->members()->delete();
+
+            foreach ($data['family_members'] ?? [] as $member) {
+                $family->members()->create([
+                    'name'         => $member['name'],
+                    'cpf'          => $member['cpf'] ?? null,
+                    'birth_date'   => $member['data_nascimento'],
+                    'relationship' => $member['relacao_parentesco'],
+                ]);
+            }
+        });
+
+        return redirect()->route('family.info', $family->id);
+    }
+
+    public function deactivate(Family $family)
+    {
+        $family->update(['is_active' => false]);
+
+        return redirect()->route('family');
+    }
+
+    public function activate(Family $family)
+    {
+        $family->update(['is_active' => true]);
+
+        return redirect()->route('family');
     }
 }

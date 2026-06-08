@@ -1,17 +1,30 @@
+import { DatePicker } from '@/components/inputs/date-picker';
 import { InputLabel } from '@/components/inputs/input-label';
+import { InputSelect } from '@/components/inputs/input-select';
 import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import { Trash2Icon } from 'lucide-react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useHookFormMask } from 'use-mask-input';
 export function Step1() {
+  // Puxando contexto do form
   const {
     control,
     register,
     formState: { errors },
   } = useFormContext();
+
+  // Implementação da máscara
+  const registerWithMask = useHookFormMask(register);
+
+  // Criação de novos inputs
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'family_members',
   });
+  const eightteenYearsAgo = new Date(
+    new Date().getTime() - 1000 * 60 * 60 * 24 * 365 * 18,
+  );
   return (
     <div className="grid grid-cols-1 gap-2 p-1 md:grid-cols-2">
       <div className="col-span-2">
@@ -28,18 +41,19 @@ export function Step1() {
 
       <div className="col-span-2 flex items-center justify-between gap-4 *:flex-1">
         <InputLabel
-          {...register('cpf')}
+          {...registerWithMask('cpf', 'cpf')}
           id="cpf"
           label="CPF"
-          maxLength={11}
           placeholder="000.000.000-00"
           required
         />
         <InputLabel
-          {...register('telefone')}
+          {...registerWithMask('telefone', '(99) 99999-9999', {
+            rightAlign: false,
+          })}
           id="telefone"
           label="Telefone"
-          placeholder="(00) 00000-0000"
+          placeholder="Digite o número de telefone"
           required
         />
       </div>
@@ -50,14 +64,16 @@ export function Step1() {
           id="E-mail"
           label="E-mail"
           placeholder="nome@email.com"
+          required={false}
         />
-        {/* Trocar para um calendar Select */}
-        <InputLabel
-          {...register('data_nascimento')}
-          id="data_nascimento"
-          label="Data de Nascimento"
-          placeholder="00/00/0000"
-          required
+        <DatePicker
+          control={control}
+          disabled={{
+            after: eightteenYearsAgo,
+          }}
+          label="Data de nascimento"
+          name="data_nascimento"
+          today={eightteenYearsAgo}
         />
       </div>
 
@@ -68,30 +84,54 @@ export function Step1() {
       <div className="col-span-2 space-y-2">
         {fields.map((field, index) => (
           <div key={field.id} className="flex items-end justify-between gap-4">
-            <div className="flex-1">
+            <div className="flex-3">
               <InputLabel
                 {...register(`family_members.${index}.name`)}
                 label="Nome do Membro Familiar"
-                maxLength={100}
                 placeholder="Digite o nome do membro familiar"
                 required
               />
             </div>
             <div className="flex-1">
               <InputLabel
-                {...register(`family_members.${index}.cpf`)}
+                {...registerWithMask(`family_members.${index}.cpf`, 'cpf')}
                 label="CPF do membro familiar"
-                maxLength={11}
                 placeholder="000.000.000-00"
                 required
               />
             </div>
             <div className="flex-1">
-              <InputLabel
+              <DatePicker
+                control={control}
+                disabled={{
+                  after: new Date(),
+                }}
+                label="Data de nascimento"
                 {...register(`family_members.${index}.data_nascimento`)}
-                label="Data de Nascimento"
-                placeholder="00/00/0000"
-                required
+              />
+            </div>
+            <div className="flex-1">
+              <Label className="text-heading text-xs font-semibold">
+                Relação de Parentesco
+                <span className="text-destructive">*</span>
+              </Label>
+              <InputSelect
+                control={control}
+                name={`family_members.${index}.relacao_parentesco`}
+                options={[
+                  {
+                    label: 'Pai',
+                    value: 'pai',
+                  },
+                  {
+                    label: 'Mãe',
+                    value: 'mae',
+                  },
+                  {
+                    label: 'Filho(a)',
+                    value: 'filho',
+                  },
+                ]}
               />
             </div>
             <Button
@@ -111,6 +151,7 @@ export function Step1() {
               name: '',
               cpf: '',
               data_nascimento: '',
+              relacao_parentesco: '',
             });
           }}
           type="button"
