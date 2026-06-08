@@ -105,7 +105,7 @@ function SectionCardAppearance({
   children: React.ReactNode;
 }) {
   return (
-    <Card>
+    <Card variant={'basic'}>
       <CardHeader className="pb-6">
         <CardTitle className="text-xs font-semibold uppercase text-muted-foreground">
           {title}
