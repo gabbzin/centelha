@@ -12,6 +12,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('gestao-sistema', function () {
         return Inertia::render('admin/gestao-sistema');
     })->name('gestao-sistema');
+
+    Route::get('gestao-sistema/configuracoes-gerais', function () {
+        return Inertia::render('admin/gestao-sistema/configuracoes-gerais');
+    })->name('gestao-sistema.configuracoes-gerais');
+
+    Route::get('gestao-sistema/aparencia', function () {
+        return Inertia::render('admin/gestao-sistema/aparencia');
+    })->name('gestao-sistema.aparencia');
 });
 
 Route::middleware(['auth'])->group(function () {
