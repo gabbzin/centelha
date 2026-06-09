@@ -5,6 +5,7 @@ import { LayoutBase } from '@/layouts/layout';
 import { Command, Settings, Users } from 'lucide-react';
 export default function GestaoSistema() {
   const { communityCenter } = usePage<SharedData>().props;
+  const url = usePage().url;
   const name = communityCenter?.name ?? 'Centelha';
   const systemCards = [
     {
@@ -12,14 +13,14 @@ export default function GestaoSistema() {
       description:
         'Gestão de voluntários/agentes e vinculação de famílias para atendimento focado.',
       actionLabel: 'Configurar',
-      href: '/admin/configuracoes-gerais',
+      href: 'configuracoes-gerais',
       icon: Settings,
     },
     {
       title: 'Aparência',
       description: `Personalize as cores utilizadas na interface da plataforma ${name}`,
       actionLabel: 'Configurar',
-      href: '#',
+      href: 'aparencia',
       icon: Command,
     },
     {
@@ -40,7 +41,7 @@ export default function GestaoSistema() {
   ] as const;
   return (
     <LayoutBase
-      descriptionPage={`Gerencie acessos, módulos e configurações fundamentais da plataforma ${name}.`}
+      description={`Gerencie acessos, módulos e configurações fundamentais da plataforma ${name}.`}
       tagTitle="Gestão Global do Sistema"
       titlePage="Gestão Global do Sistema"
     >
@@ -50,7 +51,7 @@ export default function GestaoSistema() {
             key={card.title}
             actionLabel={card.actionLabel}
             description={card.description}
-            href={card.href}
+            href={`${url}/${card.href}`}
             Icon={card.icon}
             title={card.title}
           />

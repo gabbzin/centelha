@@ -64,12 +64,17 @@ export function FamilyForm({
   });
   const handleNext = async () => {
     const isValid = await form.trigger(STEP_FIELDS[step]);
-    console.log(form.formState.errors[STEP_FIELDS[step][0]]?.message);
-    toaster.createError(
-      `Erro!`,
-      `${form.formState.errors[STEP_FIELDS[step][0]]?.message}`,
-    );
-    if (isValid) onNext();
+    if (isValid) {
+      onNext();
+    } else {
+      const firstErrorField = STEP_FIELDS[step].find(
+        (field) => form.formState.errors[field],
+      );
+      const errorMessage = firstErrorField
+        ? form.formState.errors[firstErrorField]?.message
+        : 'Verifique os campos';
+      toaster.createError(`Erro de validação!`, String(errorMessage));
+    }
   };
   const onSubmit = form.handleSubmit((data) => {
     router.post('/family', data as never, {
@@ -78,7 +83,6 @@ export function FamilyForm({
           'Sucesso!',
           'Cadastro da família concluído com sucesso!',
         );
-        router.visit('family');
       },
       onError: () => {
         toaster.createError(
