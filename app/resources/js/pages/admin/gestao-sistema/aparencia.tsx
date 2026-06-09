@@ -13,6 +13,7 @@ export default function Aparencia() {
           Restaurar Padrão
         </Button>
       }
+      tagTitle="Aparência"
       titlePage="Cores do sistema"
     >
       <div className="space-y-10">

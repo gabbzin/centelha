@@ -29,7 +29,7 @@ export function SystemManagementCard({ title, description, actionLabel, href, Ic
           <Separator />
           <div className="pt-4.25 text-right">
             <Button variant="secondary" size="sm" className="h-10 rounded-md px-4 text-xs font-medium">
-              <Link href={href}>{actionLabel}</Link>
+              <Link href={`gestao-sistema/${href}`}>{actionLabel}</Link>
             </Button>
           </div>
         </div>

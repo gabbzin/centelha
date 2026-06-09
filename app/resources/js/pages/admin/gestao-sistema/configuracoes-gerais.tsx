@@ -55,7 +55,7 @@ export default function ConfiguracoesGerais() {
 
                 <div className="space-y-2">
                   <Label>Fonte da Plataforma</Label>
-                  <InputSelect options={options} />
+                  {/* <InputSelect options={options} /> */}
                 </div>
               </div>
             </div>

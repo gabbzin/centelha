@@ -12,21 +12,21 @@ export default function GestaoSistema() {
       description:
         'Gestão de voluntários/agentes e vinculação de famílias para atendimento focado.',
       actionLabel: 'Configurar',
-      href: '/admin/configuracoes-gerais',
+      href: 'configuracoes-gerais',
       icon: Settings,
     },
     {
       title: 'Aparência',
       description: `Personalize as cores utilizadas na interface da plataforma ${name}`,
       actionLabel: 'Configurar',
-      href: '#',
+      href: 'aparencia',
       icon: Command,
     },
     {
-      title: 'Usuários e Permissões',
+      title: 'Usuários e Benefícios',
       description: `Gerencie usuários, perfis de acesso e permissões da plataforma ${name}`,
       actionLabel: 'Configurar',
-      href: '#',
+      href: 'usuarios-beneficios',
       icon: Users,
     },
     {
@@ -34,7 +34,7 @@ export default function GestaoSistema() {
       description:
         'Painel de Customização da tela, onde pode ser alterado textos e informações de uma tela específica.',
       actionLabel: 'Selecionar tela',
-      href: '#',
+      href: 'customizacao-tela',
       icon: Settings,
     },
   ] as const;
