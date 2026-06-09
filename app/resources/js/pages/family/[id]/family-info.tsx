@@ -21,21 +21,30 @@ import {
   UsersIcon,
 } from 'lucide-react';
 interface FamilyInfoPageProps {
+  backUrl: string;
   id: string;
   family: Family;
 }
-export default function FamilyInfoPage({ id, family }: FamilyInfoPageProps) {
+export default function FamilyInfoPage({
+  backUrl,
+  id,
+  family,
+}: FamilyInfoPageProps) {
   const handleToggleActive = () => {
     // Flag para verificar se está ativa
     const actived = family.is_active ? true : false;
-    if (actived) {
-      router.patch(`/family/${id}/deactivate`);
-    } else {
-      router.patch(`/family/${id}/activate`);
-    }
-    toaster.createSuccess(
-      `Sucesso!`,
-      `Família ${actived ? 'desativada' : 'ativada'} com sucesso.`,
+    const url = `/family/${id}/${actived ? 'deactivate' : 'activate'}`;
+    router.patch(
+      url,
+      {},
+      {
+        onSuccess: () => {
+          toaster.createSuccess(
+            `Sucesso!`,
+            `Família ${actived ? 'desativada' : 'ativada'} com sucesso.`,
+          );
+        },
+      },
     );
   };
   return (
@@ -210,9 +219,11 @@ export default function FamilyInfoPage({ id, family }: FamilyInfoPageProps) {
       </div>
 
       <footer className="mt-12 flex items-center gap-4 justify-end">
-        <Button onClick={() => window.history.back()} variant={'outline'}>
-          <ArrowLeftIcon /> Voltar
-        </Button>
+        <Link href={backUrl}>
+          <Button variant={'outline'}>
+            <ArrowLeftIcon /> Voltar
+          </Button>
+        </Link>
         <Button variant={'primary'}>
           <PlusIcon /> Registrar nova entrega
         </Button>
