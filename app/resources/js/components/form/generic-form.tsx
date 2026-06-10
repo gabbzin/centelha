@@ -12,7 +12,7 @@ interface GenericFormProps<T extends FieldValues> extends UseFormProps<T> {
   schema: ZodType<T, any, any>;
   onSubmit: (data: T) => Promise<void> | void;
   children: React.ReactNode;
-  submitText: string;
+  submitText?: string;
   needButtons?: boolean;
   buttons?: React.ReactNode;
   className?: string;
@@ -45,7 +45,7 @@ export default function GenericForm<T extends FieldValues>({
         {needButtons && (
           <Buttons>
             <Button disabled={isSubmitting} type="submit" variant={'default'}>
-              {methods.formState.isSubmitting ? 'Enviando...' : submitText}
+              {methods.formState.isSubmitting ? 'Enviando...' : submitText ?? 'Enviar'}
             </Button>
             {buttons}
           </Buttons>

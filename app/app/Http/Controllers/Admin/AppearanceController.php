@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\CommunityCenter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -10,7 +11,6 @@ class AppearanceController extends Controller
 {
     public function update(Request $request)
     {
-        // 1. Validação: Garante que o frontend enviou os campos e que são cores válidas (ex: #FFFFFF)
         $validated = $request->validate([
             'primary'        => 'required|string',
             'background'     => 'required|string',
@@ -24,15 +24,15 @@ class AppearanceController extends Controller
             'error'          => 'required|string',
             'warning'        => 'required|string',
             'info'           => 'required|string',
+            'button'         => 'required|string',
         ]);
 
-        $center = CommunityCenter::first();
+        $center = CommunityCenter::firstOrCreate([]);
 
         $center->update([
             'colors' => $validated
         ]);
 
-        // 4. Redireciona o usuário de volta para a mesma página com uma mensagem de sucesso
-        return Redirect::back()->with('success', 'Configurações de cores salvas com sucesso!');
+        return to_route('gestao-sistema.aparencia')->with('success', 'Salvo!');
     }
 }

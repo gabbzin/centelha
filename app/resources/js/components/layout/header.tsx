@@ -5,7 +5,7 @@ import { AnimatedThemeToggler } from '../ui/animated-theme-toggler';
 import { Button } from '../ui/button';
 export function Header() {
   return (
-    <header className="border-border bg-muted border-b px-4 sticky top-0 z-100">
+    <header className="border-border bg-muted border-b px-4 sticky top-0 z-50">
       <div className="max-w-lm mx-auto flex items-center justify-between py-2 px-4">
         <AppLogo />
 

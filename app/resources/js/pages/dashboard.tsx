@@ -38,7 +38,13 @@ export default function Dashboard() {
       rightComponent={
         <Select defaultValue={OPTIONSSELECT[0].value}>
           <SelectTrigger className={'border-border border'}>
-            <SelectValue className={'capitalize'} />
+            <SelectValue className={'capitalize'}>
+              {
+                OPTIONSSELECT.find(
+                  (option) => option.value === OPTIONSSELECT[0].value,
+                )?.label
+              }
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             {OPTIONSSELECT.map((option) => (
@@ -53,6 +59,7 @@ export default function Dashboard() {
           </SelectContent>
         </Select>
       }
+      tagTitle="Dashboard"
       titlePage="Visão Geral do Dashboard"
     >
       <main className="space-y-8">

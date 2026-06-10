@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LayoutBase } from '@/layouts/layout';
 import { HistoryIcon, SaveIcon } from 'lucide-react';
 import { SharedData } from '@/types';
+import { toaster } from '@/components/toasters/toast-alert';
 
 // Interface para tipar o nosso JSON de cores
 interface SystemColors {
@@ -21,6 +22,7 @@ interface SystemColors {
   error: string;
   warning: string;
   info: string;
+  button: string;
 }
 
 // Componente Principal
@@ -42,12 +44,15 @@ export default function Aparencia() {
     error: '#EF4444',
     warning: '#F59E0B',
     info: '#3B82F6',
+    button: '#094785',
   };
+
   // Form do Inertia
   const { data, setData, put, processing } = useForm<SystemColors>({
     ...defaultColors,
     ...colors,
   });
+
   // Atualiza as variáveis CSS no root sempre que os dados mudarem
   useEffect(() => {
     const root = document.documentElement;
@@ -63,10 +68,19 @@ export default function Aparencia() {
     root.style.setProperty('--destructive', data.error);
     root.style.setProperty('--warning', data.warning);
     root.style.setProperty('--info', data.info);
+    root.style.setProperty('--button', data.button);
   }, [data]);
+
   // Funções de envio e reset
   const handleSave = () => {
-    put(route('admin.appearance.update'));
+    put(route('admin.appearance.update'), {
+      onSuccess: () => {
+        toaster.createSuccess('Sucesso', 'Cores atualizadas com sucesso!');
+      },
+      onError: () => {
+        toaster.createError('Erro', 'Algo deu errado!');
+      },
+    });
   };
   const handleReset = () => {
     setData(defaultColors);
@@ -145,6 +159,11 @@ export default function Aparencia() {
               color={data.active}
               label="Cor de Ativo"
               setColor={(color) => setData('active', color)}
+            />
+            <InputColor
+              color={data.button}
+              label="Cor de Botão ou Primário forte"
+              setColor={(color) => setData('button', color)}
             />
           </SectionCardAppearance>
         </section>

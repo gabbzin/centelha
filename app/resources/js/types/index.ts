@@ -22,11 +22,21 @@ export interface CommunityCenter {
   location: string;
   slogan: string;
   rodape_text: string;
-  logo_path: string;
-  favicon_path: string;
+  logo_path: string | null;
+  favicon_path: string | null;
   fontFamily: string;
   settings: Record<string, unknown>;
   colors: Record<string, string>;
+  maintenance_mode: boolean;
+  social_links?: SocialLink[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SocialLink {
+  id: number;
+  community_center_id: number;
+  value: string;
   created_at: string;
   updated_at: string;
 }
@@ -38,6 +48,10 @@ export interface SharedData {
   };
   auth: Auth;
   communityCenter: CommunityCenter | null;
+  flash: {
+    success: string | null;
+    error: string | null;
+  };
   [key: string]: unknown;
 }
 export interface PaginatedData<T> {

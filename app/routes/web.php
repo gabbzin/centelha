@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\FamilyController;
+use App\Http\Controllers\Admin\AppearanceController;
+use App\Http\Controllers\Admin\ConfiguracoesGeraisController;
 
 Route::get('/', function () {
     return Inertia::render('home');
@@ -20,6 +22,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('gestao-sistema/aparencia', function () {
         return Inertia::render('admin/gestao-sistema/aparencia');
     })->name('gestao-sistema.aparencia');
+
+    Route::put('gestao-sistema/aparencia', [AppearanceController::class, 'update'])->name('admin.appearance.update');
+
+    Route::put('gestao-sistema/configuracoes-gerais', [ConfiguracoesGeraisController::class, 'update'])->name('gestao-sistema.configuracoes-gerais.update');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -44,4 +50,3 @@ Route::middleware(['auth'])->group(function () {
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
-require __DIR__ . '/admin.php';

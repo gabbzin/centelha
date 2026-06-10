@@ -7,10 +7,52 @@ import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@headlessui/react';
 import { BrushIcon, Share2Icon, Plus, WrenchIcon } from 'lucide-react';
-import { Label } from 'recharts';
+import { Label } from '@/components/ui/label';
 import SettingsPanelCard from '../settings-panel-card';
 import { SocialInputRow } from '../social-input-row';
-export function ConfigsGeraisForm() {
+import { Controller, useFieldArray, useFormContext, useWatch } from 'react-hook-form';
+import { InputSelect } from '@/components/inputs/input-select';
+import { type FileWithPreview } from '@/hooks/inputs/use-file-upload';
+
+// Opções
+const options = [
+  {
+    label: 'Poppins',
+    value: 'poppins',
+  },
+  {
+    label: 'Roboto',
+    value: 'roboto',
+  },
+  {
+    label: 'Open Sans',
+    value: 'open-sans',
+  },
+];
+
+interface ConfigsGeraisFormProps {
+  onLogoChange?: (files: FileWithPreview[]) => void;
+  onFaviconChange?: (files: FileWithPreview[]) => void;
+}
+
+// Render
+export function ConfigsGeraisForm({ onLogoChange, onFaviconChange }: ConfigsGeraisFormProps) {
+  // Form Context
+  const { control, register } = useFormContext();
+
+  // Criando novos fields
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'social_links',
+  });
+
+  // Assistindo os fields
+  const socialLinksWatch = useWatch({
+    control,
+    name: 'social_links',
+  });
+
+  // Classe repetida
   const classIcons = 'size-5';
   return (
     <>
@@ -22,18 +64,22 @@ export function ConfigsGeraisForm() {
           >
             <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-5">
               <div className="md:col-span-3">
-                <Uploader2 />
+                <Uploader2 onFilesChange={onLogoChange} />
               </div>
               <div className="space-y-8 md:col-span-2">
                 <div className="space-y-2">
                   <Label>Ícone do Navegador (Favicon)</Label>
                   <div>
-                    <Uploader1 />
+                    <Uploader1 onFilesChange={onFaviconChange} />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label>Fonte da Plataforma</Label>
-                  {/* <InputSelect options={options} /> */}
+                  <InputSelect
+                    control={control}
+                    name="font"
+                    options={options}
+                  />
                 </div>
               </div>
             </div>
@@ -47,20 +93,23 @@ export function ConfigsGeraisForm() {
                 <Input
                   className="border-border mt-2 border"
                   placeholder="Centelha Administrative System"
+                  {...register('platformName')}
                 />
               </div>
               <div>
                 <Label>SLOGAN / DESCRIÇÃO CURTA</Label>
                 <Textarea
-                  className="border-border mt-2 resize-none border"
+                  className="border-border mt-2 resize-none border w-full"
                   placeholder="Gestão inteligente e eficiente de dados."
+                  {...register('slogan')}
                 />
               </div>
               <div>
                 <Label>TEXTO RODAPÉ</Label>
                 <Textarea
-                  className="border-border mt-2 resize-none border"
+                  className="border-border mt-2 resize-none border w-full"
                   placeholder="© 2026 Centelha Administrative System. Todos os direitos reservados."
+                  {...register('footerText')}
                 />
               </div>
             </div>
@@ -73,20 +122,29 @@ export function ConfigsGeraisForm() {
           title="Redes Sociais"
         >
           <div className="space-y-3">
-            <SocialInputRow
-              network="instagram"
-              placeholder="https://instagram.com/centelha"
-            />
-            <SocialInputRow
-              network="linkedin"
-              placeholder="https://linkedin.com/company/centelha"
-            />
-            <SocialInputRow network="youtube" placeholder="URL do YouTube" />
+            {fields.map((field, index) => {
+              const currentValue = socialLinksWatch?.[index]?.value || '';
+              return (
+                <SocialInputRow
+                  key={field.id}
+                  onDelete={() => remove(index)}
+                  placeholder={'Digite a url da rede social'}
+                  value={currentValue}
+                  {...register(`social_links.${index}.value`)}
+                />
+              );
+            })}
             <Button
               className="mt-2 inline-flex items-center gap-2"
+              onClick={() =>
+                append({
+                  value: '',
+                })
+              }
+              type="button"
               variant="ghost"
             >
-              <Plus className="h-4 w-4" /> ADICIONAR REDE SOCIAL
+              <Plus className="size-4" /> ADICIONAR REDE SOCIAL
             </Button>
           </div>
         </SettingsPanelCard>
@@ -116,7 +174,16 @@ export function ConfigsGeraisForm() {
                   <span className="text-foreground/60 text-sm">
                     MODO DE MANUTENÇÃO
                   </span>
-                  <Switch />
+                  <Controller
+                    control={control}
+                    name="maintenance_mode"
+                    render={({ field }) => (
+                      <Switch
+                        checked={field.value ?? false}
+                        onCheckedChange={(val) => field.onChange(val)}
+                      />
+                    )}
+                  />
                 </div>
               </div>
             </div>

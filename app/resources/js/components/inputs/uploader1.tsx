@@ -1,12 +1,17 @@
 import { Button } from '@/components/ui/button';
-import { useFileUpload } from '@/hooks/inputs/use-file-upload';
+import { useFileUpload, type FileWithPreview } from '@/hooks/inputs/use-file-upload';
 import { Trash2Icon } from 'lucide-react';
 
-export default function Uploader1() {
+interface Uploader1Props {
+  onFilesChange?: (files: FileWithPreview[]) => void;
+}
+
+export default function Uploader1({ onFilesChange }: Uploader1Props) {
   const [{ files }, { removeFile, openFileDialog, getInputProps }] = useFileUpload({
     accept: 'image/*',
     maxFiles: 1,
     maxSize: 1024 * 1024, // 1MB
+    onFilesChange,
   });
 
   const previewUrl = files[0]?.preview || null;
