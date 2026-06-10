@@ -26,6 +26,7 @@ export interface CommunityCenter {
   favicon_path: string;
   fontFamily: string;
   settings: Record<string, unknown>;
+  colors: Record<string, string>;
   created_at: string;
   updated_at: string;
 }

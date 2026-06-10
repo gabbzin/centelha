@@ -22,7 +22,9 @@ export function InputColor({ label, color, setColor }: InputColorProps) {
                     backgroundColor: color,
                   }}
                 />
-                <p className="text-heading text-base font-normal">{color}</p>
+                <p className="text-heading text-base font-normal uppercase">
+                  {color}
+                </p>
               </div>
               <PenIcon className="size-4 opacity-50" />
             </div>

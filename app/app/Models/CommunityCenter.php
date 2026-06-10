@@ -16,11 +16,13 @@ class CommunityCenter extends Model
         'favicon_path',
         'fontFamily',
         'settings',
+        'colors',
     ];
     protected function casts(): array
     {
         return [
             'settings' => 'array',
+            'colors' => 'array',
         ];
     }
 }
