@@ -41,7 +41,7 @@ export function HeroSection({ imageUrl, ref }: HeroSectionProps) {
         <div className="relative flex justify-center lg:justify-end">
           <div className="absolute -inset-6 rounded-[32px] bg-[radial-gradient(circle_at_center,rgba(45,87,142,0.16),transparent_65%)] blur-xl" />
           <div className="border-border/70 relative overflow-hidden rounded-2xl border bg-white p-2 shadow-[0_24px_50px_-12px_rgba(16,24,36,0.22)]">
-            <div className="border-border/50 hidden overflow-hidden rounded-2xl border bg-white md:block">
+            <div className="border-border/50 hidden overflow-hidden rounded-2xl border bg-white md:block max-h-150">
               <img src={imageUrl} alt="Dashboard da Plataforma Centelha" className="block h-auto w-full" />
             </div>
           </div>

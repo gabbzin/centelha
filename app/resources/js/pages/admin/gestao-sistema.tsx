@@ -24,10 +24,10 @@ export default function GestaoSistema() {
       icon: Command,
     },
     {
-      title: 'Usuários e Permissões',
+      title: 'Usuários e Benefícios',
       description: `Gerencie usuários, perfis de acesso e permissões da plataforma ${name}`,
       actionLabel: 'Configurar',
-      href: '#',
+      href: 'usuarios-beneficios',
       icon: Users,
     },
     {
@@ -35,7 +35,7 @@ export default function GestaoSistema() {
       description:
         'Painel de Customização da tela, onde pode ser alterado textos e informações de uma tela específica.',
       actionLabel: 'Selecionar tela',
-      href: '#',
+      href: 'customizacao-tela',
       icon: Settings,
     },
   ] as const;

@@ -46,7 +46,7 @@ const LINKS = [
     id: 'admin',
     label: 'Gestão',
     icon: ManagementIcon,
-    href: '/admin',
+    href: '/gestao-sistema',
   },
 ];
 const activeColor = '#C5D9FF';
@@ -66,8 +66,8 @@ export function SidebarMenu() {
         }
       />
       <SheetContent side={'right'}>
-        <SheetHeader className="mt-1 border-b border-[#C2C6D2]">
-          <SheetTitle className={'text-lg font-semibold text-[#094785]'}>
+        <SheetHeader className="mt-1 border-b border-border">
+          <SheetTitle className={'text-lg font-semibold text-button'}>
             Menu de navegação
           </SheetTitle>
         </SheetHeader>
@@ -77,7 +77,7 @@ export function SidebarMenu() {
               key={id}
               className={cn(
                 `flex w-full items-center justify-start gap-4 rounded-lg p-3 font-normal uppercase`,
-                `${url.includes(href) ? 'bg-[#2E5F9E] text-[#C5D9FF]' : 'bg-transparent text-[#424750] hover:bg-[#2E5F9E]/80'}`,
+                `${url.includes(href) ? 'bg-secondary text-[#C5D9FF]' : 'bg-transparent text-text hover:bg-secondary/80'}`,
               )}
               href={href}
               target={'_self'}
@@ -87,9 +87,9 @@ export function SidebarMenu() {
             </Link>
           ))}
         </div>
-        <SheetFooter className="border-t border-[#C2C6D2] p-4">
+        <SheetFooter className="border-t border-border p-4">
           <div className="ml-2 flex items-center gap-4 rounded-lg p-1">
-            <div className="rounded-lg bg-[#2E5F9E] p-2 text-base font-semibold text-white">
+            <div className="rounded-lg bg-secondary p-2 text-base font-semibold text-white">
               PF
             </div>
             <div>

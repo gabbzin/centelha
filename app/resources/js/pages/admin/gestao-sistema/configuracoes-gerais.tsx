@@ -1,162 +1,124 @@
-import SettingsPanelCard from '@/components/gestao-sistema/settings-panel-card';
-import { SocialInputRow } from '@/components/gestao-sistema/social-input-row';
-import { InputSelect } from '@/components/inputs/input-select';
-import Uploader1 from '@/components/inputs/uploader1';
-import Uploader2 from '@/components/inputs/uploader2';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Switch } from '@/components/ui/switch';
-import { Textarea } from '@/components/ui/textarea';
 import { LayoutBase } from '@/layouts/layout';
-import { BrushIcon, Plus, Share2Icon, WrenchIcon } from 'lucide-react';
-import { TtIcon } from './Tt-icon';
-const options = [
-  {
-    value: 'geist',
-    label: 'Geist',
-  },
-  {
-    value: 'inter',
-    label: 'Inter',
-  },
-  {
-    value: 'roboto',
-    label: 'Roboto',
-  },
-];
+import GenericForm from '@/components/form/generic-form';
+import { router, usePage } from '@inertiajs/react';
+import { useState } from 'react';
+import { SharedData } from '@/types';
+import { ConfigsGeraisForm } from '@/components/gestao-sistema/forms/configs-gerais-form';
+import { toaster } from '@/components/toasters/toast-alert';
+import {
+  configsGeraisSchema,
+  FormValues,
+} from '@/components/gestao-sistema/schemas/configs-gerais-form';
+import { FileWithPreview } from '@/hooks/inputs/use-file-upload';
+import { useFormContext } from 'react-hook-form';
+
+// Componente principal
 export default function ConfiguracoesGerais() {
-  const classIcons = 'size-5';
+  const { communityCenter } = usePage<SharedData>().props;
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [faviconFile, setFaviconFile] = useState<File | null>(null);
   return (
     <LayoutBase
       descriptionPage="Gerencie a identidade da marca e as comunicações textuais da plataforma."
+      tagTitle="Configurações Gerais"
       titlePage="Configurações Visuais e Textos"
     >
-      <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <div className="lg:col-span-2">
-          <SettingsPanelCard
-            icon={<BrushIcon className={classIcons} />}
-            title="Identidade Visual"
-          >
-            <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-5">
-              <div className="md:col-span-3">
-                <Uploader2 />
-              </div>
-
-              <div className="space-y-8 md:col-span-2">
-                <div className="space-y-2">
-                  <Label>Ícone do Navegador (Favicon)</Label>
-                  <div>
-                    <Uploader1 />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Fonte da Plataforma</Label>
-                  <InputSelect options={options} />
-                </div>
-              </div>
-            </div>
-          </SettingsPanelCard>
-        </div>
-        <div className="col-span-1">
-          <SettingsPanelCard icon={<TtIcon />} title="Textos da Interface">
-            <div className="space-y-4">
-              <div>
-                <Label>NOME DA PLATAFORMA</Label>
-                <Input
-                  className="border-border mt-2 border"
-                  placeholder="Centelha Administrative System"
-                />
-              </div>
-
-              <div>
-                <Label>SLOGAN / DESCRIÇÃO CURTA</Label>
-                <Textarea
-                  className="border-border mt-2 resize-none border"
-                  placeholder="Gestão inteligente e eficiente de dados."
-                />
-              </div>
-
-              <div>
-                <Label>TEXTO RODAPÉ</Label>
-                <Textarea
-                  className="border-border mt-2 resize-none border"
-                  placeholder="© 2026 Centelha Administrative System. Todos os direitos reservados."
-                />
-              </div>
-            </div>
-          </SettingsPanelCard>
-        </div>
-      </section>
-      <div className="mt-4">
-        <SettingsPanelCard
-          icon={<Share2Icon className={classIcons} />}
-          title="Redes Sociais"
-        >
-          <div className="space-y-3">
-            <SocialInputRow
-              network="instagram"
-              placeholder="https://instagram.com/centelha"
-            />
-            <SocialInputRow
-              network="linkedin"
-              placeholder="https://linkedin.com/company/centelha"
-            />
-            <SocialInputRow network="youtube" placeholder="URL do YouTube" />
-
-            <Button
-              className="mt-2 inline-flex items-center gap-2"
-              variant="ghost"
-            >
-              <Plus className="h-4 w-4" /> ADICIONAR REDE SOCIAL
-            </Button>
-          </div>
-        </SettingsPanelCard>
-      </div>
-
-      <div className="mt-4">
-        <Card variant={'basic'}>
-          <CardContent className="flex items-start gap-4">
-            <div className="bg-destructive/40 flex items-center justify-center rounded-md p-2">
-              <WrenchIcon
-                className={`${classIcons} text-destructive scale-x-[-1]`}
-              />
-            </div>
-            <div className="grid w-full max-w-full items-start gap-1 pb-2">
-              <h3 className="text-heading text-lg font-semibold">
-                Manutenção da Plataforma
-              </h3>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-foreground/75 text-sm">
-                    Ative esta opção para suspender temporariamente o acesso de
-                    usuários comuns à plataforma.
-                    <br />
-                    Administradores ainda poderão fazer login.
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <span className="text-foreground/60 text-sm">
-                    MODO DE MANUTENÇÃO
-                  </span>
-                  <Switch />
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Separator className="my-6" />
-
-      <footer className="flex items-center justify-end gap-4">
-        <Button variant="ghost">Cancelar</Button>
-        <Button>Salvar Alterações</Button>
-      </footer>
+      <GenericForm
+        defaultValues={{
+          platformName: communityCenter?.name ?? '',
+          slogan: communityCenter?.slogan ?? '',
+          footerText: communityCenter?.rodape_text ?? '',
+          font: communityCenter?.fontFamily ?? 'poppins',
+          social_links:
+            communityCenter?.social_links?.map((s) => ({
+              value: s.value,
+            })) ?? [],
+          maintenance_mode: communityCenter?.maintenance_mode ?? false,
+        }}
+        needButtons={false}
+        onSubmit={() => {}}
+        schema={configsGeraisSchema}
+      >
+        <FormContent
+          faviconFile={faviconFile}
+          logoFile={logoFile}
+          onFaviconChange={(files) =>
+            setFaviconFile(
+              files[0]?.file instanceof File ? files[0].file : null,
+            )
+          }
+          onLogoChange={(files) =>
+            setLogoFile(files[0]?.file instanceof File ? files[0].file : null)
+          }
+        />
+      </GenericForm>
     </LayoutBase>
   );
+}
+
+// Componente interno
+function FormContent({
+  logoFile,
+  faviconFile,
+  onLogoChange,
+  onFaviconChange,
+}: {
+  logoFile: File | null;
+  faviconFile: File | null;
+  onLogoChange: (files: FileWithPreview[]) => void;
+  onFaviconChange: (files: FileWithPreview[]) => void;
+}) {
+  // Contexto do Formulário
+  const { getValues, trigger } = useFormContext<FormValues>();
+
+  // Funções de envio
+  const handleSave = async () => {
+    const isValid = await trigger();
+    if (!isValid) return;
+    const values = getValues();
+    const formData = buildConfigsFormData(values, logoFile, faviconFile);
+
+    // Chamada da API
+    router.put(route('gestao-sistema.configuracoes-gerais.update'), formData, {
+      preserveState: true,
+      onSuccess: () =>
+        toaster.createSuccess('Sucesso', 'Configurações salvas!'),
+      onError: () => toaster.createError('Erro', 'Algo deu errado.'),
+    });
+  };
+  return (
+    <>
+      <ConfigsGeraisForm
+        onFaviconChange={onFaviconChange}
+        onLogoChange={onLogoChange}
+      />
+      <Separator className="my-6" />
+      <footer className="flex items-center justify-end gap-4">
+        <Button variant="ghost">Cancelar</Button>
+        <Button onClick={handleSave}>Salvar Alterações</Button>
+      </footer>
+    </>
+  );
+}
+
+// Função para construir o FormData para envio
+function buildConfigsFormData(
+  values: FormValues,
+  logoFile: File | null,
+  faviconFile: File | null,
+): FormData {
+  const formData = new FormData();
+  formData.append('name', values.platformName);
+  formData.append('fontFamily', values.font);
+  formData.append('maintenance_mode', values.maintenance_mode ? '1' : '0');
+  if (values.slogan) formData.append('slogan', values.slogan);
+  if (values.footerText) formData.append('rodape_text', values.footerText);
+  if (values.social_links?.length) {
+    formData.append('social_links', JSON.stringify(values.social_links));
+  }
+  if (logoFile) formData.append('logo', logoFile);
+  if (faviconFile) formData.append('favicon', faviconFile);
+  return formData;
 }

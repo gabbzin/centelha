@@ -1,10 +1,14 @@
 import { Button } from '@/components/ui/button';
-import { useFileUpload } from '@/hooks/inputs/use-file-upload';
+import { useFileUpload, type FileWithPreview } from '@/hooks/inputs/use-file-upload';
 import { convertMB } from '@/utils/convertMb';
 import { AlertCircleIcon, CloudUploadIcon, UploadIcon, XIcon } from 'lucide-react';
 import { Label } from '../ui/label';
 
-export default function Uploader2() {
+interface Uploader2Props {
+  onFilesChange?: (files: FileWithPreview[]) => void;
+}
+
+export default function Uploader2({ onFilesChange }: Uploader2Props) {
   const maxSize = convertMB(2);
 
   const [
@@ -13,15 +17,14 @@ export default function Uploader2() {
   ] = useFileUpload({
     accept: 'image/svg+xml,image/png,image/jpeg,image/jpg,image/gif',
     maxSize,
+    onFilesChange,
   });
   const previewUrl = files[0]?.preview || null;
-  //   const _fileName = files[0]?.file.name || null;
 
   return (
     <div className="flex flex-col gap-2">
       <Label>Logo da plataforma</Label>
       <div className="relative">
-        {/* Drop area */}
         <div
           className="border-border has-[input:focus]:border-ring has-[input:focus]:ring-ring/50 data-[dragging=true]:bg-accent/50 relative flex min-h-24 flex-col items-center justify-center overflow-hidden rounded-xl border border-dashed p-11 transition-colors has-[input:focus]:ring-[3px]"
           data-dragging={isDragging || undefined}

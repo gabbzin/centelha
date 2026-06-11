@@ -46,7 +46,12 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'communityCenter' => CommunityCenter::first(),
+            'communityCenter' => CommunityCenter::with('socialLinks')->first() ?? null,
+
+            'flash' => [
+                'success' => $request->session()->get('success'),
+                'error'   => $request->session()->get('error'),
+            ],
         ];
     }
 }

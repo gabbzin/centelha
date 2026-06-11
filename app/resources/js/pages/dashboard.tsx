@@ -31,14 +31,60 @@ import { Map } from '@/components/dashboard/map';
 import { AlertCard } from '@/components/dashboard/cards/alert-card';
 import { TopItensCard } from '@/components/dashboard/cards/top-itens-card';
 import SimpleBarChart from '@/components/dashboard/simple-bar-chart';
-export default function Dashboard() {
+
+interface StatsCardData {
+  value: number;
+  percentageChange: number;
+}
+
+interface AlertInfo {
+  label: string;
+  rest: number;
+  alertLevel: 'warning' | 'critical';
+}
+
+interface TopItem {
+  name: string;
+  quantity: number;
+  percentage: number;
+}
+
+interface ChartDataItem {
+  name: string;
+  anterior: number;
+  atual: number;
+}
+
+interface DashboardProps {
+  statsCards: {
+    benefitsDelivered: StatsCardData;
+    familiesServed: StatsCardData;
+    newRegistrations: StatsCardData;
+  };
+  alerts: AlertInfo[];
+  topItems: TopItem[];
+  chartData: ChartDataItem[];
+}
+
+export default function Dashboard({
+  statsCards,
+  alerts,
+  topItems,
+  chartData,
+}: DashboardProps) {
   return (
     <LayoutBase
       descriptionPage="Acompanhamento estratégico das operações da Centelha"
       rightComponent={
         <Select defaultValue={OPTIONSSELECT[0].value}>
           <SelectTrigger className={'border-border border'}>
-            <SelectValue className={'capitalize'} />
+            <SelectValue className={'capitalize'}>
+              {
+                OPTIONSSELECT.find(
+                  (option) => option.value === OPTIONSSELECT[0].value,
+                )?.label
+              }
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             {OPTIONSSELECT.map((option) => (
@@ -53,27 +99,28 @@ export default function Dashboard() {
           </SelectContent>
         </Select>
       }
+      tagTitle="Dashboard"
       titlePage="Visão Geral do Dashboard"
     >
       <main className="space-y-8">
         <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <StatsCard
             icon={<HandWithHeartIcon />}
-            percentageChange={15}
+            percentageChange={statsCards.benefitsDelivered.percentageChange}
             title="Benefícios Entregues"
-            value={1240}
+            value={statsCards.benefitsDelivered.value}
           />
           <StatsCard
             icon={<FamilyIcon />}
-            percentageChange={8}
+            percentageChange={statsCards.familiesServed.percentageChange}
             title="Familias Atendidas"
-            value={850}
+            value={statsCards.familiesServed.value}
           />
           <StatsCard
             icon={<UserAddIcon />}
-            percentageChange={-6}
+            percentageChange={statsCards.newRegistrations.percentageChange}
             title="Novos Cadastros"
-            value={1240}
+            value={statsCards.newRegistrations.value}
           />
         </section>
 
@@ -89,34 +136,8 @@ export default function Dashboard() {
             </CardContent>
           </Card>
           <div className="flex flex-col items-center justify-between">
-            <AlertCard
-              infos={[
-                {
-                  label: 'Cestas básicas',
-                  rest: 12,
-                  alertLevel: 'warning',
-                },
-                {
-                  label: 'Gás',
-                  rest: 8,
-                  alertLevel: 'critical',
-                },
-              ]}
-            />
-            <TopItensCard
-              itens={[
-                {
-                  name: 'Cestas básicas',
-                  quantity: 270,
-                  percentage: 75,
-                },
-                {
-                  name: 'Gás',
-                  quantity: 150,
-                  percentage: 60,
-                },
-              ]}
-            />
+            <AlertCard infos={alerts} />
+            <TopItensCard itens={topItems} />
           </div>
         </section>
 
@@ -138,7 +159,7 @@ export default function Dashboard() {
               </CardDescription>
             </CardHeader>
             <CardContent className="flex items-center justify-center">
-              <SimpleBarChart data={data} />
+              <SimpleBarChart data={chartData} />
             </CardContent>
           </Card>
         </section>
@@ -146,20 +167,4 @@ export default function Dashboard() {
     </LayoutBase>
   );
 }
-const data = [
-  {
-    name: 'Kit Higiene',
-    anterior: 250,
-    atual: 320,
-  },
-  {
-    name: 'Cestas básicas',
-    anterior: 300,
-    atual: 270,
-  },
-  {
-    name: 'Gás',
-    anterior: 200,
-    atual: 150,
-  },
-];
+

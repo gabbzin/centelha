@@ -16,11 +16,20 @@ class CommunityCenter extends Model
         'favicon_path',
         'fontFamily',
         'settings',
+        'colors',
+        'maintenance_mode',
     ];
     protected function casts(): array
     {
         return [
             'settings' => 'array',
+            'colors' => 'array',
+            'maintenance_mode' => 'boolean',
         ];
+    }
+
+    public function socialLinks()
+    {
+        return $this->hasMany(SocialLink::class);
     }
 }
