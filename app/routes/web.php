@@ -27,6 +27,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('gestao-sistema/aparencia', [AppearanceController::class, 'update'])->name('admin.appearance.update');
 
     Route::put('gestao-sistema/configuracoes-gerais', [ConfiguracoesGeraisController::class, 'update'])->name('gestao-sistema.configuracoes-gerais.update');
+
+    Route::get('gestao-sistema/painel-customizacao', function () {
+        return Inertia::render('admin/gestao-sistema/painel-customizacao');
+    })->name('gestao-sistema.painel-customizacao');
 });
 
 Route::middleware(['auth'])->group(function () {

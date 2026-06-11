@@ -8,6 +8,7 @@ interface LayoutBaseProps {
   tagTitle?: string;
   description?: string | React.ReactNode;
   rightComponent?: React.ReactNode;
+  showHeader?: boolean;
 }
 export function LayoutBase({
   children,
@@ -15,16 +16,19 @@ export function LayoutBase({
   titlePage,
   description,
   rightComponent,
+  showHeader = true,
 }: LayoutBaseProps) {
   return (
     <>
       <Head title={title} />
       {/* O Header já está dentro do Main */}
       <Main>
-        <div className="flex items-center justify-between gap-4">
-          <Heading description={description} title={titlePage} />
-          {rightComponent}
-        </div>
+        {showHeader && (
+          <div className="flex items-center justify-between gap-4">
+            <Heading description={description} title={titlePage} />
+            {rightComponent}
+          </div>
+        )}
 
         <div className="flex flex-col">{children}</div>
       </Main>

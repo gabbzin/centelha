@@ -31,30 +31,25 @@ import { Map } from '@/components/dashboard/map';
 import { AlertCard } from '@/components/dashboard/cards/alert-card';
 import { TopItensCard } from '@/components/dashboard/cards/top-itens-card';
 import SimpleBarChart from '@/components/dashboard/simple-bar-chart';
-
 interface StatsCardData {
   value: number;
   percentageChange: number;
 }
-
 interface AlertInfo {
   label: string;
   rest: number;
   alertLevel: 'warning' | 'critical';
 }
-
 interface TopItem {
   name: string;
   quantity: number;
   percentage: number;
 }
-
 interface ChartDataItem {
   name: string;
   anterior: number;
   atual: number;
 }
-
 interface DashboardProps {
   statsCards: {
     benefitsDelivered: StatsCardData;
@@ -64,13 +59,14 @@ interface DashboardProps {
   alerts: AlertInfo[];
   topItems: TopItem[];
   chartData: ChartDataItem[];
+  showHeader?: boolean;
 }
-
 export default function Dashboard({
   statsCards,
   alerts,
   topItems,
   chartData,
+  showHeader = true,
 }: DashboardProps) {
   return (
     <LayoutBase
@@ -167,4 +163,3 @@ export default function Dashboard({
     </LayoutBase>
   );
 }
-
