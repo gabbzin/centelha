@@ -5,6 +5,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\FamilyController;
 use App\Http\Controllers\Admin\AppearanceController;
 use App\Http\Controllers\Admin\ConfiguracoesGeraisController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return Inertia::render('home');
@@ -33,9 +34,7 @@ Route::middleware(['auth'])->group(function () {
         return Inertia::render('beneficios');
     })->name('beneficios');
 
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('family', [FamilyController::class, 'index'])->name('family');
     Route::post('family', [FamilyController::class, 'store'])->name('family.store');
     Route::get('family/register', function () {
