@@ -10,9 +10,6 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import { CalendarClock, HandCoins, HeartHandshake } from 'lucide-react';
 import React, { useRef } from 'react';
 import { SocialIcon } from 'react-social-icons';
-
-const heroDashboardImage = 'https://www.figma.com/api/mcp/asset/fb9db903-00d7-45ee-9259-ff2b6076d32c';
-
 const steps = [
   {
     step: '1',
@@ -31,7 +28,6 @@ const steps = [
     title: 'Acompanhe o impacto com dados reais.',
   },
 ];
-
 const features = [
   {
     title: 'Gestao de Eventos Sem Caos',
@@ -41,16 +37,17 @@ const features = [
   },
   {
     title: 'Beneficios com Transparencia Total',
-    description: 'Controle a entrega de cestas e vouchers com rastreabilidade absoluta e sem duplicidade.',
+    description:
+      'Controle a entrega de cestas e vouchers com rastreabilidade absoluta e sem duplicidade.',
     Icon: HandCoins,
   },
   {
     title: 'Nenhuma Familia Esquecida',
-    description: 'Receba alertas automaticos de familias desassistidas e garanta um atendimento justo e humanizado.',
+    description:
+      'Receba alertas automaticos de familias desassistidas e garanta um atendimento justo e humanizado.',
     Icon: HeartHandshake,
   },
 ];
-
 const footerColumns = [
   {
     title: 'Produto',
@@ -65,27 +62,32 @@ const footerColumns = [
     links: ['Termos de Uso', 'Politica de Privacidade', 'Segurança de Dados'],
   },
 ];
-
-const links = ['https://instagram.com', 'https://linkedin.com', 'https://twitter.com'];
-
 export default function Home() {
   const { communityCenter } = usePage<SharedData>().props;
   const inicioRef = useRef<HTMLDivElement | null>(null);
   const beneficiosRef = useRef<HTMLDivElement | null>(null);
   const comoFuncionaRef = useRef<HTMLDivElement | null>(null);
-
   const scrollTo = (e: React.RefObject<HTMLDivElement | null>) => {
     if (e.current) {
-      e.current?.scrollIntoView({ behavior: 'smooth' });
+      e.current?.scrollIntoView({
+        behavior: 'smooth',
+      });
     }
   };
-
   const navItems = [
-    { name: 'Inicio', ref: inicioRef },
-    { name: 'Beneficios', ref: beneficiosRef },
-    { name: 'Como Funciona', ref: comoFuncionaRef },
+    {
+      name: 'Inicio',
+      ref: inicioRef,
+    },
+    {
+      name: 'Beneficios',
+      ref: beneficiosRef,
+    },
+    {
+      name: 'Como Funciona',
+      ref: comoFuncionaRef,
+    },
   ];
-
   return (
     <>
       <Head title={communityCenter?.name ?? 'Centelha'} />
@@ -93,9 +95,11 @@ export default function Home() {
       <main className="bg-background text-foreground min-h-screen scroll-smooth">
         <header className="bg-background sticky top-0 z-50 border-b border-zinc-200 backdrop-blur-lg">
           <div className="max-w-lm mx-auto flex w-full items-center justify-between px-2 py-2 lg:px-10">
-            <Link href="#" className="flex items-center gap-3">
+            <Link className="flex items-center gap-3" href="#">
               <Logo />
-              <p className="text-heading text-xl font-extrabold tracking-tight">{communityCenter?.name ?? 'Centelha'}</p>
+              <p className="text-heading text-xl font-extrabold tracking-tight">
+                {communityCenter?.name ?? 'Centelha'}
+              </p>
             </Link>
 
             <nav className="hidden items-center gap-8 lg:flex">
@@ -112,25 +116,34 @@ export default function Home() {
 
             <div className="flex items-center gap-2">
               <Link
+                className={buttonVariants({
+                  variant: 'ghost',
+                  className: 'hidden rounded-full sm:inline-flex',
+                })}
                 href={route('login')}
-                className={buttonVariants({ variant: 'ghost', className: 'hidden rounded-full sm:inline-flex' })}
               >
                 Entrar
               </Link>
-              <Link href={route('login')} className={buttonVariants({ variant: 'default', className: 'rounded-full' })}>
+              <Link
+                className={buttonVariants({
+                  variant: 'default',
+                  className: 'rounded-full',
+                })}
+                href={route('login')}
+              >
                 Começar
               </Link>
             </div>
           </div>
         </header>
 
-        <HeroSection imageUrl={heroDashboardImage} ref={inicioRef} />
+        <HeroSection ref={inicioRef} imageUrl={'/family.png'} />
 
         <AboutSection />
 
-        <StepsSection steps={steps} ref={beneficiosRef} />
+        <StepsSection ref={beneficiosRef} steps={steps} />
 
-        <FeaturesSection features={features} ref={comoFuncionaRef} />
+        <FeaturesSection ref={comoFuncionaRef} features={features} />
 
         <FinalCardSection />
 
@@ -138,11 +151,14 @@ export default function Home() {
           <div className="mx-auto grid w-full max-w-7xl gap-12 px-2 py-16 md:grid-cols-2 lg:grid-cols-4 lg:px-10">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <Logo width={32} height={32} />
-                <p className="text-xl font-semibold tracking-tight">{communityCenter?.name ?? 'Centelha'}</p>
+                <Logo height={32} width={32} />
+                <p className="text-xl font-semibold tracking-tight">
+                  {communityCenter?.name ?? 'Centelha'}
+                </p>
               </div>
               <p className="max-w-xs text-sm text-white/70">
-                {communityCenter?.slogan ?? 'Tecnologia simples e poderosa para potencializar ações sociais e transformar comunidades.'}
+                {communityCenter?.slogan ??
+                  'Tecnologia simples e poderosa para potencializar ações sociais e transformar comunidades.'}
               </p>
             </div>
 
@@ -152,7 +168,10 @@ export default function Home() {
                 <ul className="space-y-2">
                   {column.links.map((link) => (
                     <li key={link}>
-                      <a href="#" className="text-sm text-white/70 transition hover:text-white">
+                      <a
+                        className="text-sm text-white/70 transition hover:text-white"
+                        href="#"
+                      >
                         {link}
                       </a>
                     </li>
@@ -164,23 +183,27 @@ export default function Home() {
 
           <div className="border-t border-white/10">
             <div className="mx-auto flex w-full max-w-7xl flex-col gap-2 px-6 py-6 text-sm text-white/50 lg:flex-row lg:items-center lg:justify-between lg:px-10">
-              <p>{communityCenter?.rodape_text ?? `© ${new Date().getFullYear()} Centelha. Todos os direitos reservados.`}</p>
+              <p>
+                {communityCenter?.rodape_text ??
+                  `© ${new Date().getFullYear()} Centelha. Todos os direitos reservados.`}
+              </p>
               <div>
-                {links.map((link) => (
+                {communityCenter?.social_links?.map((link) => (
                   <SocialIcon
-                    key={link}
-                    url={link}
+                    key={link.value}
                     bgColor="transparent"
+                    fgColor="#FFFFFF88"
                     style={{
                       width: 32,
                       height: 32,
                     }}
-                    fgColor="#FFFFFF88"
+                    url={link.value}
                   />
                 ))}
               </div>
               <p>
-                Desenvolvido com <span className="text-white">💙</span> pela equipe {communityCenter?.name ?? 'Centelha'}
+                Desenvolvido com <span className="text-white">💙</span> pela
+                equipe {communityCenter?.name ?? 'Centelha'}
               </p>
             </div>
           </div>

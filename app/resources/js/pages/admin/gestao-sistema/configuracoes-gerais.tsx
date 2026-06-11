@@ -58,7 +58,10 @@ function FormContent({
         toaster.createSuccess('Sucesso', 'Configurações salvas com sucesso!');
       },
       onError: () => {
-        toaster.createError('Erro', 'Algo deu errado ao salvar as configurações.');
+        toaster.createError(
+          'Erro',
+          'Algo deu errado ao salvar as configurações.',
+        );
       },
     });
   };
