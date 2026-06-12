@@ -108,6 +108,7 @@ export function StockControlSection({ benefits }: StockControlSectionProps) {
       </div>
 
       <BenefitFormModal
+        key={benefitToEdit ? `edit-${benefitToEdit.id}` : 'create'}
         open={isFormOpen}
         onOpenChange={handleCloseFormModal}
         benefitToEdit={benefitToEdit}
