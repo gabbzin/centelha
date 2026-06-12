@@ -1,47 +1,80 @@
-import { useCallback, useMemo, useState } from 'react';
-import { CreateBenefitModal } from './create-benefit-modal';
-import { BENEFITS, filterBenefits, paginate } from './data';
+import { useCallback, useState } from 'react';
+import { BenefitFormModal } from './create-benefit-modal';
+import { ViewBenefitModal } from './view-benefit-modal';
 import { StockFilterBar } from './stock-filter-bar';
 import { StockSectionHeader } from './stock-section-header';
 import { StockTable } from './stock-table';
-import type { Benefit } from './types';
+import type { Benefit, PaginatedBenefits } from './types';
+import { router } from '@inertiajs/react';
 
-const PAGE_SIZE = 8;
+interface StockControlSectionProps {
+  benefits: PaginatedBenefits;
+}
 
-export function StockControlSection() {
-  const [search, setSearch] = useState('');
-  const [category, setCategory] = useState('all');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
+export function StockControlSection({ benefits }: StockControlSectionProps) {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [benefitToEdit, setBenefitToEdit] = useState<Benefit | null>(null);
 
-  const filtered = useMemo(() => filterBenefits(BENEFITS, { search, category }), [search, category]);
+  const [isViewOpen, setIsViewOpen] = useState(false);
+  const [benefitToView, setBenefitToView] = useState<Benefit | null>(null);
 
-  const pagination = useMemo(() => paginate(filtered, currentPage, PAGE_SIZE), [filtered, currentPage]);
+  const searchParams = new URLSearchParams(window.location.search);
+  const [search, setSearch] = useState(searchParams.get('search') ?? '');
+  const [category, setCategory] = useState(searchParams.get('category') ?? 'all');
 
   const handleSearchChange = useCallback((value: string) => {
     setSearch(value);
-    setCurrentPage(1);
-  }, []);
+    router.get(
+      '/beneficios',
+      { search: value, category, page: 1 },
+      { preserveState: true, preserveScroll: true, replace: true },
+    );
+  }, [category]);
 
   const handleCategoryChange = useCallback((value: string) => {
     setCategory(value);
-    setCurrentPage(1);
-  }, []);
+    router.get(
+      '/beneficios',
+      { search, category: value, page: 1 },
+      { preserveState: true, preserveScroll: true, replace: true },
+    );
+  }, [search]);
+
+  const handlePageChange = useCallback((page: number) => {
+    router.get(
+      '/beneficios',
+      { search, category, page },
+      { preserveState: true, preserveScroll: true, replace: true },
+    );
+  }, [search, category]);
 
   const handleView = useCallback((benefit: Benefit) => {
-    console.log('View:', benefit.code);
+    setBenefitToView(benefit);
+    setIsViewOpen(true);
   }, []);
 
   const handleEdit = useCallback((benefit: Benefit) => {
-    console.log('Edit:', benefit.code);
+    setBenefitToEdit(benefit);
+    setIsFormOpen(true);
   }, []);
 
   const handleDelete = useCallback((benefit: Benefit) => {
-    console.log('Delete:', benefit.code);
+    if (confirm(`Tem certeza que deseja excluir o benefício "${benefit.name}"?`)) {
+      router.delete(`/beneficios/${benefit.id}`, {
+        preserveState: true,
+        preserveScroll: true,
+      });
+    }
   }, []);
 
   const handleAdd = useCallback(() => {
-    setIsCreateOpen(true);
+    setBenefitToEdit(null);
+    setIsFormOpen(true);
+  }, []);
+
+  const handleCloseFormModal = useCallback(() => {
+    setIsFormOpen(false);
+    setBenefitToEdit(null);
   }, []);
 
   return (
@@ -61,20 +94,30 @@ export function StockControlSection() {
 
       <div className="mt-4">
         <StockTable
-          benefits={pagination.items}
-          startIndex={pagination.startIndex}
-          endIndex={pagination.endIndex}
-          total={pagination.total}
-          currentPage={currentPage}
-          totalPages={pagination.totalPages}
-          onPageChange={setCurrentPage}
+          benefits={benefits.data}
+          startIndex={benefits.from ?? 1}
+          endIndex={benefits.to ?? benefits.data.length}
+          total={benefits.total}
+          currentPage={benefits.current_page}
+          totalPages={benefits.last_page}
+          onPageChange={handlePageChange}
           onView={handleView}
           onEdit={handleEdit}
           onDelete={handleDelete}
         />
       </div>
 
-      <CreateBenefitModal open={isCreateOpen} onOpenChange={setIsCreateOpen} />
+      <BenefitFormModal
+        open={isFormOpen}
+        onOpenChange={handleCloseFormModal}
+        benefitToEdit={benefitToEdit}
+      />
+
+      <ViewBenefitModal
+        benefit={benefitToView}
+        open={isViewOpen}
+        onOpenChange={setIsViewOpen}
+      />
     </section>
   );
 }
