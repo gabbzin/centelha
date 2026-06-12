@@ -17,13 +17,23 @@ import {
 } from 'lucide-react';
 import { FamilyCard } from './components/family-card';
 import { PaginationConsul } from '@/components/layout/pagination';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 interface FamilyProps {
   families: PaginatedData<Family>;
 }
 export default function Family({ families }: FamilyProps) {
   const { communityCenter } = usePage<SharedData>().props;
   const [onlyLastName, setOnlyLastName] = useState(false);
+  const [search, setSearch] = useState(
+    () => new URL(window.location.href).searchParams.get('search') || '',
+  );
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.get('/family', { search }, { preserveState: true, replace: true });
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [search]);
   return (
     <>
       <Head title="Módulo Familia" />
@@ -46,7 +56,11 @@ export default function Family({ families }: FamilyProps) {
         <Card variant={'basic'}>
           <CardContent className="flex items-center gap-3">
             <InputGroup className="bg-muted">
-              <InputGroupInput className="" placeholder="Buscar família..." />
+              <InputGroupInput
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Buscar família..."
+                value={search}
+              />
               <InputGroupAddon>
                 <SearchIcon />
               </InputGroupAddon>
@@ -92,11 +106,19 @@ export default function Family({ families }: FamilyProps) {
             );
           })}
         </div>
-        <PaginationConsul
-          links={families.links}
-          next_page_url={families.next_page_url}
-          prev_page_url={families.prev_page_url}
-        />
+
+        {families.data.length > 0 && (
+          <PaginationConsul
+            links={families.links}
+            next_page_url={families.next_page_url}
+            prev_page_url={families.prev_page_url}
+          />
+        )}
+
+        {/* Editar a parte de não encontrado */}
+        <div>
+          Não encontrado
+        </div>
       </Main>
     </>
   );

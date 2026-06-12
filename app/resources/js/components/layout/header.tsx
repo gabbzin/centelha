@@ -11,13 +11,13 @@ export function Header() {
 
         <div className="flex items-center gap-2">
           <AnimatedThemeToggler />
-          <Button
+          {/* <Button
             className="border-foreground/40 text-foreground hover:bg-background h-9 w-10 rounded-lg bg-transparent"
             size="icon-sm"
             variant="outline"
-          >
+           >
             <BellIcon className="h-4 w-4" />
-          </Button>
+           </Button> */}
           <SidebarMenu />
         </div>
       </div>

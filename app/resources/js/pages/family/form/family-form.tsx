@@ -15,8 +15,10 @@ import type { Resolver } from 'react-hook-form';
 import {
   defaultValues,
   familySchema,
+  familyToFormData,
   type FormData,
 } from './schema/family-schema';
+import type { Family } from '@/types';
 import { Step1 } from './form-steps/step1';
 import { Step2 } from './form-steps/step2';
 import { Step3 } from './form-steps/step3';
@@ -50,17 +52,19 @@ interface FamilyFormProps {
   totalSteps: number;
   onNext: () => void;
   onPrev: () => void;
+  family?: Family;
 }
 export function FamilyForm({
   step,
   totalSteps,
   onNext,
   onPrev,
+  family,
 }: FamilyFormProps) {
   const form = useForm<FormData>({
     mode: 'onTouched',
     resolver: zodResolver(familySchema) as unknown as Resolver<FormData>,
-    defaultValues,
+    defaultValues: family ? familyToFormData(family) : defaultValues,
   });
   const handleNext = async () => {
     const isValid = await form.trigger(STEP_FIELDS[step]);
@@ -76,21 +80,32 @@ export function FamilyForm({
       toaster.createError(`Erro de validação!`, String(errorMessage));
     }
   };
+  const isEditing = !!family;
   const onSubmit = form.handleSubmit((data) => {
-    router.post('/family', data as never, {
+    const options = {
       onSuccess: () => {
         toaster.createSuccess(
           'Sucesso!',
-          'Cadastro da família concluído com sucesso!',
+          isEditing
+            ? 'Informações da família atualizadas com sucesso!'
+            : 'Cadastro da família concluído com sucesso!',
         );
       },
       onError: () => {
         toaster.createError(
           'Erro!',
-          'Ocorreu um erro ao cadastrar a família. Verifique os dados e tente novamente.',
+          isEditing
+            ? 'Ocorreu um erro ao atualizar a família. Verifique os dados e tente novamente.'
+            : 'Ocorreu um erro ao cadastrar a família. Verifique os dados e tente novamente.',
         );
       },
-    });
+    };
+
+    if (isEditing) {
+      router.put(`/family/${family.id}`, data as never, options);
+    } else {
+      router.post('/family', data as never, options);
+    }
   });
   return (
     <>
@@ -120,7 +135,7 @@ export function FamilyForm({
           </Button>
         ) : (
           <Button onClick={onSubmit} type="submit" variant={'primary'}>
-            Finalizar Cadastro
+            {isEditing ? 'Atualizar Cadastro' : 'Finalizar Cadastro'}
           </Button>
         )}
       </footer>
