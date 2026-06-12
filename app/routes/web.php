@@ -5,6 +5,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\FamilyController;
 use App\Http\Controllers\Admin\AppearanceController;
 use App\Http\Controllers\Admin\ConfiguracoesGeraisController;
+use App\Http\Controllers\BenefitController;
 use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
@@ -30,9 +31,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('beneficios', function () {
-        return Inertia::render('beneficios');
-    })->name('beneficios');
+    Route::get('beneficios', [BenefitController::class, 'index'])->name('beneficios');
+    Route::post('beneficios', [BenefitController::class, 'store'])->name('beneficios.store');
+    Route::put('beneficios/{benefit}', [BenefitController::class, 'update'])->name('beneficios.update');
+    Route::delete('beneficios/{benefit}', [BenefitController::class, 'destroy'])->name('beneficios.destroy');
 
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('family', [FamilyController::class, 'index'])->name('family');
