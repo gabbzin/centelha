@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 import { format } from 'date-fns';
+=======
+import { format, parse } from 'date-fns';
+>>>>>>> Stashed changes
 import { z } from 'zod';
 export const familyMemberSchema = z.object({
   name: z
@@ -48,6 +52,7 @@ export const familySchema = z.object({
   renda_familiar: z.union([z.string(), z.number()]).optional(),
   recebe_auxilio: z.enum(['sim', 'nao']).optional(),
   auxilios_recebidos: z.string().optional(),
+  general_observations: z.string().optional(),
 });
 export type FormData = z.infer<typeof familySchema>;
 export const defaultValues: FormData = {
@@ -68,4 +73,44 @@ export const defaultValues: FormData = {
   renda_familiar: '',
   recebe_auxilio: undefined,
   auxilios_recebidos: '',
+  general_observations: '',
 };
+<<<<<<< Updated upstream
+=======
+
+function strip(value: string | null | undefined): string {
+  return (value ?? '').replace(/\D/g, '');
+}
+
+export function familyToFormData(family: Family): FormData {
+  return {
+    name: family.responsible_name,
+    cpf: strip(family.responsible_cpf),
+    telefone: strip(family.responsible_phone),
+    email: family.responsible_email ?? '',
+    data_nascimento: family.responsible_birth_date
+      ? (parseISO(family.responsible_birth_date) as unknown as string)
+      : '',
+    family_members: (family.members ?? []).map((m) => ({
+      name: m.name,
+      cpf: strip(m.cpf),
+      data_nascimento: m.birth_date
+        ? (parseISO(m.birth_date) as unknown as string)
+        : '',
+      relacao_parentesco: m.relationship,
+    })),
+    cep: strip(family.address?.zipcode),
+    logradouro: family.address?.street ?? '',
+    numero: Number(family.address?.number) || 0,
+    cidade: family.address?.city ?? '',
+    UF: family.address?.state ?? '',
+    bairro: family.address?.neighborhood ?? '',
+    moradia: (family.housing_condition as FormData['moradia']) ?? undefined,
+    fonte_renda: family.income_source ?? '',
+    renda_familiar: family.total_income ? family.total_income / 100 : '',
+    recebe_auxilio: family.receives_government_aid ? 'sim' : 'nao',
+    auxilios_recebidos: family.government_aid_description ?? '',
+    general_observations: family.general_observations ?? '',
+  };
+}
+>>>>>>> Stashed changes

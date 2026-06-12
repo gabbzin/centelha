@@ -37,7 +37,7 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('gestao-sistema');
         }
 
-        return redirect('/');
+        return redirect()->route('dashboard');
     }
 
     /**

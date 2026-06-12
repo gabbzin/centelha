@@ -10,13 +10,15 @@ interface StockFilterBarProps {
   category: string;
   onCategoryChange: (value: string) => void;
   onAdd: () => void;
+  searchPlaceholder?: string;
+  addButtonLabel?: string;
 }
 
-export function StockFilterBar({ search, onSearchChange, category, onCategoryChange, onAdd }: StockFilterBarProps) {
+export function StockFilterBar({ search, onSearchChange, category, onCategoryChange, onAdd, searchPlaceholder, addButtonLabel }: StockFilterBarProps) {
   return (
     <div className="mt-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
       <div className="flex w-full items-center gap-3 md:w-2/3">
-        <Input placeholder="Buscar por benefícios..." value={search} onChange={(e) => onSearchChange(e.target.value)} />
+        <Input placeholder={searchPlaceholder ?? 'Buscar por benefícios...'} value={search} onChange={(e) => onSearchChange(e.target.value)} />
         <div className="w-48">
           <Select value={category} onValueChange={onCategoryChange}>
             <SelectTrigger className="border-border w-full border">
@@ -35,7 +37,7 @@ export function StockFilterBar({ search, onSearchChange, category, onCategoryCha
 
       <div className="flex items-center gap-3">
         <Button variant="default" className="gap-2 rounded-md px-4" onClick={onAdd}>
-          Adicionar novo benefício
+          {addButtonLabel ?? 'Adicionar novo benefício'}
           <Plus className="size-4" />
         </Button>
       </div>

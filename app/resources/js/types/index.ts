@@ -40,6 +40,50 @@ export interface SocialLink {
   created_at: string;
   updated_at: string;
 }
+export interface DashboardPageSettings {
+  widgets: {
+    metrics_cards: boolean;
+    heat_map: boolean;
+    stock_alerts: boolean;
+    comparison_chart: boolean;
+    period_selector: boolean;
+  };
+  texts: {
+    main_title: string;
+    subtitle: string;
+    label_card_1: string;
+    label_card_2: string;
+    label_card_3: string;
+    map_title: string;
+    alert_card_title: string;
+    top_items_title: string;
+    chart_title: string;
+    chart_label_previous: string;
+    chart_label_current: string;
+  };
+  rules: {
+    low_stock_limit: number;
+  };
+}
+
+export interface SchemaField {
+  key: string;
+  label: string;
+  type: 'boolean' | 'string' | 'number';
+  max?: number;
+  min?: number;
+}
+
+export interface SchemaSection {
+  title: string;
+  description?: string;
+  fields: SchemaField[];
+}
+
+export interface PageSchema {
+  sections: SchemaSection[];
+}
+
 export interface SharedData {
   name: string;
   quote: {
@@ -48,6 +92,7 @@ export interface SharedData {
   };
   auth: Auth;
   communityCenter: CommunityCenter | null;
+  pageSettings: Record<string, unknown> | null;
   flash: {
     success: string | null;
     error: string | null;

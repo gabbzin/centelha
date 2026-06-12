@@ -7,19 +7,22 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { FamilyForm } from './family-form';
-import type { SharedData } from '@/types';
+import type { Family, SharedData } from '@/types';
 const STEPS = [
   { icon: IdCardIcon, title: '01 Identificação e Familia' },
   { icon: MapPinHouseIcon, title: '02 Endereço' },
   { icon: CircleDollarSignIcon, title: '03 Renda' },
 ];
-export default function RegisterFamilyPage() {
+interface EditFamilyPageProps {
+  family: Family;
+}
+export default function EditFamilyPage({ family }: EditFamilyPageProps) {
   const { pageSettings } = usePage<SharedData>().props;
   const texts = (pageSettings?.texts as Record<string, string>) ?? {};
   const [currentStep, setCurrentStep] = useState(0);
   return (
     <>
-      <Head title={texts.register_title ?? 'Formulário'} />
+      <Head title={texts.edit_title ?? 'Editar Família'} />
       <div className="flex min-h-screen flex-col">
         <Header />
         <div className="grid flex-1 grid-cols-1 lg:grid-cols-[16%_1fr]">
@@ -41,6 +44,7 @@ export default function RegisterFamilyPage() {
 
           <main className="bg-surface flex h-full flex-col justify-between p-8">
             <FamilyForm
+              family={family}
               onNext={() => setCurrentStep((s) => s + 1)}
               onPrev={() => setCurrentStep((s) => s - 1)}
               step={currentStep}

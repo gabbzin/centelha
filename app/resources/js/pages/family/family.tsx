@@ -20,33 +20,46 @@ import { PaginationConsul } from '@/components/layout/pagination';
 import { useState } from 'react';
 interface FamilyProps {
   families: PaginatedData<Family>;
+  previewSettings?: Record<string, unknown>;
+  hideHeader?: boolean;
 }
-export default function Family({ families }: FamilyProps) {
-  const { communityCenter } = usePage<SharedData>().props;
+export default function Family({ families, previewSettings, hideHeader }: FamilyProps) {
+  const { communityCenter, pageSettings: sharedSettings } = usePage<SharedData>().props;
+  const pageSettings = previewSettings ?? sharedSettings;
+  const texts = (pageSettings?.texts as Record<string, string>) ?? {};
+  const t = (key: string, fallback: string) => texts[key] ?? fallback;
   const [onlyLastName, setOnlyLastName] = useState(false);
   return (
     <>
-      <Head title="Módulo Familia" />
+      <Head title={t('page_title', 'Módulo Familia')} />
 
       <Main>
         <div className="flex items-center justify-between gap-4">
           <Heading
-            description={`Gerencie e acompanhe o cadastro das famílias atendidas pela rede ${communityCenter?.name}`}
-            title="Gestão de Familias"
+            description={`${t('page_description', 'Gerencie e acompanhe o cadastro das famílias atendidas pela rede')} ${communityCenter?.name}`}
+            title={t('page_title', 'Gestão de Familias')}
           />
           <Button
             className={'uppercase'}
             onClick={() => router.visit('/family/register')}
             variant={'primary'}
           >
-            Nova Família +
+            {t('new_button', 'Nova Família +')}
           </Button>
         </div>
 
         <Card variant={'basic'}>
           <CardContent className="flex items-center gap-3">
             <InputGroup className="bg-muted">
+<<<<<<< Updated upstream
               <InputGroupInput className="" placeholder="Buscar família..." />
+=======
+              <InputGroupInput
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder={t('search_placeholder', 'Buscar família...')}
+                value={search}
+              />
+>>>>>>> Stashed changes
               <InputGroupAddon>
                 <SearchIcon />
               </InputGroupAddon>
@@ -92,11 +105,24 @@ export default function Family({ families }: FamilyProps) {
             );
           })}
         </div>
+<<<<<<< Updated upstream
         <PaginationConsul
           links={families.links}
           next_page_url={families.next_page_url}
           prev_page_url={families.prev_page_url}
         />
+=======
+
+        {families.data.length > 0 ? (
+          <PaginationConsul
+            links={families.links}
+            next_page_url={families.next_page_url}
+            prev_page_url={families.prev_page_url}
+          />
+        ) : (
+          <div>{t('empty_state', 'Nenhuma família encontrada.')}</div>
+        )}
+>>>>>>> Stashed changes
       </Main>
     </>
   );

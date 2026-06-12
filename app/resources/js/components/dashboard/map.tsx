@@ -6,6 +6,7 @@ export function Map() {
       style={{
         height: '500px',
         width: '100%',
+        zIndex: 0
       }}
       zoom={13}
     >

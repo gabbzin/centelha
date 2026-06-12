@@ -6,6 +6,7 @@ use App\Http\Controllers\FamilyController;
 use App\Http\Controllers\Admin\AppearanceController;
 use App\Http\Controllers\Admin\ConfiguracoesGeraisController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Admin\PageCustomizationController;
 
 Route::get('/', function () {
     return Inertia::render('home');
@@ -28,9 +29,15 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::put('gestao-sistema/configuracoes-gerais', [ConfiguracoesGeraisController::class, 'update'])->name('gestao-sistema.configuracoes-gerais.update');
 
+<<<<<<< Updated upstream
     Route::get('gestao-sistema/painel-customizacao', function () {
         return Inertia::render('admin/gestao-sistema/painel-customizacao');
     })->name('gestao-sistema.painel-customizacao');
+=======
+    Route::get('gestao-sistema/customizacao-tela', [PageCustomizationController::class, 'index'])->name('gestao-sistema.customizacao-tela');
+    Route::get('gestao-sistema/customizacao-tela/{pageKey}', [PageCustomizationController::class, 'show'])->name('gestao-sistema.customizacao-tela.edit');
+    Route::put('gestao-sistema/customizacao-tela/{pageKey}', [PageCustomizationController::class, 'update'])->name('gestao-sistema.customizacao-tela.update');
+>>>>>>> Stashed changes
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -47,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('family/details/{id}', [FamilyController::class, 'show'])->name('family.info');
     Route::put('family/{family}', [FamilyController::class, 'update'])->name('family.update');
     Route::patch('family/{family}/deactivate', [FamilyController::class, 'deactivate'])->name('family.deactivate');
+    Route::patch('family/{family}/activate', [FamilyController::class, 'activate'])->name('family.activate');
 });
 
 
