@@ -44,8 +44,7 @@ class BenefitController extends Controller
             $imagePath = $request->file('image')->store('benefits', 'public');
         }
 
-        Benefit::create([
-            'code' => Benefit::generateCode(),
+        $benefit = Benefit::create([
             'name' => $data['name'],
             'category' => $data['category'],
             'stock' => $data['quantity'],
@@ -57,6 +56,8 @@ class BenefitController extends Controller
             'created_by' => auth()->id(),
         ]);
 
+        $benefit->update(['code' => $benefit->generateCode()]);
+
         return redirect()->route('beneficios');
     }
 
@@ -65,6 +66,14 @@ class BenefitController extends Controller
         $data = $request->validated();
 
         $imagePath = $benefit->image_path;
+
+        if ($request->has('remove_image')) {
+            if ($imagePath) {
+                Storage::disk('public')->delete($imagePath);
+            }
+            $imagePath = null;
+        }
+
         if ($request->hasFile('image')) {
             if ($imagePath) {
                 Storage::disk('public')->delete($imagePath);

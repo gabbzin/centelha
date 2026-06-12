@@ -21,10 +21,8 @@ class Benefit extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public static function generateCode(): string
+    public function generateCode(): string
     {
-        $latest = static::orderBy('id', 'desc')->first();
-        $nextId = $latest ? $latest->id + 1 : 1;
-        return 'BNF-' . str_pad((string) $nextId, 3, '0', STR_PAD_LEFT);
+        return 'BNF-' . str_pad((string) $this->id, 3, '0', STR_PAD_LEFT);
     }
 }

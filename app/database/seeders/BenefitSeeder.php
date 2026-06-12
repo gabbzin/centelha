@@ -30,9 +30,9 @@ class BenefitSeeder extends Seeder
             ['name' => 'Voucher R$ 50', 'category' => 'Financeiro', 'stock' => 110, 'status' => 'Ativo'],
         ];
 
-        foreach ($benefits as $index => $data) {
-            $code = 'BNF-' . str_pad((string) ($index + 1), 3, '0', STR_PAD_LEFT);
-            Benefit::create(array_merge($data, ['code' => $code]));
+        foreach ($benefits as $data) {
+            $benefit = Benefit::create($data);
+            $benefit->update(['code' => $benefit->generateCode()]);
         }
     }
 }
