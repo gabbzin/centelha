@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { FamilyCard } from './components/family-card';
 import { PaginationConsul } from '@/components/layout/pagination';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 interface FamilyProps {
   families: PaginatedData<Family>;
   previewSettings?: Record<string, unknown>;
@@ -29,6 +29,17 @@ export default function Family({ families, previewSettings, hideHeader }: Family
   const texts = (pageSettings?.texts as Record<string, string>) ?? {};
   const t = (key: string, fallback: string) => texts[key] ?? fallback;
   const [onlyLastName, setOnlyLastName] = useState(false);
+  const [search, setSearch] = useState(
+    () => new URL(window.location.href).searchParams.get('search') || '',
+  );
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.get('/family', { search }, { preserveState: true, replace: true });
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [search]);
+
   return (
     <>
       <Head title={t('page_title', 'Módulo Familia')} />
@@ -51,15 +62,11 @@ export default function Family({ families, previewSettings, hideHeader }: Family
         <Card variant={'basic'}>
           <CardContent className="flex items-center gap-3">
             <InputGroup className="bg-muted">
-<<<<<<< Updated upstream
-              <InputGroupInput className="" placeholder="Buscar família..." />
-=======
               <InputGroupInput
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder={t('search_placeholder', 'Buscar família...')}
                 value={search}
               />
->>>>>>> Stashed changes
               <InputGroupAddon>
                 <SearchIcon />
               </InputGroupAddon>
@@ -88,7 +95,6 @@ export default function Family({ families, previewSettings, hideHeader }: Family
                 ? parts[parts.length - 2] + ' ' + parts[parts.length - 1]
                 : name;
             };
-            // Se withoutSobrenome for true, pega o sobrenome, caso contrário, pega o nome completo
             const sobrenome = onlyLastName
               ? getSobrenome(family.responsible_name)
               : family.responsible_name;
@@ -105,13 +111,6 @@ export default function Family({ families, previewSettings, hideHeader }: Family
             );
           })}
         </div>
-<<<<<<< Updated upstream
-        <PaginationConsul
-          links={families.links}
-          next_page_url={families.next_page_url}
-          prev_page_url={families.prev_page_url}
-        />
-=======
 
         {families.data.length > 0 ? (
           <PaginationConsul
@@ -122,10 +121,6 @@ export default function Family({ families, previewSettings, hideHeader }: Family
         ) : (
           <div>{t('empty_state', 'Nenhuma família encontrada.')}</div>
         )}
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
       </Main>
     </>
   );

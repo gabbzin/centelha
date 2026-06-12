@@ -1,13 +1,6 @@
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-import { format } from 'date-fns';
-=======
-import { format, parse } from 'date-fns';
->>>>>>> Stashed changes
-=======
-import { format, parse } from 'date-fns';
->>>>>>> Stashed changes
+import { format, parseISO } from 'date-fns';
 import { z } from 'zod';
+import type { Family } from '@/types';
 export const familyMemberSchema = z.object({
   name: z
     .string()
@@ -17,7 +10,6 @@ export const familyMemberSchema = z.object({
     .string()
     .transform((v) => v.replace(/\D/g, ''))
     .pipe(z.string().length(11, 'CPF inválido')),
-  // Zod agora aceita o objeto Date e converte pra string pro Backend!
   data_nascimento: z
     .date({
       error: 'Data de nascimento é obrigatória',
@@ -79,8 +71,6 @@ export const defaultValues: FormData = {
   auxilios_recebidos: '',
   general_observations: '',
 };
-<<<<<<< Updated upstream
-=======
 
 function strip(value: string | null | undefined): string {
   return (value ?? '').replace(/\D/g, '');
@@ -117,4 +107,3 @@ export function familyToFormData(family: Family): FormData {
     general_observations: family.general_observations ?? '',
   };
 }
->>>>>>> Stashed changes

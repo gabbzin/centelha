@@ -6,25 +6,19 @@ import { StockSectionHeader } from './stock-section-header';
 import { StockTable } from './stock-table';
 import type { Benefit } from './types';
 
-<<<<<<< Updated upstream
 const PAGE_SIZE = 8;
 
-export function StockControlSection() {
-  const [search, setSearch] = useState('');
-  const [category, setCategory] = useState('all');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
-=======
 interface StockControlSectionProps {
-  benefits: PaginatedBenefits;
+  benefits?: PaginatedBenefits;
   texts?: Record<string, string>;
 }
 
 export function StockControlSection({ benefits, texts = {} }: StockControlSectionProps) {
   const t = (key: string, fallback: string) => texts[key] ?? fallback;
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [benefitToEdit, setBenefitToEdit] = useState<Benefit | null>(null);
->>>>>>> Stashed changes
+  const [search, setSearch] = useState('');
+  const [category, setCategory] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   const filtered = useMemo(() => filterBenefits(BENEFITS, { search, category }), [search, category]);
 
