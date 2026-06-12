@@ -4,6 +4,7 @@ import { ViewBenefitModal } from './view-benefit-modal';
 import { StockFilterBar } from './stock-filter-bar';
 import { StockSectionHeader } from './stock-section-header';
 import { StockTable } from './stock-table';
+import { toaster } from '@/components/toasters/toast-alert';
 import type { Benefit, PaginatedBenefits } from './types';
 import { router } from '@inertiajs/react';
 
@@ -59,12 +60,16 @@ export function StockControlSection({ benefits }: StockControlSectionProps) {
   }, []);
 
   const handleDelete = useCallback((benefit: Benefit) => {
-    if (confirm(`Tem certeza que deseja excluir o benefício "${benefit.name}"?`)) {
-      router.delete(`/beneficios/${benefit.id}`, {
-        preserveState: true,
-        preserveScroll: true,
-      });
-    }
+    router.delete(`/beneficios/${benefit.id}`, {
+      preserveState: true,
+      preserveScroll: true,
+      onSuccess: () => {
+        toaster.createSuccess('Sucesso', 'Benefício excluído com sucesso!');
+      },
+      onError: () => {
+        toaster.createError('Erro', 'Não foi possível excluir o benefício.');
+      },
+    });
   }, []);
 
   const handleAdd = useCallback(() => {

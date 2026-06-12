@@ -9,6 +9,7 @@ import { Check, FileImage, ImageIcon, Minus, Plus, Trash2, User, X } from 'lucid
 import { useCallback, useEffect, useState } from 'react';
 import { CATEGORY_OPTIONS, formatIsoDateToInput } from './data';
 import { router, usePage } from '@inertiajs/react';
+import { toaster } from '@/components/toasters/toast-alert';
 import type { Benefit } from './types';
 
 interface BenefitFormModalProps {
@@ -118,14 +119,26 @@ export function BenefitFormModal({ open, onOpenChange, benefitToEdit }: BenefitF
         forceFormData: true,
         preserveState: true,
         preserveScroll: true,
-        onSuccess: () => handleOpenChange(false),
+        onSuccess: () => {
+          handleOpenChange(false);
+          toaster.createSuccess('Sucesso', 'Benefício atualizado com sucesso!');
+        },
+        onError: () => {
+          toaster.createError('Erro', 'Não foi possível atualizar o benefício.');
+        },
       });
     } else {
       router.post('/beneficios', formData, {
         forceFormData: true,
         preserveState: true,
         preserveScroll: true,
-        onSuccess: () => handleOpenChange(false),
+        onSuccess: () => {
+          handleOpenChange(false);
+          toaster.createSuccess('Sucesso', 'Benefício cadastrado com sucesso!');
+        },
+        onError: () => {
+          toaster.createError('Erro', 'Não foi possível cadastrar o benefício.');
+        },
       });
     }
   };
