@@ -22,6 +22,11 @@ import { AlertCard } from '@/components/dashboard/cards/alert-card';
 import { TopItensCard } from '@/components/dashboard/cards/top-itens-card';
 import SimpleBarChart from '@/components/dashboard/simple-bar-chart';
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+import { usePage } from '@inertiajs/react';
+import type { SharedData } from '@/types';
+>>>>>>> Stashed changes
 =======
 import { usePage } from '@inertiajs/react';
 import type { SharedData } from '@/types';
@@ -55,7 +60,12 @@ interface DashboardProps {
   topItems: TopItem[];
   chartData: ChartDataItem[];
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   showHeader?: boolean;
+=======
+  previewSettings?: Record<string, unknown>;
+  hideHeader?: boolean;
+>>>>>>> Stashed changes
 =======
   previewSettings?: Record<string, unknown>;
   hideHeader?: boolean;
@@ -67,7 +77,12 @@ export default function Dashboard({
   topItems,
   chartData,
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   showHeader = true,
+=======
+  previewSettings,
+  hideHeader,
+>>>>>>> Stashed changes
 =======
   previewSettings,
   hideHeader,
@@ -183,7 +198,10 @@ export default function Dashboard({
   );
 }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 const defaultConfigs = {
   widgets: {
     metrics_cards: true,
@@ -209,4 +227,7 @@ const defaultConfigs = {
     low_stock_limit: 50,
   },
 };
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

@@ -30,9 +30,15 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('gestao-sistema/configuracoes-gerais', [ConfiguracoesGeraisController::class, 'update'])->name('gestao-sistema.configuracoes-gerais.update');
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     Route::get('gestao-sistema/painel-customizacao', function () {
         return Inertia::render('admin/gestao-sistema/painel-customizacao');
     })->name('gestao-sistema.painel-customizacao');
+=======
+    Route::get('gestao-sistema/customizacao-tela', [PageCustomizationController::class, 'index'])->name('gestao-sistema.customizacao-tela');
+    Route::get('gestao-sistema/customizacao-tela/{pageKey}', [PageCustomizationController::class, 'show'])->name('gestao-sistema.customizacao-tela.edit');
+    Route::put('gestao-sistema/customizacao-tela/{pageKey}', [PageCustomizationController::class, 'update'])->name('gestao-sistema.customizacao-tela.update');
+>>>>>>> Stashed changes
 =======
     Route::get('gestao-sistema/customizacao-tela', [PageCustomizationController::class, 'index'])->name('gestao-sistema.customizacao-tela');
     Route::get('gestao-sistema/customizacao-tela/{pageKey}', [PageCustomizationController::class, 'show'])->name('gestao-sistema.customizacao-tela.edit');

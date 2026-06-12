@@ -9,7 +9,11 @@ interface LayoutBaseProps {
   description?: string | React.ReactNode;
   rightComponent?: React.ReactNode;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   showHeader?: boolean;
+=======
+  hideHeader?: boolean;
+>>>>>>> Stashed changes
 =======
   hideHeader?: boolean;
 >>>>>>> Stashed changes
@@ -21,7 +25,11 @@ export function LayoutBase({
   description,
   rightComponent,
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   showHeader = true,
+=======
+  hideHeader = false,
+>>>>>>> Stashed changes
 =======
   hideHeader = false,
 >>>>>>> Stashed changes
@@ -29,6 +37,7 @@ export function LayoutBase({
   return (
     <>
       <Head title={title} />
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
       {/* O Header já está dentro do Main */}
       <Main>
@@ -39,6 +48,8 @@ export function LayoutBase({
           </div>
         )}
 =======
+=======
+>>>>>>> Stashed changes
       <Main hideHeader={hideHeader}>
         <div className="flex items-center justify-between gap-4">
           <Heading description={description} title={titlePage} />

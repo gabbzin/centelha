@@ -122,6 +122,9 @@ export default function Family({ families, previewSettings, hideHeader }: Family
         ) : (
           <div>{t('empty_state', 'Nenhuma família encontrada.')}</div>
         )}
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
       </Main>
     </>
