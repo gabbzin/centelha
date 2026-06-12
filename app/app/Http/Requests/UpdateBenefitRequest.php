@@ -18,9 +18,9 @@ class UpdateBenefitRequest extends FormRequest
             'category' => ['sometimes', 'required', 'in:Alimentação,Financeiro,Saúde,Vestuário,Educação'],
             'stock' => ['sometimes', 'required', 'integer', 'min:0'],
             'status' => ['sometimes', 'required', 'in:Ativo,Revisão,Inativo'],
-            'donor' => ['nullable', 'string', 'max:255'],
-            'validity' => ['nullable', 'date'],
-            'notes' => ['nullable', 'string'],
+            'donor' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'validity' => ['sometimes', 'nullable', 'date'],
+            'notes' => ['sometimes', 'nullable', 'string'],
             'image' => ['nullable', 'file', 'mimes:png,jpg,jpeg,pdf', 'max:5120'],
         ];
     }
