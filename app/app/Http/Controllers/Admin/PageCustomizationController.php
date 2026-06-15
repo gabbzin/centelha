@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\CommunityCenter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 
 class PageCustomizationController extends Controller
@@ -44,8 +45,12 @@ class PageCustomizationController extends Controller
         ]);
     }
 
+    private const ALLOWED_PAGES = ['dashboard', 'home', 'login', 'familia', 'beneficios'];
+
     public function show(string $pageKey)
     {
+        abort_if(! in_array($pageKey, self::ALLOWED_PAGES, true), 404, "Página '{$pageKey}' não encontrada.");
+
         $schemaPath = config_path("pages/schemas/{$pageKey}.php");
         $configPath = config_path("pages/{$pageKey}.php");
 
@@ -58,7 +63,7 @@ class PageCustomizationController extends Controller
 
         $center = CommunityCenter::first();
         $saved = $center?->settings[$pageKey] ?? [];
-        $settings = array_merge($defaults, $saved);
+        $settings = array_replace_recursive($defaults, $saved);
 
         return Inertia::render('admin/gestao-sistema/customizacao-tela/edit', [
             'pageKey' => $pageKey,
@@ -69,12 +74,16 @@ class PageCustomizationController extends Controller
 
     public function update(Request $request, string $pageKey)
     {
+        abort_if(! in_array($pageKey, self::ALLOWED_PAGES, true), 404, "Página '{$pageKey}' não encontrada.");
+
         $schemaPath = config_path("pages/schemas/{$pageKey}.php");
 
         if (! file_exists($schemaPath)) {
             abort(404, "Página '{$pageKey}' não encontrada.");
         }
 
+        // Estes arquivos são carregados via `require` dinâmico e não são cobertos
+        // pelo config cache do Laravel. Não os registre via config().
         $schema = require $schemaPath;
 
         $rules = $this->buildValidationRules($schema);
@@ -83,10 +92,13 @@ class PageCustomizationController extends Controller
         $nested = $this->flatToNested($schema, $validated);
 
         $center = CommunityCenter::first();
-        $settings = $center->settings;
+        abort_if(! $center, 503, 'Community center não configurado.');
+        $settings = $center->settings ?? [];
         $settings[$pageKey] = $nested;
         $center->settings = $settings;
         $center->save();
+
+        Cache::forget('community_center');
 
         return back()->with('success', 'Configurações salvas com sucesso!');
     }
@@ -133,7 +145,7 @@ class PageCustomizationController extends Controller
                 $flatKey = str_replace('.', '_', $field['key']);
                 $value = $flat[$flatKey] ?? null;
 
-                if ($value === null || $value === '') {
+                if ($value === null) {
                     continue;
                 }
 

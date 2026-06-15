@@ -32,7 +32,7 @@ return [
             'title' => 'Textos da Página',
             'fields' => [
                 ['key' => 'texts.main_title', 'label' => 'Título principal', 'type' => 'string', 'max' => 100],
-                ['key' => 'texts.subtitle', 'label' => 'Subtítulo', 'type' => 'string', 'max' => 200],
+                ['key' => 'texts.subtitle', 'label' => 'Subtítulo', 'type' => 'textarea', 'max' => 200],
                 ['key' => 'texts.label_card_1', 'label' => 'Card Benefícios', 'type' => 'string', 'max' => 50],
                 ['key' => 'texts.label_card_2', 'label' => 'Card Famílias', 'type' => 'string', 'max' => 50],
                 ['key' => 'texts.label_card_3', 'label' => 'Card Cadastros', 'type' => 'string', 'max' => 50],

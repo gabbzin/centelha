@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\CommunityCenter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redirect;
 
 class ConfiguracoesGeraisController extends Controller
@@ -49,6 +50,8 @@ class ConfiguracoesGeraisController extends Controller
                 $center->socialLinks()->create(['value' => $link['value']]);
             }
         }
+
+        Cache::forget('community_center');
 
         return to_route('gestao-sistema.configuracoes-gerais')
             ->with('success', 'Configurações salvas com sucesso!');

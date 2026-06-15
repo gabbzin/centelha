@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\CommunityCenter;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -39,7 +40,7 @@ class HandleInertiaRequests extends Middleware
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
-        $center = CommunityCenter::with('socialLinks')->first();
+        $center = Cache::remember('community_center', 300, fn () => CommunityCenter::with('socialLinks')->first());
 
         return [
             ...parent::share($request),
@@ -96,6 +97,6 @@ class HandleInertiaRequests extends Middleware
         $defaults = require $path;
         $saved = $center?->settings[$pageKey] ?? [];
 
-        return array_merge($defaults, $saved);
+        return array_replace_recursive($defaults, $saved);
     }
 }

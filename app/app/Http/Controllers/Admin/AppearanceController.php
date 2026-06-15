@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\CommunityCenter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redirect;
 
 class AppearanceController extends Controller
@@ -32,6 +33,8 @@ class AppearanceController extends Controller
         $center->update([
             'colors' => $validated
         ]);
+
+        Cache::forget('community_center');
 
         return to_route('gestao-sistema.aparencia')->with('success', 'Salvo!');
     }

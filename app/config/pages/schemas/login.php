@@ -6,7 +6,7 @@ return [
             'title' => 'Textos da Tela de Login',
             'fields' => [
                 ['key' => 'texts.welcome_title', 'label' => 'Título de boas-vindas', 'type' => 'string', 'max' => 80],
-                ['key' => 'texts.subtitle', 'label' => 'Subtítulo', 'type' => 'string', 'max' => 150],
+                ['key' => 'texts.subtitle', 'label' => 'Subtítulo', 'type' => 'textarea', 'max' => 150],
                 ['key' => 'texts.email_label', 'label' => 'Label do e-mail', 'type' => 'string', 'max' => 30],
                 ['key' => 'texts.email_placeholder', 'label' => 'Placeholder do e-mail', 'type' => 'string', 'max' => 50],
                 ['key' => 'texts.password_label', 'label' => 'Label da senha', 'type' => 'string', 'max' => 30],
