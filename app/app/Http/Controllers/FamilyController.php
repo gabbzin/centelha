@@ -12,8 +12,13 @@ class FamilyController extends Controller
 {
     public function index()
     {
+        $search = request('search');
+
         $families = Family::with(['address', 'specificNeeds'])
             ->withCount('members')
+            ->when($search, function ($query, $search) {
+                $query->where('responsible_name', 'like', "%{$search}%");
+            })
             ->paginate(6);
 
         $families->getCollection()->transform(function ($family) {
@@ -34,6 +39,15 @@ class FamilyController extends Controller
             'backUrl' => url()->previous(),
             'id'      => $id,
             'family'  => $family,
+        ]);
+    }
+
+    public function edit(Family $family)
+    {
+        $family->load(['address', 'members']);
+
+        return Inertia::render('family/form/edit', [
+            'family' => $family,
         ]);
     }
 

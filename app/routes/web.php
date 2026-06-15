@@ -5,6 +5,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\FamilyController;
 use App\Http\Controllers\Admin\AppearanceController;
 use App\Http\Controllers\Admin\ConfiguracoesGeraisController;
+use App\Http\Controllers\BenefitController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\PageCustomizationController;
 
@@ -35,9 +36,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('beneficios', function () {
-        return Inertia::render('beneficios');
-    })->name('beneficios');
+    Route::get('beneficios', [BenefitController::class, 'index'])->name('beneficios');
+    Route::post('beneficios', [BenefitController::class, 'store'])->name('beneficios.store');
+    Route::put('beneficios/{benefit}', [BenefitController::class, 'update'])->name('beneficios.update');
+    Route::delete('beneficios/{benefit}', [BenefitController::class, 'destroy'])->name('beneficios.destroy');
 
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('family', [FamilyController::class, 'index'])->name('family');
@@ -46,6 +48,7 @@ Route::middleware(['auth'])->group(function () {
         return Inertia::render('family/form/register');
     })->name('family.register');
     Route::get('family/details/{id}', [FamilyController::class, 'show'])->name('family.info');
+    Route::get('family/{family}/edit', [FamilyController::class, 'edit'])->name('family.edit');
     Route::put('family/{family}', [FamilyController::class, 'update'])->name('family.update');
     Route::patch('family/{family}/deactivate', [FamilyController::class, 'deactivate'])->name('family.deactivate');
     Route::patch('family/{family}/activate', [FamilyController::class, 'activate'])->name('family.activate');
