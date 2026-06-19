@@ -57,7 +57,7 @@ export default function FamilyInfoPage({
       }
       rightComponent={
         <div className="flex items-center gap-2">
-          <Link>
+          <Link href={`/family/${id}/edit`}>
             <Button variant={'primary'}>
               <PenIcon className="size-4" />
               Editar informações

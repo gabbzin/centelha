@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils'
 import { BenefitCategoryBadge } from './category-badge'
 import { LOW_STOCK_THRESHOLD } from './data'
+import { DeleteActionPopover } from './delete-action-popover'
 import { StockActionButton } from './stock-action-button'
 import type { Benefit } from './types'
 
@@ -10,6 +11,7 @@ interface StockTableRowProps {
   onEdit: (benefit: Benefit) => void
   onDelete: (benefit: Benefit) => void
 }
+
 export function StockTableRow({
   benefit,
   onView,
@@ -17,6 +19,7 @@ export function StockTableRow({
   onDelete,
 }: StockTableRowProps) {
   const isLowStock = benefit.stock <= LOW_STOCK_THRESHOLD
+
   return (
     <tr className="border-border border-t bg-white">
       <td className="text-foreground/80 px-6 py-4 text-sm font-medium">
@@ -48,10 +51,9 @@ export function StockTableRow({
             onClick={() => onEdit(benefit)}
             variant="edit"
           />
-          <StockActionButton
-            aria-label={`Excluir ${benefit.name}`}
-            onClick={() => onDelete(benefit)}
-            variant="delete"
+          <DeleteActionPopover
+            ariaLabel={`Excluir ${benefit.name}`}
+            onDelete={() => onDelete(benefit)}
           />
         </div>
       </td>

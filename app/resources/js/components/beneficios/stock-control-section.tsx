@@ -1,49 +1,98 @@
-import { useCallback, useMemo, useState } from 'react'
-import { CreateBenefitModal } from './create-benefit-modal'
-import { BENEFITS, filterBenefits, paginate } from './data'
+import { router } from '@inertiajs/react'
+import { useCallback, useState } from 'react'
+import { toaster } from '@/components/toasters/toast-alert'
+import { BenefitFormModal } from './create-benefit-modal'
 import { StockFilterBar } from './stock-filter-bar'
 import { StockSectionHeader } from './stock-section-header'
 import { StockTable } from './stock-table'
-import type { Benefit } from './types'
+import type { Benefit, PaginatedBenefits } from './types'
+import { ViewBenefitModal } from './view-benefit-modal'
 
-const PAGE_SIZE = 8
-export function StockControlSection() {
-  const [search, setSearch] = useState('')
-  const [category, setCategory] = useState('all')
-  const [currentPage, setCurrentPage] = useState(1)
-  const [isCreateOpen, setIsCreateOpen] = useState(false)
-  const filtered = useMemo(
-    () =>
-      filterBenefits(BENEFITS, {
-        search,
-        category,
-      }),
+interface StockControlSectionProps {
+  benefits: PaginatedBenefits
+}
+
+export function StockControlSection({ benefits }: StockControlSectionProps) {
+  const [isFormOpen, setIsFormOpen] = useState(false)
+  const [benefitToEdit, setBenefitToEdit] = useState<Benefit | null>(null)
+
+  const [isViewOpen, setIsViewOpen] = useState(false)
+  const [benefitToView, setBenefitToView] = useState<Benefit | null>(null)
+
+  const searchParams = new URLSearchParams(window.location.search)
+  const [search, setSearch] = useState(searchParams.get('search') ?? '')
+  const [category, setCategory] = useState(
+    searchParams.get('category') ?? 'all',
+  )
+
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      setSearch(value)
+      router.get(
+        '/beneficios',
+        { search: value, category, page: 1 },
+        { preserveState: true, preserveScroll: true, replace: true },
+      )
+    },
+    [category],
+  )
+
+  const handleCategoryChange = useCallback(
+    (value: string) => {
+      setCategory(value)
+      router.get(
+        '/beneficios',
+        { search, category: value, page: 1 },
+        { preserveState: true, preserveScroll: true, replace: true },
+      )
+    },
+    [search],
+  )
+
+  const handlePageChange = useCallback(
+    (page: number) => {
+      router.get(
+        '/beneficios',
+        { search, category, page },
+        { preserveState: true, preserveScroll: true, replace: true },
+      )
+    },
     [search, category],
   )
-  const pagination = useMemo(
-    () => paginate(filtered, currentPage, PAGE_SIZE),
-    [filtered, currentPage],
-  )
-  const handleSearchChange = useCallback((value: string) => {
-    setSearch(value)
-    setCurrentPage(1)
-  }, [])
-  const handleCategoryChange = useCallback((value: string) => {
-    setCategory(value)
-    setCurrentPage(1)
-  }, [])
+
   const handleView = useCallback((benefit: Benefit) => {
-    console.log('View:', benefit.code)
+    setBenefitToView(benefit)
+    setIsViewOpen(true)
   }, [])
+
   const handleEdit = useCallback((benefit: Benefit) => {
-    console.log('Edit:', benefit.code)
+    setBenefitToEdit(benefit)
+    setIsFormOpen(true)
   }, [])
+
   const handleDelete = useCallback((benefit: Benefit) => {
-    console.log('Delete:', benefit.code)
+    router.delete(`/beneficios/${benefit.id}`, {
+      preserveState: true,
+      preserveScroll: true,
+      onSuccess: () => {
+        toaster.createSuccess('Sucesso', 'Benefício excluído com sucesso!')
+      },
+      onError: () => {
+        toaster.createError('Erro', 'Não foi possível excluir o benefício.')
+      },
+    })
   }, [])
+
   const handleAdd = useCallback(() => {
-    setIsCreateOpen(true)
+    setBenefitToEdit(null)
+    setIsFormOpen(true)
   }, [])
+
+  const handleCloseFormModal = useCallback(() => {
+    setIsFormOpen(false)
+    setBenefitToEdit(null)
+  }, [])
+
   return (
     <section className="space-y-0">
       <StockSectionHeader
@@ -61,20 +110,31 @@ export function StockControlSection() {
 
       <div className="mt-4">
         <StockTable
-          benefits={pagination.items}
-          currentPage={currentPage}
-          endIndex={pagination.endIndex}
+          benefits={benefits.data}
+          currentPage={benefits.current_page}
+          endIndex={benefits.to ?? benefits.data.length}
           onDelete={handleDelete}
           onEdit={handleEdit}
-          onPageChange={setCurrentPage}
+          onPageChange={handlePageChange}
           onView={handleView}
-          startIndex={pagination.startIndex}
-          total={pagination.total}
-          totalPages={pagination.totalPages}
+          startIndex={benefits.from ?? 1}
+          total={benefits.total}
+          totalPages={benefits.last_page}
         />
       </div>
 
-      <CreateBenefitModal onOpenChange={setIsCreateOpen} open={isCreateOpen} />
+      <BenefitFormModal
+        key={benefitToEdit ? `edit-${benefitToEdit.id}` : 'create'}
+        benefitToEdit={benefitToEdit}
+        onOpenChange={handleCloseFormModal}
+        open={isFormOpen}
+      />
+
+      <ViewBenefitModal
+        benefit={benefitToView}
+        onOpenChange={setIsViewOpen}
+        open={isViewOpen}
+      />
     </section>
   )
 }

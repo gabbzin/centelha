@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import type { Family } from '@/types'
 import { Step1 } from './form-steps/step1'
 import { Step2 } from './form-steps/step2'
 import { Step3 } from './form-steps/step3'
@@ -20,6 +21,7 @@ import {
   defaultValues,
   type FormData,
   familySchema,
+  familyToFormData,
 } from './schema/family-schema'
 
 const STEP_FIELDS: Array<Array<keyof FormData>> = [
@@ -27,6 +29,7 @@ const STEP_FIELDS: Array<Array<keyof FormData>> = [
   ['cep', 'logradouro', 'numero', 'cidade', 'UF', 'bairro', 'moradia'],
   ['fonte_renda', 'renda_familiar', 'recebe_auxilio', 'auxilios_recebidos'],
 ]
+
 const STEPS = [
   {
     title: 'Dados do responsável familiar e informações da família',
@@ -46,23 +49,30 @@ const STEPS = [
     component: <Step3 />,
   },
 ]
+
 interface FamilyFormProps {
   step: number
   totalSteps: number
   onNext: () => void
   onPrev: () => void
+  family?: Family
 }
+
 export function FamilyForm({
   step,
   totalSteps,
   onNext,
   onPrev,
+  family,
 }: FamilyFormProps) {
   const form = useForm<FormData>({
     mode: 'onTouched',
     resolver: zodResolver(familySchema) as unknown as Resolver<FormData>,
-    defaultValues,
+    defaultValues: family ? familyToFormData(family) : defaultValues,
   })
+
+  const isEditing = !!family
+
   const handleNext = async () => {
     const isValid = await form.trigger(STEP_FIELDS[step])
     if (isValid) {
@@ -77,22 +87,34 @@ export function FamilyForm({
       toaster.createError(`Erro de validação!`, String(errorMessage))
     }
   }
+
   const onSubmit = form.handleSubmit((data) => {
-    router.post('/family', data as never, {
+    const options = {
       onSuccess: () => {
         toaster.createSuccess(
           'Sucesso!',
-          'Cadastro da família concluído com sucesso!',
+          isEditing
+            ? 'Informações da família atualizadas com sucesso!'
+            : 'Cadastro da família concluído com sucesso!',
         )
       },
       onError: () => {
         toaster.createError(
           'Erro!',
-          'Ocorreu um erro ao cadastrar a família. Verifique os dados e tente novamente.',
+          isEditing
+            ? 'Ocorreu um erro ao atualizar a família. Verifique os dados e tente novamente.'
+            : 'Ocorreu um erro ao cadastrar a família. Verifique os dados e tente novamente.',
         )
       },
-    })
+    }
+
+    if (isEditing) {
+      router.put(`/family/${family.id}`, data as never, options)
+    } else {
+      router.post('/family', data as never, options)
+    }
   })
+
   return (
     <>
       <div className="space-y-4">
@@ -121,7 +143,7 @@ export function FamilyForm({
           </Button>
         ) : (
           <Button onClick={onSubmit} type="submit" variant={'primary'}>
-            Finalizar Cadastro
+            {isEditing ? 'Atualizar Cadastro' : 'Finalizar Cadastro'}
           </Button>
         )}
       </footer>
