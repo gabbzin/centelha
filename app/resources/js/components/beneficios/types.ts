@@ -1,5 +1,9 @@
-export type BenefitCategory = 'Alimentação' | 'Financeiro' | 'Saúde' | 'Vestuário' | 'Educação';
-
+export type BenefitCategory =
+  | 'Alimentação'
+  | 'Financeiro'
+  | 'Saúde'
+  | 'Vestuário'
+  | 'Educação';
 export interface Benefit {
   code: string;
   name: string;
@@ -7,12 +11,10 @@ export interface Benefit {
   stock: number;
   status: 'Ativo' | 'Revisão' | 'Inativo';
 }
-
 export interface PaginationState {
   currentPage: number;
   pageSize: number;
 }
-
 export interface PaginationResult<T> {
   items: T[];
   total: number;

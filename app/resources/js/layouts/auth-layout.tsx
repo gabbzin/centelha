@@ -1,5 +1,4 @@
 import AuthLayoutTemplate from '@/layouts/auth/auth-simple-layout';
-
 export default function AuthLayout({
   children,
   title,
@@ -11,7 +10,7 @@ export default function AuthLayout({
   description: string;
 }) {
   return (
-    <AuthLayoutTemplate title={title} description={description} {...props}>
+    <AuthLayoutTemplate description={description} title={title} {...props}>
       {children}
     </AuthLayoutTemplate>
   );

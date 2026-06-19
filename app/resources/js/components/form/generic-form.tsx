@@ -45,7 +45,9 @@ export default function GenericForm<T extends FieldValues>({
         {needButtons && (
           <Buttons>
             <Button disabled={isSubmitting} type="submit" variant={'default'}>
-              {methods.formState.isSubmitting ? 'Enviando...' : submitText ?? 'Enviar'}
+              {methods.formState.isSubmitting
+                ? 'Enviando...'
+                : (submitText ?? 'Enviar')}
             </Button>
             {buttons}
           </Buttons>

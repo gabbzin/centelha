@@ -8,9 +8,9 @@ export function AboutSection() {
           Chega de planilhas perdidas e processos manuais.
         </h2>
         <p className="text-muted-foreground mx-auto max-w-3xl text-base leading-relaxed lg:text-lg">
-          O atraso e a falha tiram o foco do que realmente importa: as pessoas. O{' '}
-          <span className="font-bold text-[#2E5F9E]">Centelha+</span> organiza sua operação para que você recupere seu
-          tempo.
+          O atraso e a falha tiram o foco do que realmente importa: as pessoas.
+          O <span className="font-bold text-[#2E5F9E]">Centelha+</span> organiza
+          sua operação para que você recupere seu tempo.
         </p>
       </div>
     </section>

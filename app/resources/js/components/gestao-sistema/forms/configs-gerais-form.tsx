@@ -10,7 +10,12 @@ import { BrushIcon, Share2Icon, Plus, WrenchIcon } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import SettingsPanelCard from '../settings-panel-card';
 import { SocialInputRow } from '../social-input-row';
-import { Controller, useFieldArray, useFormContext, useWatch } from 'react-hook-form';
+import {
+  Controller,
+  useFieldArray,
+  useFormContext,
+  useWatch,
+} from 'react-hook-form';
 import { InputSelect } from '@/components/inputs/input-select';
 import { type FileWithPreview } from '@/hooks/inputs/use-file-upload';
 
@@ -29,14 +34,16 @@ const options = [
     value: 'open-sans',
   },
 ];
-
 interface ConfigsGeraisFormProps {
   onLogoChange?: (files: FileWithPreview[]) => void;
   onFaviconChange?: (files: FileWithPreview[]) => void;
 }
 
 // Render
-export function ConfigsGeraisForm({ onLogoChange, onFaviconChange }: ConfigsGeraisFormProps) {
+export function ConfigsGeraisForm({
+  onLogoChange,
+  onFaviconChange,
+}: ConfigsGeraisFormProps) {
   // Form Context
   const { control, register } = useFormContext();
 

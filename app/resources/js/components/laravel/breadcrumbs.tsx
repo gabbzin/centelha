@@ -8,8 +8,11 @@ import {
 } from '@/components/ui/breadcrumb';
 import { type BreadcrumbItem as BreadcrumbItemType } from '@/types';
 import { Fragment } from 'react';
-
-export function Breadcrumbs({ breadcrumbs }: { breadcrumbs: BreadcrumbItemType[] }) {
+export function Breadcrumbs({
+  breadcrumbs,
+}: {
+  breadcrumbs: BreadcrumbItemType[];
+}) {
   return (
     <>
       {breadcrumbs.length > 0 && (
@@ -23,7 +26,9 @@ export function Breadcrumbs({ breadcrumbs }: { breadcrumbs: BreadcrumbItemType[]
                     {isLast ? (
                       <BreadcrumbPage>{item.title}</BreadcrumbPage>
                     ) : (
-                      <BreadcrumbLink href={item.href}>{item.title}</BreadcrumbLink>
+                      <BreadcrumbLink href={item.href}>
+                        {item.title}
+                      </BreadcrumbLink>
                     )}
                   </BreadcrumbItem>
                   {!isLast && <BreadcrumbSeparator />}

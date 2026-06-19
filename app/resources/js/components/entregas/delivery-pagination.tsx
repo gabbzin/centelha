@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
-interface StockPaginationProps {
+interface DeliveryPaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
@@ -32,11 +32,11 @@ function getPageNumbers(
   pages.push(total);
   return pages;
 }
-export function StockPagination({
+export function DeliveryPagination({
   currentPage,
   totalPages,
   onPageChange,
-}: StockPaginationProps) {
+}: DeliveryPaginationProps) {
   if (totalPages <= 1) return null;
   const pages = getPageNumbers(currentPage, totalPages);
   return (

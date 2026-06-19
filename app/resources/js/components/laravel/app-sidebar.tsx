@@ -14,7 +14,6 @@ import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
 import AppLogo from '../app/app-logo';
-
 const mainNavItems: NavItem[] = [
   {
     title: 'Dashboard',
@@ -22,7 +21,6 @@ const mainNavItems: NavItem[] = [
     icon: LayoutGrid,
   },
 ];
-
 const footerNavItems: NavItem[] = [
   {
     title: 'Repository',
@@ -35,14 +33,13 @@ const footerNavItems: NavItem[] = [
     icon: BookOpen,
   },
 ];
-
 export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" variant="inset">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
+            <SidebarMenuButton asChild size="lg">
               <Link href="/dashboard" prefetch>
                 <AppLogo />
               </Link>
@@ -56,7 +53,7 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter>
-        <NavFooter items={footerNavItems} className="mt-auto" />
+        <NavFooter className="mt-auto" items={footerNavItems} />
         <NavUser />
       </SidebarFooter>
     </Sidebar>

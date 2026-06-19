@@ -34,6 +34,10 @@ Route::middleware(['auth'])->group(function () {
         return Inertia::render('beneficios');
     })->name('beneficios');
 
+    Route::get('entregas', function () {
+        return Inertia::render('entregas');
+    })->name('entregas');
+
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('family', [FamilyController::class, 'index'])->name('family');
     Route::post('family', [FamilyController::class, 'store'])->name('family.store');

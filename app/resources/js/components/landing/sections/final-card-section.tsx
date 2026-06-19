@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-
 export function FinalCardSection() {
   return (
     <section className="bg-background px-6 py-8 lg:px-10 lg:py-24">
@@ -12,12 +11,13 @@ export function FinalCardSection() {
             Pronto para modernizar seu centro social?
           </h2>
           <p className="text-primary-foreground/90 mx-auto max-w-3xl text-base lg:text-lg">
-            Junte-se a organizações que já otimizaram sua gestão e ampliaram seu impacto na comunidade.
+            Junte-se a organizações que já otimizaram sua gestão e ampliaram seu
+            impacto na comunidade.
           </p>
         </div>
         <Button
-          size="lg"
           className="text-primary bg-background hover:bg-background/90 relative gap-2 rounded-full px-6 shadow-xl"
+          size="lg"
         >
           Cadastrar Meu Centro Agora
         </Button>
