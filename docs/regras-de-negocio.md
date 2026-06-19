@@ -183,3 +183,55 @@
 **RN76.** Benefícios com estoque baixo são destacados com níveis de alerta (atenção ou crítico).
 
 **RN77.** O sistema apresenta ranking dos benefícios mais distribuídos com suas respectivas quantidades.
+
+---
+
+## 9. Entrega de Benefícios
+
+**RN78.** O código da entrega deve ser único e gerado automaticamente no formato "ENT-" seguido de número sequencial de 4 dígitos (ex.: ENT-0001).
+
+**RN79.** O local de retirada é de preenchimento obrigatório no momento da entrega.
+
+**RN80.** A entrega pode ter um comprovante anexado nos formatos PNG, JPG ou PDF, com tamanho máximo de 5 MB.
+
+**RN81.** Uma entrega não pode ser editada nem excluída após registrada. Ajustes de estoque devem ser feitos manualmente.
+
+---
+
+## 10. Customização de Tela
+
+**RN82.** O sistema deve permitir ao Gestor personalizar textos, visibilidade de widgets e regras de negócio de cada tela do sistema individualmente.
+
+**RN83.** As alterações realizadas no formulário de customização devem refletir imediatamente no preview ao lado, sem necessidade de salvar para visualizar.
+
+**RN84.** As configurações de customização só são efetivadas após o clique em "Publicar". Enquanto não publicadas, as alterações não persistem nem afetam os usuários.
+
+**RN85.** Caso uma chave de configuração não exista nas configurações salvas, o sistema deve utilizar o valor padrão definido no arquivo de configuração.
+
+**RN86.** As telas customizáveis são: Dashboard, Página Inicial, Tela de Login, Gestão de Famílias e Controle de Estoque.
+
+---
+
+## 11. Dashboard
+
+**RN87.** O dashboard permite ao usuário selecionar o mês de referência para visualização dos dados através de um seletor de período.
+
+**RN88.** O dashboard exibe um mapa geográfico indicando a distribuição das famílias atendidas.
+
+**RN89.** O dashboard exibe gráfico comparativo de entregas por categoria entre o mês atual e o mês anterior.
+
+---
+
+## 12. Usuários e Tags de Benefício
+
+**RN90.** A gestão de usuários e tags de benefício deve estar em uma única tela, dividida em duas seções independentes.
+
+**RN91.** O cadastro de usuário deve conter: nome, tipo de usuário, data de nascimento, e-mail e senha do administrador logado para confirmação.
+
+**RN92.** A exclusão de um usuário é uma funcionalidade exclusiva do perfil Gestor e deve solicitar confirmação antes de ser executada.
+
+**RN93.** O sistema deve permitir o gerenciamento de tags de benefício com nome, descrição, cor e ícone representativo.
+
+**RN94.** Cada tag de benefício deve possuir uma cor selecionável a partir de uma paleta predefinida de 8 cores.
+
+**RN95.** Cada tag de benefício pode possuir um ícone representativo selecionado a partir de uma lista de ícones disponíveis.
