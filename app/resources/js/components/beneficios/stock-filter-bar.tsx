@@ -56,7 +56,7 @@ export function StockFilterBar({
         <Button
           className="gap-2 rounded-md px-4"
           onClick={onAdd}
-          variant="default"
+          variant="primary"
         >
           Adicionar novo benefício
           <Plus className="size-4" />

@@ -81,7 +81,7 @@ export function DeliveryHistorySection() {
           <Button
             className="gap-2 rounded-md px-4"
             onClick={handleRegister}
-            variant="default"
+            variant="primary"
           >
             <Plus className="size-4" />
             Registrar nova entrega
