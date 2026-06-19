@@ -45,7 +45,7 @@ export function StockTable({
             <tbody>
               {benefits.map((benefit) => (
                 <StockTableRow
-                  key={benefit.code}
+                  key={benefit.id}
                   benefit={benefit}
                   onView={onView}
                   onEdit={onEdit}

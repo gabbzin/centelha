@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import { BenefitCategoryBadge } from './category-badge';
 import { LOW_STOCK_THRESHOLD } from './data';
+import { DeleteActionPopover } from './delete-action-popover';
 import { StockActionButton } from './stock-action-button';
 import type { Benefit } from './types';
 
@@ -28,11 +29,7 @@ export function StockTableRow({ benefit, onView, onEdit, onDelete }: StockTableR
         <div className="flex items-center gap-2">
           <StockActionButton variant="view" aria-label={`Ver ${benefit.name}`} onClick={() => onView(benefit)} />
           <StockActionButton variant="edit" aria-label={`Editar ${benefit.name}`} onClick={() => onEdit(benefit)} />
-          <StockActionButton
-            variant="delete"
-            aria-label={`Excluir ${benefit.name}`}
-            onClick={() => onDelete(benefit)}
-          />
+          <DeleteActionPopover ariaLabel={`Excluir ${benefit.name}`} onDelete={() => onDelete(benefit)} />
         </div>
       </td>
     </tr>
