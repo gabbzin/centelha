@@ -23,7 +23,7 @@ export function Step1() {
     name: 'family_members',
   })
   const eightteenYearsAgo = new Date(
-    new Date().getTime() - 1000 * 60 * 60 * 24 * 365 * 18,
+    Date.now() - 1000 * 60 * 60 * 24 * 365 * 18,
   )
   return (
     <div className="grid grid-cols-1 gap-2 p-1 md:grid-cols-2">

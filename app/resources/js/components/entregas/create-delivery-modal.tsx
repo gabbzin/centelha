@@ -38,6 +38,7 @@ interface CreateDeliveryModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
 }
+
 export function CreateDeliveryModal({
   open,
   onOpenChange,
@@ -392,12 +393,14 @@ export function CreateDeliveryModal({
     </Dialog>
   )
 }
+
 interface FormFieldProps {
   label: string
   required?: boolean
   error?: string
   children: React.ReactNode
 }
+
 function FormField({ label, required, error, children }: FormFieldProps) {
   return (
     <div className="space-y-1.5">

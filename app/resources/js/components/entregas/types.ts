@@ -1,4 +1,5 @@
 export type DeliveryStatus = 'Entregue' | 'Pendente' | 'Cancelado'
+
 export interface Delivery {
   code: string
   date: string
@@ -9,14 +10,24 @@ export interface Delivery {
   status: DeliveryStatus
   deliveredBy: string
 }
+
 export interface SelectOption {
   value: string
   label: string
 }
+
+export interface BeneficiaryOption {
+  value: string
+  label: string
+  cpf: string
+  nis: string
+}
+
 export interface PaginationState {
   currentPage: number
   pageSize: number
 }
+
 export interface PaginationResult<T> {
   items: T[]
   total: number

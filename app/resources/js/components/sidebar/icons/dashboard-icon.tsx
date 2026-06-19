@@ -1,6 +1,7 @@
 export function DashboardIcon({ fill = '#424750' }) {
   return (
     <svg
+      aria-hidden="true"
       fill="none"
       height="18"
       viewBox="0 0 18 18"

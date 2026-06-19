@@ -1,6 +1,7 @@
 export function TtIcon() {
   return (
     <svg
+      aria-hidden="true"
       fill="none"
       height="16"
       viewBox="0 0 20 16"

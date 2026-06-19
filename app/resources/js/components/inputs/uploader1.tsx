@@ -25,6 +25,7 @@ export default function Uploader1({ onFilesChange }: Uploader1Props) {
         <div
           aria-label={previewUrl ? 'Upload preview' : 'Default user avatar'}
           className="border-input relative flex size-10 shrink-0 items-center justify-start overflow-hidden rounded-md border"
+          role="img"
         >
           {previewUrl ? (
             <img

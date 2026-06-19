@@ -10,6 +10,7 @@ interface DeliveryFilterBarProps {
   endDate: string
   onEndDateChange: (value: string) => void
 }
+
 export function DeliveryFilterBar({
   search,
   onSearchChange,

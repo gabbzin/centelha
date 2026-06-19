@@ -97,7 +97,7 @@ export default function Home() {
       <main className="bg-background text-foreground min-h-screen scroll-smooth">
         <header className="bg-background sticky top-0 z-50 border-b border-zinc-200 backdrop-blur-lg">
           <div className="max-w-lm mx-auto flex w-full items-center justify-between px-2 py-2 lg:px-10">
-            <Link className="flex items-center gap-3" href="#">
+            <Link className="flex items-center gap-3" href={route('home')}>
               <Logo />
               <p className="text-heading text-xl font-extrabold tracking-tight">
                 {communityCenter?.name ?? 'Centelha'}
@@ -106,13 +106,14 @@ export default function Home() {
 
             <nav className="hidden items-center gap-8 lg:flex">
               {navItems.map((item) => (
-                <p
+                <button
                   key={item.name}
                   className="hover:text-heading border-heading cursor-pointer text-sm transition duration-200 hover:border-b"
                   onClick={() => scrollTo(item.ref)}
+                  type="button"
                 >
                   {item.name}
-                </p>
+                </button>
               ))}
             </nav>
 
@@ -172,7 +173,7 @@ export default function Home() {
                     <li key={link}>
                       <a
                         className="text-sm text-white/70 transition hover:text-white"
-                        href="#"
+                        href="/"
                       >
                         {link}
                       </a>

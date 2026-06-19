@@ -1,6 +1,7 @@
 export function BenefityIcon({ fill = '#424750' }) {
   return (
     <svg
+      aria-hidden="true"
       fill="none"
       height="21"
       viewBox="0 0 21 21"

@@ -5,6 +5,7 @@ import type { Delivery } from './types'
 interface DeliveryTableRowProps {
   delivery: Delivery
 }
+
 const statusVariantMap: Record<
   Delivery['status'],
   'success_basic' | 'warning' | 'destructive_basic'
@@ -13,6 +14,7 @@ const statusVariantMap: Record<
   Pendente: 'warning',
   Cancelado: 'destructive_basic',
 }
+
 export function DeliveryTableRow({ delivery }: DeliveryTableRowProps) {
   return (
     <tr className="border-border border-b last:border-b-0 hover:bg-muted/40 transition-colors">

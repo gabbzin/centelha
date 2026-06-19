@@ -75,7 +75,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                     onChange={(e) => setData('email', e.target.value)}
                     placeholder="nome@exemplo.com.br"
                     required
-                    tabIndex={1}
+                    tabIndex="0"
                     type="email"
                     value={data.email}
                   />
@@ -95,7 +95,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                     <TextLink
                       className="text-xs font-medium text-slate-400"
                       href={route('password.request')}
-                      tabIndex={5}
+                      tabIndex="0"
                     >
                       Esqueceu sua senha?
                     </TextLink>
@@ -110,7 +110,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                     onChange={(e) => setData('password', e.target.value)}
                     placeholder="Sua senha"
                     required
-                    tabIndex={2}
+                    tabIndex="0"
                     type={showPassword ? 'text' : 'password'}
                     value={data.password}
                   />
@@ -120,7 +120,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                     }
                     className="absolute top-1/2 right-3 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                     onClick={() => setShowPassword((prev) => !prev)}
-                    tabIndex={4}
+                    tabIndex="0"
                     type="button"
                   >
                     {showPassword ? (
@@ -141,7 +141,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                   onCheckedChange={(value) =>
                     setData('remember', value === true)
                   }
-                  tabIndex={3}
+                  tabIndex="0"
                 />
                 <Label className="text-sm text-slate-400" htmlFor="remember">
                   Lembrar de mim
@@ -151,7 +151,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
               <Button
                 className="mt-2 h-12 w-full rounded-md bg-[#3e6fb6] text-white"
                 disabled={processing}
-                tabIndex={6}
+                tabIndex="0"
                 type="submit"
               >
                 {processing && (

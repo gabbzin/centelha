@@ -9,7 +9,7 @@ import { initializeTheme } from './hooks/use-appearance'
 declare global {
   const route: typeof routeFn
 }
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel'
+const _appName = import.meta.env.VITE_APP_NAME || 'Laravel'
 createInertiaApp({
   title: (title) => `${title}`,
   resolve: (name) =>

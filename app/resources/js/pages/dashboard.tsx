@@ -30,7 +30,7 @@ const OPTIONSSELECT = [
 
 import { AlertCard } from '@/components/dashboard/cards/alert-card'
 import { TopItensCard } from '@/components/dashboard/cards/top-itens-card'
-import { Map } from '@/components/dashboard/map'
+import { DashboardMap } from '@/components/dashboard/map'
 import SimpleBarChart from '@/components/dashboard/simple-bar-chart'
 import { LayoutBase } from '@/layouts/layout'
 
@@ -129,7 +129,7 @@ export default function Dashboard({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Map />
+              <DashboardMap />
             </CardContent>
           </Card>
           <div className="flex flex-col items-center justify-between">

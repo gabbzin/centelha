@@ -65,6 +65,7 @@ export default function Welcome() {
                     >
                       <span>Documentation</span>
                       <svg
+                        aria-hidden="true"
                         className="h-2.5 w-2.5"
                         fill="none"
                         height={11}
@@ -97,6 +98,7 @@ export default function Welcome() {
                     >
                       <span>Laracasts</span>
                       <svg
+                        aria-hidden="true"
                         className="h-2.5 w-2.5"
                         fill="none"
                         height={11}
@@ -129,6 +131,7 @@ export default function Welcome() {
             </div>
             <div className="relative -mb-px aspect-[335/376] w-full shrink-0 overflow-hidden rounded-t-lg bg-[#fff2f2] lg:mb-0 lg:-ml-px lg:aspect-auto lg:w-[438px] lg:rounded-t-none lg:rounded-r-lg dark:bg-[#1D0002]">
               <svg
+                aria-hidden="true"
                 className="w-full max-w-none translate-y-0 text-[#F53003] opacity-100 transition-all duration-750 dark:text-[#F61500] starting:translate-y-6 starting:opacity-0"
                 fill="none"
                 viewBox="0 0 438 104"
@@ -161,6 +164,7 @@ export default function Welcome() {
                 />
               </svg>
               <svg
+                aria-hidden="true"
                 className="relative -mt-[4.9rem] -ml-8 w-[448px] max-w-none lg:-mt-[6.6rem] lg:ml-0 dark:hidden"
                 fill="none"
                 viewBox="0 0 440 376"
@@ -489,6 +493,7 @@ export default function Welcome() {
                 </g>
               </svg>
               <svg
+                aria-hidden="true"
                 className="relative -mt-[4.9rem] -ml-8 hidden w-[448px] max-w-none lg:-mt-[6.6rem] lg:ml-0 dark:block"
                 fill="none"
                 viewBox="0 0 440 376"

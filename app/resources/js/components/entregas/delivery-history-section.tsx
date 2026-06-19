@@ -14,6 +14,7 @@ import { DeliveryFilterBar } from './delivery-filter-bar'
 import { DeliveryTable } from './delivery-table'
 
 const PAGE_SIZE = 7
+
 export function DeliveryHistorySection() {
   const [startDate, setStartDate] = useState(() => {
     const now = new Date()
@@ -26,6 +27,7 @@ export function DeliveryHistorySection() {
   const [search, setSearch] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [isCreateOpen, setIsCreateOpen] = useState(false)
+
   const filtered = useMemo(
     () =>
       filterDeliveries(DELIVERIES, {
@@ -35,31 +37,39 @@ export function DeliveryHistorySection() {
       }),
     [search, startDate, endDate],
   )
+
   const pagination = useMemo(
     () => paginate(filtered, currentPage, PAGE_SIZE),
     [filtered, currentPage],
   )
+
   const handleSearchChange = useCallback((value: string) => {
     setSearch(value)
     setCurrentPage(1)
   }, [])
+
   const handleStartDateChange = useCallback((value: string) => {
     setStartDate(value)
     setCurrentPage(1)
   }, [])
+
   const handleEndDateChange = useCallback((value: string) => {
     setEndDate(value)
     setCurrentPage(1)
   }, [])
+
   const handleRegister = useCallback(() => {
     setIsCreateOpen(true)
   }, [])
+
   const handleExportCurrentMonth = useCallback(() => {
     console.log('Exportar PDF do mês atual')
   }, [])
+
   const handleExportSelectedPeriod = useCallback(() => {
     console.log('Exportar PDF do período selecionado')
   }, [])
+
   return (
     <section className="space-y-4">
       <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">

@@ -13,7 +13,7 @@ interface InputSelectProps {
     label: string
   }[]
   name: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: control vinculado a campos de formulário dinâmicos
   control: Control<any>
   placeholder?: string
   required?: boolean

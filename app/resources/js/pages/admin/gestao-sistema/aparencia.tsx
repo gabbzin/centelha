@@ -1,6 +1,6 @@
 import { useForm, usePage } from '@inertiajs/react' // Se for usar o form do Inertia para salvar
 import { HistoryIcon, SaveIcon } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { InputColor } from '@/components/inputs/input-color'
 import { toaster } from '@/components/toasters/toast-alert'
 import { Button } from '@/components/ui/button'

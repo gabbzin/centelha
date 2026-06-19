@@ -18,8 +18,8 @@ export function TopItensCard({ itens }: TopItensCardProps) {
       </CardHeader>
       <CardContent className="p-4">
         <ul className="space-y-4">
-          {itens.map((item, index) => (
-            <li key={index}>
+          {itens.map((item) => (
+            <li key={item.name}>
               <div className="flex items-center justify-between">
                 <h4 className="font-bold">{item.name}</h4>
                 <p>{item.quantity} un</p>

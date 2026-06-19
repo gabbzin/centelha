@@ -46,7 +46,7 @@ export default function Register() {
               onChange={(e) => setData('name', e.target.value)}
               placeholder="Full name"
               required
-              tabIndex={1}
+              tabIndex="0"
               type="text"
               value={data.name}
             />
@@ -62,7 +62,7 @@ export default function Register() {
               onChange={(e) => setData('email', e.target.value)}
               placeholder="email@example.com"
               required
-              tabIndex={2}
+              tabIndex="0"
               type="email"
               value={data.email}
             />
@@ -78,7 +78,7 @@ export default function Register() {
               onChange={(e) => setData('password', e.target.value)}
               placeholder="Password"
               required
-              tabIndex={3}
+              tabIndex="0"
               type="password"
               value={data.password}
             />
@@ -94,7 +94,7 @@ export default function Register() {
               onChange={(e) => setData('password_confirmation', e.target.value)}
               placeholder="Confirm password"
               required
-              tabIndex={4}
+              tabIndex="0"
               type="password"
               value={data.password_confirmation}
             />
@@ -104,7 +104,7 @@ export default function Register() {
           <Button
             className="mt-2 w-full"
             disabled={processing}
-            tabIndex={5}
+            tabIndex="0"
             type="submit"
           >
             {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
@@ -114,7 +114,7 @@ export default function Register() {
 
         <div className="text-muted-foreground text-center text-sm">
           Already have an account?{' '}
-          <TextLink href={route('login')} tabIndex={6}>
+          <TextLink href={route('login')} tabIndex="0">
             Log in
           </TextLink>
         </div>

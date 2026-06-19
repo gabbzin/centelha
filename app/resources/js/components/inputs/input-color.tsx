@@ -15,7 +15,10 @@ export function InputColor({ label, color, setColor }: InputColorProps) {
       <Popover>
         <PopoverTrigger
           render={
-            <button className="flex items-center justify-between cursor-pointer border border-border rounded-lg p-2 gap-2 w-full bg-muted">
+            <button
+              className="flex items-center justify-between cursor-pointer border border-border rounded-lg p-2 gap-2 w-full bg-muted"
+              type="button"
+            >
               <div className="flex items-end gap-4">
                 <div
                   className="size-8 rounded-lg border"

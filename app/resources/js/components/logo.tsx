@@ -5,6 +5,7 @@ interface LogoProps extends React.ComponentPropsWithoutRef<'svg'> {
 export function Logo({ width = 60, height = 65 }: LogoProps) {
   return (
     <svg
+      aria-hidden="true"
       fill="none"
       height={height}
       viewBox="0 0 60 65"

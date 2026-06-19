@@ -1,5 +1,5 @@
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
-export function Map() {
+export function DashboardMap() {
   return (
     <MapContainer
       center={[-15.793, -47.882]}

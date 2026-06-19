@@ -22,7 +22,7 @@ import { FamilyCard } from './components/family-card'
 interface FamilyProps {
   families: PaginatedData<Family>
 }
-export default function Family({ families }: FamilyProps) {
+export default function FamilyPage({ families }: FamilyProps) {
   const { communityCenter } = usePage<SharedData>().props
   const [onlyLastName, setOnlyLastName] = useState(false)
   return (
@@ -73,7 +73,7 @@ export default function Family({ families }: FamilyProps) {
             const getSobrenome = (name: string) => {
               const parts = name.trim().split(' ')
               return parts.length > 1
-                ? parts[parts.length - 2] + ' ' + parts[parts.length - 1]
+                ? `${parts[parts.length - 2]} ${parts[parts.length - 1]}`
                 : name
             }
             // Se withoutSobrenome for true, pega o sobrenome, caso contrário, pega o nome completo

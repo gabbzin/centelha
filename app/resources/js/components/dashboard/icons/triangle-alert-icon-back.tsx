@@ -1,6 +1,7 @@
 export function TriangleAlertIconBack() {
   return (
     <svg
+      aria-hidden="true"
       fill="none"
       height="19"
       viewBox="0 0 22 19"

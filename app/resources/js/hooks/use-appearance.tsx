@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 export type Appearance = 'light' | 'dark' | 'system'
 const prefersDark = () =>
   window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -22,11 +22,11 @@ export function initializeTheme() {
 }
 export function useAppearance() {
   const [appearance, setAppearance] = useState<Appearance>('light')
-  const updateAppearance = (mode: Appearance) => {
+  const updateAppearance = useCallback((mode: Appearance) => {
     setAppearance(mode)
     localStorage.setItem('appearance', mode)
     applyTheme(mode)
-  }
+  }, [])
   useEffect(() => {
     const savedAppearance = localStorage.getItem(
       'appearance',
@@ -34,7 +34,7 @@ export function useAppearance() {
     updateAppearance(savedAppearance || 'light')
     return () =>
       mediaQuery.removeEventListener('change', handleSystemThemeChange)
-  }, [])
+  }, [updateAppearance])
   return {
     appearance,
     updateAppearance,

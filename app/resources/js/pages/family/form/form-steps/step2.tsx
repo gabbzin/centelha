@@ -58,8 +58,7 @@ export function Step2() {
             setWrite(false)
             document.getElementById('numero')?.focus()
           }
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-        } catch (_error: any) {
+        } catch {
           setError('cep', {
             type: 'manual',
             message: 'Erro ao buscar CEP. Preencha manualmente.',

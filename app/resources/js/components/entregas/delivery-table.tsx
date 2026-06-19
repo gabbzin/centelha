@@ -12,6 +12,7 @@ interface DeliveryTableProps {
   totalPages: number
   onPageChange: (page: number) => void
 }
+
 export function DeliveryTable({
   deliveries,
   startIndex,

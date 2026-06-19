@@ -38,6 +38,7 @@ export default function Uploader2({ onFilesChange }: Uploader2Props) {
     <div className="flex flex-col gap-2">
       <Label>Logo da plataforma</Label>
       <div className="relative">
+        {/* biome-ignore lint/a11y/noStaticElementInteractions: drag-drop é aprimoramento; o input de arquivo contido provê acessibilidade por teclado */}
         <div
           className="border-border has-[input:focus]:border-ring has-[input:focus]:ring-ring/50 data-[dragging=true]:bg-accent/50 relative flex min-h-24 flex-col items-center justify-center overflow-hidden rounded-xl border border-dashed p-11 transition-colors has-[input:focus]:ring-[3px]"
           data-dragging={isDragging || undefined}
