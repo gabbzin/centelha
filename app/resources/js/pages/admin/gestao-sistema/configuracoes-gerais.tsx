@@ -1,24 +1,24 @@
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { LayoutBase } from '@/layouts/layout';
-import GenericForm from '@/components/form/generic-form';
-import { router, usePage } from '@inertiajs/react';
-import { useState } from 'react';
-import { SharedData } from '@/types';
-import { ConfigsGeraisForm } from '@/components/gestao-sistema/forms/configs-gerais-form';
-import { toaster } from '@/components/toasters/toast-alert';
+import { router, usePage } from '@inertiajs/react'
+import { useState } from 'react'
+import { useFormContext } from 'react-hook-form'
+import GenericForm from '@/components/form/generic-form'
+import { ConfigsGeraisForm } from '@/components/gestao-sistema/forms/configs-gerais-form'
 import {
   configsGeraisSchema,
-  FormValues,
-} from '@/components/gestao-sistema/schemas/configs-gerais-form';
-import { FileWithPreview } from '@/hooks/inputs/use-file-upload';
-import { useFormContext } from 'react-hook-form';
+  type FormValues,
+} from '@/components/gestao-sistema/schemas/configs-gerais-form'
+import { toaster } from '@/components/toasters/toast-alert'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
+import type { FileWithPreview } from '@/hooks/inputs/use-file-upload'
+import { LayoutBase } from '@/layouts/layout'
+import type { SharedData } from '@/types'
 
 // Componente principal
 export default function ConfiguracoesGerais() {
-  const { communityCenter } = usePage<SharedData>().props;
-  const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [faviconFile, setFaviconFile] = useState<File | null>(null);
+  const { communityCenter } = usePage<SharedData>().props
+  const [logoFile, setLogoFile] = useState<File | null>(null)
+  const [faviconFile, setFaviconFile] = useState<File | null>(null)
   return (
     <LayoutBase
       descriptionPage="Gerencie a identidade da marca e as comunicações textuais da plataforma."
@@ -55,7 +55,7 @@ export default function ConfiguracoesGerais() {
         />
       </GenericForm>
     </LayoutBase>
-  );
+  )
 }
 
 // Componente interno
@@ -65,20 +65,20 @@ function FormContent({
   onLogoChange,
   onFaviconChange,
 }: {
-  logoFile: File | null;
-  faviconFile: File | null;
-  onLogoChange: (files: FileWithPreview[]) => void;
-  onFaviconChange: (files: FileWithPreview[]) => void;
+  logoFile: File | null
+  faviconFile: File | null
+  onLogoChange: (files: FileWithPreview[]) => void
+  onFaviconChange: (files: FileWithPreview[]) => void
 }) {
   // Contexto do Formulário
-  const { getValues, trigger } = useFormContext<FormValues>();
+  const { getValues, trigger } = useFormContext<FormValues>()
 
   // Funções de envio
   const handleSave = async () => {
-    const isValid = await trigger();
-    if (!isValid) return;
-    const values = getValues();
-    const formData = buildConfigsFormData(values, logoFile, faviconFile);
+    const isValid = await trigger()
+    if (!isValid) return
+    const values = getValues()
+    const formData = buildConfigsFormData(values, logoFile, faviconFile)
 
     // Chamada da API
     router.put(route('gestao-sistema.configuracoes-gerais.update'), formData, {
@@ -86,8 +86,8 @@ function FormContent({
       onSuccess: () =>
         toaster.createSuccess('Sucesso', 'Configurações salvas!'),
       onError: () => toaster.createError('Erro', 'Algo deu errado.'),
-    });
-  };
+    })
+  }
   return (
     <>
       <ConfigsGeraisForm
@@ -100,7 +100,7 @@ function FormContent({
         <Button onClick={handleSave}>Salvar Alterações</Button>
       </footer>
     </>
-  );
+  )
 }
 
 // Função para construir o FormData para envio
@@ -109,16 +109,16 @@ function buildConfigsFormData(
   logoFile: File | null,
   faviconFile: File | null,
 ): FormData {
-  const formData = new FormData();
-  formData.append('name', values.platformName);
-  formData.append('fontFamily', values.font);
-  formData.append('maintenance_mode', values.maintenance_mode ? '1' : '0');
-  if (values.slogan) formData.append('slogan', values.slogan);
-  if (values.footerText) formData.append('rodape_text', values.footerText);
+  const formData = new FormData()
+  formData.append('name', values.platformName)
+  formData.append('fontFamily', values.font)
+  formData.append('maintenance_mode', values.maintenance_mode ? '1' : '0')
+  if (values.slogan) formData.append('slogan', values.slogan)
+  if (values.footerText) formData.append('rodape_text', values.footerText)
   if (values.social_links?.length) {
-    formData.append('social_links', JSON.stringify(values.social_links));
+    formData.append('social_links', JSON.stringify(values.social_links))
   }
-  if (logoFile) formData.append('logo', logoFile);
-  if (faviconFile) formData.append('favicon', faviconFile);
-  return formData;
+  if (logoFile) formData.append('logo', logoFile)
+  if (faviconFile) formData.append('favicon', faviconFile)
+  return formData
 }

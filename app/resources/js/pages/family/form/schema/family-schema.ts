@@ -1,6 +1,7 @@
-import { format, parseISO } from 'date-fns';
-import { z } from 'zod';
-import type { Family } from '@/types';
+import { format, parseISO } from 'date-fns'
+import { z } from 'zod'
+import type { Family } from '@/types'
+
 export const familyMemberSchema = z.object({
   name: z
     .string()
@@ -17,7 +18,8 @@ export const familyMemberSchema = z.object({
     })
     .transform((date) => format(date, 'yyyy-MM-dd')),
   relacao_parentesco: z.string().min(1, 'Relação de parentesco é obrigatória'),
-});
+})
+
 export const familySchema = z.object({
   name: z.string().min(1, 'Nome do responsável é obrigatório'),
   cpf: z
@@ -49,8 +51,10 @@ export const familySchema = z.object({
   renda_familiar: z.union([z.string(), z.number()]).optional(),
   recebe_auxilio: z.enum(['sim', 'nao']).optional(),
   auxilios_recebidos: z.string().optional(),
-});
-export type FormData = z.infer<typeof familySchema>;
+})
+
+export type FormData = z.infer<typeof familySchema>
+
 export const defaultValues: FormData = {
   name: '',
   cpf: '',
@@ -69,10 +73,10 @@ export const defaultValues: FormData = {
   renda_familiar: '',
   recebe_auxilio: undefined,
   auxilios_recebidos: '',
-};
+}
 
 function strip(value: string | null | undefined): string {
-  return (value ?? '').replace(/\D/g, '');
+  return (value ?? '').replace(/\D/g, '')
 }
 
 export function familyToFormData(family: Family): FormData {
@@ -103,5 +107,5 @@ export function familyToFormData(family: Family): FormData {
     renda_familiar: family.total_income ? family.total_income / 100 : '',
     recebe_auxilio: family.receives_government_aid ? 'sim' : 'nao',
     auxilios_recebidos: family.government_aid_description ?? '',
-  };
+  }
 }

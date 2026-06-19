@@ -1,10 +1,11 @@
-import { BarChart, Bar, XAxis, Tooltip } from 'recharts';
+import { Bar, BarChart, Tooltip, XAxis } from 'recharts'
+
 interface ChartProps {
   data: {
-    name: string;
-    anterior: number;
-    atual: number;
-  }[];
+    name: string
+    anterior: number
+    atual: number
+  }[]
 }
 const SimpleBarChart = ({ data }: ChartProps) => {
   return (
@@ -29,6 +30,6 @@ const SimpleBarChart = ({ data }: ChartProps) => {
       <Bar dataKey="atual" fill="var(--chart-3)" radius={[10, 10, 0, 0]} />
       <Bar dataKey="anterior" fill="var(--chart-5)" radius={[10, 10, 0, 0]} />
     </BarChart>
-  );
-};
-export default SimpleBarChart;
+  )
+}
+export default SimpleBarChart

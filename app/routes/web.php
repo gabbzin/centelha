@@ -36,6 +36,10 @@ Route::middleware(['auth'])->group(function () {
     Route::put('beneficios/{benefit}', [BenefitController::class, 'update'])->name('beneficios.update');
     Route::delete('beneficios/{benefit}', [BenefitController::class, 'destroy'])->name('beneficios.destroy');
 
+    Route::get('entregas', function () {
+        return Inertia::render('entregas');
+    })->name('entregas');
+
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('family', [FamilyController::class, 'index'])->name('family');
     Route::post('family', [FamilyController::class, 'store'])->name('family.store');

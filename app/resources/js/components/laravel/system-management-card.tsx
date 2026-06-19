@@ -1,14 +1,15 @@
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { Link } from '@inertiajs/react';
-import { type LucideIcon } from 'lucide-react';
+import { Link } from '@inertiajs/react'
+import type { LucideIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
+
 interface SystemManagementCardProps {
-  title: string;
-  description: string;
-  actionLabel: string;
-  href: string;
-  Icon: LucideIcon;
+  title: string
+  description: string
+  actionLabel: string
+  href: string
+  Icon: LucideIcon
 }
 export function SystemManagementCard({
   title,
@@ -43,5 +44,5 @@ export function SystemManagementCard({
         </div>
       </div>
     </Card>
-  );
+  )
 }

@@ -1,15 +1,14 @@
-import { Button } from '@/components/ui/button';
-import { ArrowRightIcon } from 'lucide-react';
-import React from 'react';
+import { ArrowRightIcon } from 'lucide-react'
+import type React from 'react'
+import { Button } from '@/components/ui/button'
 
 interface HeroSectionProps {
-  imageUrl: string;
-  ref: React.Ref<HTMLDivElement> | null;
+  imageUrl: string
+  ref: React.Ref<HTMLDivElement> | null
 }
-
 export function HeroSection({ imageUrl, ref }: HeroSectionProps) {
   return (
-    <section className="relative overflow-hidden bg-white" ref={ref}>
+    <section ref={ref} className="relative overflow-hidden bg-white">
       <div
         className="absolute inset-0"
         style={{
@@ -29,8 +28,8 @@ export function HeroSection({ imageUrl, ref }: HeroSectionProps) {
             <span className="text-primary">impacto real.</span>
           </h1>
           <p className="max-w-xl text-base leading-relaxed text-[#4B5563] lg:text-lg">
-            Centralize dados, organize doações e multiplique sua capacidade de ajudar com a plataforma mais simples e
-            poderosa do setor social.
+            Centralize dados, organize doações e multiplique sua capacidade de
+            ajudar com a plataforma mais simples e poderosa do setor social.
           </p>
           <Button className="gap-2 rounded-full border-0 py-6 shadow-xl">
             Começar Agora
@@ -42,11 +41,15 @@ export function HeroSection({ imageUrl, ref }: HeroSectionProps) {
           <div className="absolute -inset-6 rounded-[32px] bg-[radial-gradient(circle_at_center,rgba(45,87,142,0.16),transparent_65%)] blur-xl" />
           <div className="border-border/70 relative overflow-hidden rounded-2xl border bg-white p-2 shadow-[0_24px_50px_-12px_rgba(16,24,36,0.22)]">
             <div className="border-border/50 hidden overflow-hidden rounded-2xl border bg-white md:block max-h-150">
-              <img src={imageUrl} alt="Dashboard da Plataforma Centelha" className="block h-auto w-full" />
+              <img
+                alt="Dashboard da Plataforma Centelha"
+                className="block h-auto w-full"
+                src={imageUrl}
+              />
             </div>
           </div>
         </div>
       </div>
     </section>
-  );
+  )
 }

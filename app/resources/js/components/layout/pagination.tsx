@@ -6,16 +6,17 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from '../ui/pagination';
+} from '../ui/pagination'
+
 interface PaginationConsulProps {
   links: {
-    url: string | null;
-    label: string;
-    page: number | null;
-    active: boolean;
-  }[];
-  prev_page_url: string | null;
-  next_page_url: string | null;
+    url: string | null
+    label: string
+    page: number | null
+    active: boolean
+  }[]
+  prev_page_url: string | null
+  next_page_url: string | null
 }
 export function PaginationConsul({
   links,
@@ -23,26 +24,26 @@ export function PaginationConsul({
   next_page_url,
 }: PaginationConsulProps) {
   // Constantes
-  const firstPageIndex = 1; // Ignorando o primeiro link, que é o "Previous"
-  const lastPageIndex = links.length - 2; // Ignorando o último link, que é o "Next"
-  const activeIndex = links.findIndex((link) => link.active);
-  const active = activeIndex !== -1 ? activeIndex : 1;
-  const pagesToShow = 2; // Mostramos o ativo e mais duas páginas pra frente, o restante vira elipse
+  const firstPageIndex = 1 // Ignorando o primeiro link, que é o "Previous"
+  const lastPageIndex = links.length - 2 // Ignorando o último link, que é o "Next"
+  const activeIndex = links.findIndex((link) => link.active)
+  const active = activeIndex !== -1 ? activeIndex : 1
+  const pagesToShow = 2 // Mostramos o ativo e mais duas páginas pra frente, o restante vira elipse
 
   // Lógica de Gap (Buraco) para o final
-  const lastMappedIndex = active + pagesToShow;
+  const lastMappedIndex = active + pagesToShow
 
   // Só mostra a elipse se houver pelo menos 1 página escondida entre o primeiro link e o ativo
-  const showEllipsisStart = active - firstPageIndex > 1;
+  const showEllipsisStart = active - firstPageIndex > 1
 
   // Só mostra a elipse se houver pelo menos 1 página escondida entre o map e o último link
-  const showEllipsisEnd = lastPageIndex - lastMappedIndex > 1;
+  const showEllipsisEnd = lastPageIndex - lastMappedIndex > 1
 
   // Só mostra o último link fixo se o map não tiver alcançado ele
-  const showLastItem = lastPageIndex - lastMappedIndex > 0;
+  const showLastItem = lastPageIndex - lastMappedIndex > 0
 
   // Condição para o primeiro item (esconde se o ativo for o primeiro)
-  const showFirstItem = !links[firstPageIndex].active;
+  const showFirstItem = !links[firstPageIndex].active
 
   // Renderização
   return (
@@ -69,13 +70,13 @@ export function PaginationConsul({
         )}
         {links.map((link, index) => {
           if (index === 0 || index === links.length - 1) {
-            return null; // Ignora o primeiro e o último link (Previous e Next)
+            return null // Ignora o primeiro e o último link (Previous e Next)
           }
           if (index < active) {
-            return null; // Ignora os links anteriores ao ativo
+            return null // Ignora os links anteriores ao ativo
           }
           if (index > active + pagesToShow) {
-            return null; // Ignora os links posteriores ao ativo (exibe apenas 2 após o ativo)
+            return null // Ignora os links posteriores ao ativo (exibe apenas 2 após o ativo)
           }
           return (
             <PaginationItem key={link.label}>
@@ -86,7 +87,7 @@ export function PaginationConsul({
                 {link.label}
               </PaginationLink>
             </PaginationItem>
-          );
+          )
         })}
         {/* Tiramos 3, para remover o gargalo e a separação entre os últimos */}
         <PaginationItem className={showEllipsisEnd ? '' : 'hidden'}>
@@ -106,5 +107,5 @@ export function PaginationConsul({
         </PaginationItem>
       </PaginationContent>
     </Pagination>
-  );
+  )
 }

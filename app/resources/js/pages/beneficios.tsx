@@ -1,10 +1,10 @@
-import { StockControlSection } from '@/components/beneficios/stock-control-section';
-import { Header } from '@/components/layout/header';
-import { Head } from '@inertiajs/react';
-import type { PaginatedBenefits } from '@/components/beneficios/types';
+import { Head } from '@inertiajs/react'
+import { StockControlSection } from '@/components/beneficios/stock-control-section'
+import type { PaginatedBenefits } from '@/components/beneficios/types'
+import { Header } from '@/components/layout/header'
 
 interface BeneficiosPageProps {
-  benefits: PaginatedBenefits;
+  benefits: PaginatedBenefits
 }
 
 export default function Beneficios({ benefits }: BeneficiosPageProps) {
@@ -18,5 +18,5 @@ export default function Beneficios({ benefits }: BeneficiosPageProps) {
         </main>
       </div>
     </>
-  );
+  )
 }

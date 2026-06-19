@@ -1,6 +1,7 @@
 export function HandWithHeartIcon() {
   return (
     <svg
+      aria-hidden="true"
       fill="none"
       height="54"
       viewBox="0 0 56 54"
@@ -12,5 +13,5 @@ export function HandWithHeartIcon() {
         fill="#094785"
       />
     </svg>
-  );
+  )
 }

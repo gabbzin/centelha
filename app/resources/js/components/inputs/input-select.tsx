@@ -1,21 +1,22 @@
+import { type Control, Controller } from 'react-hook-form'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Control, Controller } from 'react-hook-form';
+} from '@/components/ui/select'
+
 interface InputSelectProps {
   options: {
-    value: string;
-    label: string;
-  }[];
-  name: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  control: Control<any>;
-  placeholder?: string;
-  required?: boolean;
+    value: string
+    label: string
+  }[]
+  name: string
+  // biome-ignore lint/suspicious/noExplicitAny: control vinculado a campos de formulário dinâmicos
+  control: Control<any>
+  placeholder?: string
+  required?: boolean
 }
 export function InputSelect({
   options,
@@ -52,5 +53,5 @@ export function InputSelect({
         </Select>
       )}
     />
-  );
+  )
 }

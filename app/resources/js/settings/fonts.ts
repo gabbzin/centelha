@@ -1,7 +1,7 @@
 export interface FontOption {
-  id: string;
-  label: string;
-  type: 'system' | 'google';
+  id: string
+  label: string
+  type: 'system' | 'google'
 }
 export const AVAILABLE_FONTS: FontOption[] = [
   {
@@ -29,4 +29,4 @@ export const AVAILABLE_FONTS: FontOption[] = [
     label: 'Open Sans',
     type: 'google',
   },
-];
+]

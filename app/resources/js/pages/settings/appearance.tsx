@@ -1,19 +1,16 @@
-import { Head } from '@inertiajs/react';
-
-import AppearanceTabs from '@/components/laravel/appearance-tabs';
-import HeadingSmall from '@/components/laravel/heading-small';
-import { type BreadcrumbItem } from '@/types';
-
-import AppLayout from '@/layouts/app-layout';
-import SettingsLayout from '@/layouts/settings/layout';
+import { Head } from '@inertiajs/react'
+import AppearanceTabs from '@/components/laravel/appearance-tabs'
+import HeadingSmall from '@/components/laravel/heading-small'
+import AppLayout from '@/layouts/app-layout'
+import SettingsLayout from '@/layouts/settings/layout'
+import type { BreadcrumbItem } from '@/types'
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
     title: 'Appearance settings',
     href: '/settings/appearance',
   },
-];
-
+]
 export default function Appearance() {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
@@ -21,10 +18,13 @@ export default function Appearance() {
 
       <SettingsLayout>
         <div className="space-y-6">
-          <HeadingSmall title="Appearance settings" description="Update your account's appearance settings" />
+          <HeadingSmall
+            description="Update your account's appearance settings"
+            title="Appearance settings"
+          />
           <AppearanceTabs />
         </div>
       </SettingsLayout>
     </AppLayout>
-  );
+  )
 }

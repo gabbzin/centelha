@@ -1,12 +1,9 @@
-import { Header } from '@/components/layout/header';
-import { Head } from '@inertiajs/react';
-import {
-  CircleDollarSignIcon,
-  IdCardIcon,
-  MapPinHouseIcon,
-} from 'lucide-react';
-import { useState } from 'react';
-import { FamilyForm } from './family-form';
+import { Head } from '@inertiajs/react'
+import { CircleDollarSignIcon, IdCardIcon, MapPinHouseIcon } from 'lucide-react'
+import { useState } from 'react'
+import { Header } from '@/components/layout/header'
+import { FamilyForm } from './family-form'
+
 const STEPS = [
   {
     icon: IdCardIcon,
@@ -20,9 +17,9 @@ const STEPS = [
     icon: CircleDollarSignIcon,
     title: '03 Renda',
   },
-];
+]
 export default function RegisterFamilyPage() {
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(0)
   return (
     <>
       <Head title="Formulário" />
@@ -36,7 +33,7 @@ export default function RegisterFamilyPage() {
 
             {STEPS.map((step, index) => (
               <div
-                key={index}
+                key={step.title}
                 className={`flex items-center gap-3 rounded-lg px-4 py-3 ${index === currentStep ? 'bg-[#094785] font-bold text-white' : 'hover:bg-muted'}`}
               >
                 <step.icon className="size-6" />
@@ -56,5 +53,5 @@ export default function RegisterFamilyPage() {
         </div>
       </div>
     </>
-  );
+  )
 }

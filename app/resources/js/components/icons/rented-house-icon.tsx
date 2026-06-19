@@ -1,6 +1,7 @@
 export function RentedHouseIcon() {
   return (
     <svg
+      aria-hidden="true"
       fill="none"
       height="18"
       viewBox="0 0 18 18"
@@ -12,5 +13,5 @@ export function RentedHouseIcon() {
         fill="#424750"
       />
     </svg>
-  );
+  )
 }

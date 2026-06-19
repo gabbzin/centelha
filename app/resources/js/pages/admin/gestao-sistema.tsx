@@ -1,12 +1,12 @@
-import { type SharedData } from '@/types';
-import { usePage } from '@inertiajs/react';
-import { SystemManagementCard } from '@/components/laravel/system-management-card';
-import { LayoutBase } from '@/layouts/layout';
-import { Command, Settings, Users } from 'lucide-react';
+import { usePage } from '@inertiajs/react'
+import { Command, Settings, Users } from 'lucide-react'
+import { SystemManagementCard } from '@/components/laravel/system-management-card'
+import { LayoutBase } from '@/layouts/layout'
+import type { SharedData } from '@/types'
 export default function GestaoSistema() {
-  const { communityCenter } = usePage<SharedData>().props;
-  const url = usePage().url;
-  const name = communityCenter?.name ?? 'Centelha';
+  const { communityCenter } = usePage<SharedData>().props
+  const url = usePage().url
+  const name = communityCenter?.name ?? 'Centelha'
   const systemCards = [
     {
       title: 'Configurações Gerais',
@@ -38,7 +38,7 @@ export default function GestaoSistema() {
       href: 'customizacao-tela',
       icon: Settings,
     },
-  ] as const;
+  ] as const
   return (
     <LayoutBase
       description={`Gerencie acessos, módulos e configurações fundamentais da plataforma ${name}.`}
@@ -58,5 +58,5 @@ export default function GestaoSistema() {
         ))}
       </section>
     </LayoutBase>
-  );
+  )
 }

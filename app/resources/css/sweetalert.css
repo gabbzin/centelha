@@ -2,7 +2,7 @@
   font-size: 24px;
   font-weight: bold;
   text-transform: uppercase;
-  color: #0F172A;
+  color: #0f172a;
 }
 
 .confirm-button-success {
@@ -11,7 +11,7 @@
   border-radius: 12px;
   font-weight: bold;
   color: white;
-  background-color: #10B981;
+  background-color: #10b981;
 }
 
 .confirm-button-success:hover {
@@ -24,11 +24,11 @@
   border-radius: 12px;
   font-weight: bold;
   color: white;
-  background-color: #EF4444;
+  background-color: #ef4444;
 }
 
 .confirm-button-error:hover {
-  background-color: #DC2626;
+  background-color: #dc2626;
 }
 
 .confirm-button-info {
@@ -37,11 +37,11 @@
   border-radius: 12px;
   font-weight: bold;
   color: white;
-  background-color: #1558D6;
+  background-color: #1558d6;
 }
 
 .confirm-button-info:hover {
-  background-color: #1E40AF;
+  background-color: #1e40af;
 }
 
 .swal2-actions {

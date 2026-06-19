@@ -1,23 +1,24 @@
 import {
   AlertDialog,
-  AlertDialogTrigger,
+  AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
   AlertDialogDescription,
   AlertDialogFooter,
-  AlertDialogCancel,
-  AlertDialogAction,
-} from '../ui/alert-dialog';
-import { Button } from '../ui/button';
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '../ui/alert-dialog'
+import { Button } from '../ui/button'
+
 interface AlertButtonProps {
-  textButton: string;
-  iconButton: React.ReactNode;
-  title: string;
-  description: string;
-  actionText: string;
-  cancelText: string;
-  onAction: () => void;
+  textButton: string
+  iconButton: React.ReactNode
+  title: string
+  description: string
+  actionText: string
+  cancelText: string
+  onAction: () => void
 }
 export function AlertButton({
   textButton,
@@ -53,5 +54,5 @@ export function AlertButton({
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  );
+  )
 }

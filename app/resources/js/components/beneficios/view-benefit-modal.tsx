@@ -1,10 +1,17 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
-import { Calendar, ImageIcon, Package, Tag, User, UserCircle } from 'lucide-react';
-import { formatIsoDateToDisplay } from './data';
-import type { Benefit } from './types';
+import {
+  Calendar,
+  ImageIcon,
+  Package,
+  Tag,
+  User,
+  UserCircle,
+} from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { Card, CardContent } from '@/components/ui/card'
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
+import { cn } from '@/lib/utils'
+import { formatIsoDateToDisplay } from './data'
+import type { Benefit } from './types'
 
 const CATEGORY_STYLES: Record<string, string> = {
   Alimentação: 'bg-blue-50 text-blue-700 border-blue-200',
@@ -12,24 +19,28 @@ const CATEGORY_STYLES: Record<string, string> = {
   Saúde: 'bg-amber-50 text-amber-700 border-amber-200',
   Vestuário: 'bg-purple-50 text-purple-700 border-purple-200',
   Educação: 'bg-pink-50 text-pink-700 border-pink-200',
-};
+}
 
 const STATUS_STYLES: Record<string, string> = {
   Ativo: 'bg-emerald-50 text-emerald-700 border-emerald-200',
   Revisão: 'bg-amber-50 text-amber-700 border-amber-200',
   Inativo: 'bg-red-50 text-red-700 border-red-200',
-};
-
-interface ViewBenefitModalProps {
-  benefit: Benefit | null;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
 }
 
-export function ViewBenefitModal({ benefit, open, onOpenChange }: ViewBenefitModalProps) {
-  if (!benefit) return null;
+interface ViewBenefitModalProps {
+  benefit: Benefit | null
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}
 
-  const imageUrl = benefit.image_path ? `/storage/${benefit.image_path}` : null;
+export function ViewBenefitModal({
+  benefit,
+  open,
+  onOpenChange,
+}: ViewBenefitModalProps) {
+  if (!benefit) return null
+
+  const imageUrl = benefit.image_path ? `/storage/${benefit.image_path}` : null
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -41,20 +52,32 @@ export function ViewBenefitModal({ benefit, open, onOpenChange }: ViewBenefitMod
 
           <div className="mt-6 space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-foreground/60 text-sm font-medium">Código</span>
+              <span className="text-foreground/60 text-sm font-medium">
+                Código
+              </span>
               <span className="text-sm font-bold">{benefit.code}</span>
             </div>
 
             <div>
-              <span className="text-foreground/60 text-sm font-medium">Nome</span>
-              <p className="text-lg font-semibold uppercase mt-0.5">{benefit.name}</p>
+              <span className="text-foreground/60 text-sm font-medium">
+                Nome
+              </span>
+              <p className="text-lg font-semibold uppercase mt-0.5">
+                {benefit.name}
+              </p>
             </div>
 
             <div className="flex items-center gap-3 flex-wrap">
-              <Badge variant="outline" className={cn('uppercase', CATEGORY_STYLES[benefit.category])}>
+              <Badge
+                variant="outline"
+                className={cn('uppercase', CATEGORY_STYLES[benefit.category])}
+              >
                 {benefit.category}
               </Badge>
-              <Badge variant="outline" className={cn('uppercase', STATUS_STYLES[benefit.status])}>
+              <Badge
+                variant="outline"
+                className={cn('uppercase', STATUS_STYLES[benefit.status])}
+              >
                 {benefit.status}
               </Badge>
             </div>
@@ -67,7 +90,14 @@ export function ViewBenefitModal({ benefit, open, onOpenChange }: ViewBenefitMod
                   </div>
                   <div>
                     <p className="text-xs text-foreground/60">Estoque</p>
-                    <p className={cn('text-sm font-semibold', benefit.stock <= 20 ? 'text-destructive' : 'text-primary')}>
+                    <p
+                      className={cn(
+                        'text-sm font-semibold',
+                        benefit.stock <= 20
+                          ? 'text-destructive'
+                          : 'text-primary',
+                      )}
+                    >
                       {benefit.stock} unidades
                     </p>
                   </div>
@@ -79,7 +109,9 @@ export function ViewBenefitModal({ benefit, open, onOpenChange }: ViewBenefitMod
                       <User className="size-4" />
                     </div>
                     <div>
-                      <p className="text-xs text-foreground/60">Doador/Origem</p>
+                      <p className="text-xs text-foreground/60">
+                        Doador/Origem
+                      </p>
                       <p className="text-sm font-semibold">{benefit.donor}</p>
                     </div>
                   </div>
@@ -92,7 +124,9 @@ export function ViewBenefitModal({ benefit, open, onOpenChange }: ViewBenefitMod
                     </div>
                     <div>
                       <p className="text-xs text-foreground/60">Validade</p>
-                      <p className="text-sm font-semibold">{formatIsoDateToDisplay(benefit.validity)}</p>
+                      <p className="text-sm font-semibold">
+                        {formatIsoDateToDisplay(benefit.validity)}
+                      </p>
                     </div>
                   </div>
                 )}
@@ -114,7 +148,9 @@ export function ViewBenefitModal({ benefit, open, onOpenChange }: ViewBenefitMod
                     </div>
                     <div>
                       <p className="text-xs text-foreground/60">Responsável</p>
-                      <p className="text-sm font-semibold">{benefit.creator.name}</p>
+                      <p className="text-sm font-semibold">
+                        {benefit.creator.name}
+                      </p>
                     </div>
                   </div>
                 )}
@@ -123,14 +159,20 @@ export function ViewBenefitModal({ benefit, open, onOpenChange }: ViewBenefitMod
 
             {benefit.notes && (
               <div>
-                <span className="text-foreground/60 text-sm font-medium">Observações</span>
-                <p className="text-sm text-foreground/80 mt-1 whitespace-pre-wrap">{benefit.notes}</p>
+                <span className="text-foreground/60 text-sm font-medium">
+                  Observações
+                </span>
+                <p className="text-sm text-foreground/80 mt-1 whitespace-pre-wrap">
+                  {benefit.notes}
+                </p>
               </div>
             )}
 
             {imageUrl ? (
               <div>
-                <span className="text-foreground/60 text-sm font-medium">Imagem</span>
+                <span className="text-foreground/60 text-sm font-medium">
+                  Imagem
+                </span>
                 <div className="mt-2 rounded-lg overflow-hidden border border-border">
                   <img
                     src={imageUrl}
@@ -147,8 +189,7 @@ export function ViewBenefitModal({ benefit, open, onOpenChange }: ViewBenefitMod
             )}
           </div>
         </div>
-
       </DialogContent>
     </Dialog>
-  );
+  )
 }

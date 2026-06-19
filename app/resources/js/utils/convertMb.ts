@@ -1,3 +1,3 @@
 export function convertMB(mb: number): number {
-  return mb * 1024 * 1024;
+  return mb * 1024 * 1024
 }

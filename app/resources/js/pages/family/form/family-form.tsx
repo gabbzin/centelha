@@ -1,33 +1,35 @@
-import { Button } from '@/components/ui/button';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { router } from '@inertiajs/react'
+import { ArrowRightIcon } from 'lucide-react'
+import type { Resolver } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
+import { toaster } from '@/components/toasters/toast-alert'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { toaster } from '@/components/toasters/toast-alert';
-import { router } from '@inertiajs/react';
-import { ArrowRightIcon } from 'lucide-react';
-import { FormProvider, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import type { Resolver } from 'react-hook-form';
+} from '@/components/ui/card'
+import type { Family } from '@/types'
+import { Step1 } from './form-steps/step1'
+import { Step2 } from './form-steps/step2'
+import { Step3 } from './form-steps/step3'
+import { RequiredInputPhrase } from './required-input'
 import {
   defaultValues,
+  type FormData,
   familySchema,
   familyToFormData,
-  type FormData,
-} from './schema/family-schema';
-import type { Family } from '@/types';
-import { Step1 } from './form-steps/step1';
-import { Step2 } from './form-steps/step2';
-import { Step3 } from './form-steps/step3';
-import { RequiredInputPhrase } from './required-input';
+} from './schema/family-schema'
+
 const STEP_FIELDS: Array<Array<keyof FormData>> = [
   ['name', 'cpf', 'telefone', 'email', 'data_nascimento', 'family_members'],
   ['cep', 'logradouro', 'numero', 'cidade', 'UF', 'bairro', 'moradia'],
   ['fonte_renda', 'renda_familiar', 'recebe_auxilio', 'auxilios_recebidos'],
-];
+]
+
 const STEPS = [
   {
     title: 'Dados do responsável familiar e informações da família',
@@ -46,14 +48,16 @@ const STEPS = [
       'Informe os dados financeiros e recebimento de benefícios sociais para finalizar o cadastro',
     component: <Step3 />,
   },
-];
+]
+
 interface FamilyFormProps {
-  step: number;
-  totalSteps: number;
-  onNext: () => void;
-  onPrev: () => void;
-  family?: Family;
+  step: number
+  totalSteps: number
+  onNext: () => void
+  onPrev: () => void
+  family?: Family
 }
+
 export function FamilyForm({
   step,
   totalSteps,
@@ -65,22 +69,25 @@ export function FamilyForm({
     mode: 'onTouched',
     resolver: zodResolver(familySchema) as unknown as Resolver<FormData>,
     defaultValues: family ? familyToFormData(family) : defaultValues,
-  });
+  })
+
+  const isEditing = !!family
+
   const handleNext = async () => {
-    const isValid = await form.trigger(STEP_FIELDS[step]);
+    const isValid = await form.trigger(STEP_FIELDS[step])
     if (isValid) {
-      onNext();
+      onNext()
     } else {
       const firstErrorField = STEP_FIELDS[step].find(
         (field) => form.formState.errors[field],
-      );
+      )
       const errorMessage = firstErrorField
         ? form.formState.errors[firstErrorField]?.message
-        : 'Verifique os campos';
-      toaster.createError(`Erro de validação!`, String(errorMessage));
+        : 'Verifique os campos'
+      toaster.createError(`Erro de validação!`, String(errorMessage))
     }
-  };
-  const isEditing = !!family;
+  }
+
   const onSubmit = form.handleSubmit((data) => {
     const options = {
       onSuccess: () => {
@@ -89,7 +96,7 @@ export function FamilyForm({
           isEditing
             ? 'Informações da família atualizadas com sucesso!'
             : 'Cadastro da família concluído com sucesso!',
-        );
+        )
       },
       onError: () => {
         toaster.createError(
@@ -97,16 +104,17 @@ export function FamilyForm({
           isEditing
             ? 'Ocorreu um erro ao atualizar a família. Verifique os dados e tente novamente.'
             : 'Ocorreu um erro ao cadastrar a família. Verifique os dados e tente novamente.',
-        );
+        )
       },
-    };
+    }
 
     if (isEditing) {
-      router.put(`/family/${family.id}`, data as never, options);
+      router.put(`/family/${family.id}`, data as never, options)
     } else {
-      router.post('/family', data as never, options);
+      router.post('/family', data as never, options)
     }
-  });
+  })
+
   return (
     <>
       <div className="space-y-4">
@@ -140,5 +148,5 @@ export function FamilyForm({
         )}
       </footer>
     </>
-  );
+  )
 }

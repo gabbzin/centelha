@@ -1,4 +1,4 @@
-import { Header } from './header';
+import { Header } from './header'
 export function Main({ children }: { children: React.ReactNode }) {
   return (
     <div className="bg-surface dark:bg-surface min-h-screen">
@@ -7,5 +7,5 @@ export function Main({ children }: { children: React.ReactNode }) {
         {children}
       </div>
     </div>
-  );
+  )
 }
