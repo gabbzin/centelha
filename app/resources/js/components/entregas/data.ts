@@ -1,9 +1,9 @@
-import type { Delivery, PaginationResult, SelectOption } from './types';
+import type { Delivery, PaginationResult, SelectOption } from './types'
 export interface BeneficiaryOption {
-  value: string;
-  label: string;
-  cpf: string;
-  nis: string;
+  value: string
+  label: string
+  cpf: string
+  nis: string
 }
 export const BENEFICIARY_OPTIONS: BeneficiaryOption[] = [
   {
@@ -36,7 +36,7 @@ export const BENEFICIARY_OPTIONS: BeneficiaryOption[] = [
     cpf: '321.654.987-00',
     nis: '32165498700',
   },
-];
+]
 export const BENEFIT_TYPE_OPTIONS: SelectOption[] = [
   {
     value: 'cesta_basica_padrao',
@@ -66,7 +66,7 @@ export const BENEFIT_TYPE_OPTIONS: SelectOption[] = [
     value: 'cesta_natalina',
     label: 'Cesta Natalina',
   },
-];
+]
 export const LOCATION_OPTIONS: SelectOption[] = [
   {
     value: 'centro_comunitario_a',
@@ -84,7 +84,7 @@ export const LOCATION_OPTIONS: SelectOption[] = [
     value: 'escola_municipal_c',
     label: 'Escola Municipal C',
   },
-];
+]
 export const DELIVERIES: Delivery[] = [
   {
     code: '#ENT-3450',
@@ -286,39 +286,39 @@ export const DELIVERIES: Delivery[] = [
     status: 'Entregue',
     deliveredBy: 'Ana Paula',
   },
-];
-const NON_DIGIT_RE = /\D/g;
+]
+const NON_DIGIT_RE = /\D/g
 export function parseDate(value: string): Date | null {
-  if (!value) return null;
-  const [day, month, year] = value.split('/');
-  if (!day || !month || !year) return null;
-  const date = new Date(Number(year), Number(month) - 1, Number(day));
-  if (Number.isNaN(date.getTime())) return null;
-  return date;
+  if (!value) return null
+  const [day, month, year] = value.split('/')
+  if (!day || !month || !year) return null
+  const date = new Date(Number(year), Number(month) - 1, Number(day))
+  if (Number.isNaN(date.getTime())) return null
+  return date
 }
 export function parseISODate(value: string): Date {
-  const [year, month, day] = value.split('-');
-  return new Date(Number(year), Number(month) - 1, Number(day));
+  const [year, month, day] = value.split('-')
+  return new Date(Number(year), Number(month) - 1, Number(day))
 }
 export function formatInputDate(date: Date): string {
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
+  const day = String(date.getDate()).padStart(2, '0')
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const year = date.getFullYear()
+  return `${day}/${month}/${year}`
 }
 export function applyDateMask(value: string): string {
-  const digits = value.replace(NON_DIGIT_RE, '').slice(0, 8);
-  if (digits.length <= 2) return digits;
-  if (digits.length <= 4) return `${digits.slice(0, 2)}/${digits.slice(2)}`;
-  return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
+  const digits = value.replace(NON_DIGIT_RE, '').slice(0, 8)
+  if (digits.length <= 2) return digits
+  if (digits.length <= 4) return `${digits.slice(0, 2)}/${digits.slice(2)}`
+  return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`
 }
 export function formatDisplayDate(dateString: string): string {
-  const date = parseISODate(dateString);
+  const date = parseISODate(dateString)
   return date.toLocaleDateString('pt-BR', {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
-  });
+  })
 }
 export function filterDeliveries(
   deliveries: Delivery[],
@@ -327,16 +327,16 @@ export function filterDeliveries(
     startDate,
     endDate,
   }: {
-    search: string;
-    startDate: string;
-    endDate: string;
+    search: string
+    startDate: string
+    endDate: string
   },
 ): Delivery[] {
-  let result = deliveries;
-  const from = parseDate(startDate);
-  const to = parseDate(endDate);
+  let result = deliveries
+  const from = parseDate(startDate)
+  const to = parseDate(endDate)
   if (from) {
-    result = result.filter((d) => parseISODate(d.date) >= from);
+    result = result.filter((d) => parseISODate(d.date) >= from)
   }
   if (to) {
     const end = new Date(
@@ -346,11 +346,11 @@ export function filterDeliveries(
       23,
       59,
       59,
-    );
-    result = result.filter((d) => parseISODate(d.date) <= end);
+    )
+    result = result.filter((d) => parseISODate(d.date) <= end)
   }
   if (search.trim()) {
-    const q = search.toLowerCase().trim();
+    const q = search.toLowerCase().trim()
     result = result.filter(
       (d) =>
         d.code.toLowerCase().includes(q) ||
@@ -358,25 +358,25 @@ export function filterDeliveries(
         d.location.toLowerCase().includes(q) ||
         d.deliveredBy.toLowerCase().includes(q) ||
         formatDisplayDate(d.date).toLowerCase().includes(q),
-    );
+    )
   }
-  return result;
+  return result
 }
 export function paginate<T>(
   items: T[],
   currentPage: number,
   pageSize: number,
 ): PaginationResult<T> {
-  const total = items.length;
-  const totalPages = Math.max(1, Math.ceil(total / pageSize));
-  const safePage = Math.min(Math.max(1, currentPage), totalPages);
-  const startIndex = (safePage - 1) * pageSize + 1;
-  const endIndex = Math.min(safePage * pageSize, total);
+  const total = items.length
+  const totalPages = Math.max(1, Math.ceil(total / pageSize))
+  const safePage = Math.min(Math.max(1, currentPage), totalPages)
+  const startIndex = (safePage - 1) * pageSize + 1
+  const endIndex = Math.min(safePage * pageSize, total)
   return {
     items: items.slice((safePage - 1) * pageSize, safePage * pageSize),
     total,
     totalPages,
     startIndex: total === 0 ? 0 : startIndex,
     endIndex,
-  };
+  }
 }

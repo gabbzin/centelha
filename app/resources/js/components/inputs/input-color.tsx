@@ -1,11 +1,12 @@
-import { PenIcon } from 'lucide-react';
-import { Label } from '../ui/label';
-import { HexColorPicker } from 'react-colorful';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { PenIcon } from 'lucide-react'
+import { HexColorPicker } from 'react-colorful'
+import { Label } from '../ui/label'
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
+
 interface InputColorProps {
-  label?: string;
-  color?: string;
-  setColor?: (color: string) => void;
+  label?: string
+  color?: string
+  setColor?: (color: string) => void
 }
 export function InputColor({ label, color, setColor }: InputColorProps) {
   return (
@@ -35,5 +36,5 @@ export function InputColor({ label, color, setColor }: InputColorProps) {
         </PopoverContent>
       </Popover>
     </div>
-  );
+  )
 }

@@ -1,15 +1,15 @@
-import { ComboboxMulti } from '@/components/inputs/combobox-multiple';
-import { InputLabel } from '@/components/inputs/input-label';
-import { RadioInput } from '@/components/inputs/radio-group';
-import { Label } from '@/components/ui/label';
-import { useFormContext } from 'react-hook-form';
-import { useHookFormMask } from 'use-mask-input';
+import { useFormContext } from 'react-hook-form'
+import { useHookFormMask } from 'use-mask-input'
+import { ComboboxMulti } from '@/components/inputs/combobox-multiple'
+import { InputLabel } from '@/components/inputs/input-label'
+import { RadioInput } from '@/components/inputs/radio-group'
+import { Label } from '@/components/ui/label'
 export function Step3() {
   // Puxando contexto do form
-  const { control, register, watch } = useFormContext();
+  const { control, register, watch } = useFormContext()
 
   // Implementação da máscara
-  const registerWithMask = useHookFormMask(register);
+  const registerWithMask = useHookFormMask(register)
 
   // Render
   return (
@@ -96,7 +96,7 @@ export function Step3() {
         </div>
       )}
     </div>
-  );
+  )
 }
 
 // Componentizar dentro dos inputs depois
@@ -105,4 +105,4 @@ const LabelInput = ({ label }: { label: string }) => (
     {label}
     <span className="text-destructive">*</span>
   </Label>
-);
+)

@@ -1,6 +1,8 @@
-import { NavFooter } from '@/components/laravel/nav-footer';
-import { NavMain } from '@/components/laravel/nav-main';
-import { NavUser } from '@/components/laravel/nav-user';
+import { Link } from '@inertiajs/react'
+import { BookOpen, Folder, LayoutGrid } from 'lucide-react'
+import { NavFooter } from '@/components/laravel/nav-footer'
+import { NavMain } from '@/components/laravel/nav-main'
+import { NavUser } from '@/components/laravel/nav-user'
 import {
   Sidebar,
   SidebarContent,
@@ -9,18 +11,17 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '@/components/ui/sidebar';
-import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
-import AppLogo from '../app/app-logo';
+} from '@/components/ui/sidebar'
+import type { NavItem } from '@/types'
+import AppLogo from '../app/app-logo'
+
 const mainNavItems: NavItem[] = [
   {
     title: 'Dashboard',
     url: '/dashboard',
     icon: LayoutGrid,
   },
-];
+]
 const footerNavItems: NavItem[] = [
   {
     title: 'Repository',
@@ -32,7 +33,7 @@ const footerNavItems: NavItem[] = [
     url: 'https://laravel.com/docs/starter-kits',
     icon: BookOpen,
   },
-];
+]
 export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" variant="inset">
@@ -57,5 +58,5 @@ export function AppSidebar() {
         <NavUser />
       </SidebarFooter>
     </Sidebar>
-  );
+  )
 }

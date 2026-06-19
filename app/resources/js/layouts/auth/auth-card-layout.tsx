@@ -1,21 +1,21 @@
-import AppLogoIcon from '@/components/app/app-logo-icon';
+import { Link } from '@inertiajs/react'
+import AppLogoIcon from '@/components/app/app-logo-icon'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Link } from '@inertiajs/react';
+} from '@/components/ui/card'
 export default function AuthCardLayout({
   children,
   title,
   description,
 }: {
-  children: React.ReactNode;
-  name?: string;
-  title?: string;
-  description?: string;
+  children: React.ReactNode
+  name?: string
+  title?: string
+  description?: string
 }) {
   return (
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
@@ -40,5 +40,5 @@ export default function AuthCardLayout({
         </div>
       </div>
     </div>
-  );
+  )
 }

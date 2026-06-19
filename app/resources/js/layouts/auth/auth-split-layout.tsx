@@ -1,17 +1,18 @@
-import AppLogoIcon from '@/components/app/app-logo-icon';
-import { type SharedData } from '@/types';
-import { Link, usePage } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react'
+import AppLogoIcon from '@/components/app/app-logo-icon'
+import type { SharedData } from '@/types'
+
 interface AuthLayoutProps {
-  children: React.ReactNode;
-  title?: string;
-  description?: string;
+  children: React.ReactNode
+  title?: string
+  description?: string
 }
 export default function AuthSplitLayout({
   children,
   title,
   description,
 }: AuthLayoutProps) {
-  const { name, quote } = usePage<SharedData>().props;
+  const { name, quote } = usePage<SharedData>().props
   return (
     <div className="relative grid h-dvh flex-col items-center justify-center px-8 sm:px-0 lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div className="bg-muted relative hidden h-full flex-col p-10 text-white lg:flex dark:border-r">
@@ -52,5 +53,5 @@ export default function AuthSplitLayout({
         </div>
       </div>
     </div>
-  );
+  )
 }

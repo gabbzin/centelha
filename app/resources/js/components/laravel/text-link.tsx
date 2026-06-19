@@ -1,7 +1,8 @@
-import { cn } from '@/lib/utils';
-import { Link } from '@inertiajs/react';
-import { ComponentProps } from 'react';
-type LinkProps = ComponentProps<typeof Link>;
+import { Link } from '@inertiajs/react'
+import type { ComponentProps } from 'react'
+import { cn } from '@/lib/utils'
+
+type LinkProps = ComponentProps<typeof Link>
 export default function TextLink({
   className = '',
   children,
@@ -17,5 +18,5 @@ export default function TextLink({
     >
       {children}
     </Link>
-  );
+  )
 }

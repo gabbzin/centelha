@@ -1,7 +1,7 @@
-import { type SharedData } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react'
+import type { SharedData } from '@/types'
 export default function Welcome() {
-  const { auth } = usePage<SharedData>().props;
+  const { auth } = usePage<SharedData>().props
   return (
     <>
       <Head title="Welcome">
@@ -61,6 +61,7 @@ export default function Welcome() {
                       className="ml-1 inline-flex items-center space-x-1 font-medium text-[#f53003] underline underline-offset-4 dark:text-[#FF4433]"
                       href="https://laravel.com/docs"
                       target="_blank"
+                      rel="noopener"
                     >
                       <span>Documentation</span>
                       <svg
@@ -92,6 +93,7 @@ export default function Welcome() {
                       className="ml-1 inline-flex items-center space-x-1 font-medium text-[#f53003] underline underline-offset-4 dark:text-[#FF4433]"
                       href="https://laracasts.com"
                       target="_blank"
+                      rel="noopener"
                     >
                       <span>Laracasts</span>
                       <svg
@@ -118,6 +120,7 @@ export default function Welcome() {
                     className="inline-block rounded-sm border border-black bg-[#1b1b18] px-5 py-1.5 text-sm leading-normal text-white hover:border-black hover:bg-black dark:border-[#eeeeec] dark:bg-[#eeeeec] dark:text-[#1C1C1A] dark:hover:border-white dark:hover:bg-white"
                     href="https://cloud.laravel.com"
                     target="_blank"
+                    rel="noopener"
                   >
                     Deploy now
                   </a>
@@ -807,5 +810,5 @@ export default function Welcome() {
         <div className="hidden h-14.5 lg:block"></div>
       </div>
     </>
-  );
+  )
 }

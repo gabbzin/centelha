@@ -1,5 +1,5 @@
-import { format } from 'date-fns';
-import { z } from 'zod';
+import { format } from 'date-fns'
+import { z } from 'zod'
 export const familyMemberSchema = z.object({
   name: z
     .string()
@@ -16,7 +16,7 @@ export const familyMemberSchema = z.object({
     })
     .transform((date) => format(date, 'yyyy-MM-dd')),
   relacao_parentesco: z.string().min(1, 'Relação de parentesco é obrigatória'),
-});
+})
 export const familySchema = z.object({
   name: z.string().min(1, 'Nome do responsável é obrigatório'),
   cpf: z
@@ -48,8 +48,8 @@ export const familySchema = z.object({
   renda_familiar: z.union([z.string(), z.number()]).optional(),
   recebe_auxilio: z.enum(['sim', 'nao']).optional(),
   auxilios_recebidos: z.string().optional(),
-});
-export type FormData = z.infer<typeof familySchema>;
+})
+export type FormData = z.infer<typeof familySchema>
 export const defaultValues: FormData = {
   name: '',
   cpf: '',
@@ -68,4 +68,4 @@ export const defaultValues: FormData = {
   renda_familiar: '',
   recebe_auxilio: undefined,
   auxilios_recebidos: '',
-};
+}

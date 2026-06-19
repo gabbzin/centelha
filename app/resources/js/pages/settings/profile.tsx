@@ -1,38 +1,39 @@
-import { type BreadcrumbItem, type SharedData } from '@/types';
-import { Transition } from '@headlessui/react';
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
-import DeleteUser from '@/components/laravel/delete-user';
-import HeadingSmall from '@/components/laravel/heading-small';
-import InputError from '@/components/laravel/input-error';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import AppLayout from '@/layouts/app-layout';
-import SettingsLayout from '@/layouts/settings/layout';
+import { Transition } from '@headlessui/react'
+import { Head, Link, useForm, usePage } from '@inertiajs/react'
+import type { FormEventHandler } from 'react'
+import DeleteUser from '@/components/laravel/delete-user'
+import HeadingSmall from '@/components/laravel/heading-small'
+import InputError from '@/components/laravel/input-error'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import AppLayout from '@/layouts/app-layout'
+import SettingsLayout from '@/layouts/settings/layout'
+import type { BreadcrumbItem, SharedData } from '@/types'
+
 const breadcrumbs: BreadcrumbItem[] = [
   {
     title: 'Profile settings',
     href: '/settings/profile',
   },
-];
+]
 export default function Profile({
   mustVerifyEmail,
   status,
 }: {
-  mustVerifyEmail: boolean;
-  status?: string;
+  mustVerifyEmail: boolean
+  status?: string
 }) {
-  const { auth } = usePage<SharedData>().props;
+  const { auth } = usePage<SharedData>().props
   const { data, setData, patch, errors, processing, recentlySuccessful } =
     useForm({
       name: auth.user.name,
       email: auth.user.email,
-    });
+    })
   const submit: FormEventHandler = (e) => {
-    e.preventDefault();
-    patch(route('profile.update'));
-  };
+    e.preventDefault()
+    patch(route('profile.update'))
+  }
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Profile settings" />
@@ -119,5 +120,5 @@ export default function Profile({
         <DeleteUser />
       </SettingsLayout>
     </AppLayout>
-  );
+  )
 }

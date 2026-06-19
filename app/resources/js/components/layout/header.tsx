@@ -1,8 +1,8 @@
-import { BellIcon } from 'lucide-react';
-import AppLogo from '../app/app-logo';
-import { SidebarMenu } from '../sidebar/sidebar-menu';
-import { AnimatedThemeToggler } from '../ui/animated-theme-toggler';
-import { Button } from '../ui/button';
+import { BellIcon } from 'lucide-react'
+import AppLogo from '../app/app-logo'
+import { SidebarMenu } from '../sidebar/sidebar-menu'
+import { AnimatedThemeToggler } from '../ui/animated-theme-toggler'
+import { Button } from '../ui/button'
 export function Header() {
   return (
     <header className="border-border bg-muted border-b px-4 sticky top-0 z-50">
@@ -22,5 +22,5 @@ export function Header() {
         </div>
       </div>
     </header>
-  );
+  )
 }

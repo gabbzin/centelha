@@ -1,15 +1,16 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { DeliveryPagination } from './delivery-pagination';
-import { DeliveryTableRow } from './delivery-table-row';
-import type { Delivery } from './types';
+import { Card, CardContent } from '@/components/ui/card'
+import { DeliveryPagination } from './delivery-pagination'
+import { DeliveryTableRow } from './delivery-table-row'
+import type { Delivery } from './types'
+
 interface DeliveryTableProps {
-  deliveries: Delivery[];
-  startIndex: number;
-  endIndex: number;
-  total: number;
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
+  deliveries: Delivery[]
+  startIndex: number
+  endIndex: number
+  total: number
+  currentPage: number
+  totalPages: number
+  onPageChange: (page: number) => void
 }
 export function DeliveryTable({
   deliveries,
@@ -62,5 +63,5 @@ export function DeliveryTable({
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

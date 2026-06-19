@@ -1,12 +1,13 @@
-import { LucideIcon } from 'lucide-react';
-import { FeatureCard } from '../feature-card';
+import type { LucideIcon } from 'lucide-react'
+import { FeatureCard } from '../feature-card'
+
 interface FeaturesSectionProps {
   features: {
-    title: string;
-    description: string;
-    Icon: LucideIcon;
-  }[];
-  ref: React.Ref<HTMLDivElement>;
+    title: string
+    description: string
+    Icon: LucideIcon
+  }[]
+  ref: React.Ref<HTMLDivElement>
 }
 export function FeaturesSection({ features, ref }: FeaturesSectionProps) {
   return (
@@ -19,5 +20,5 @@ export function FeaturesSection({ features, ref }: FeaturesSectionProps) {
         </div>
       </div>
     </section>
-  );
+  )
 }

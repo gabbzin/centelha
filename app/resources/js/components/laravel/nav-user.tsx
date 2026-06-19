@@ -1,24 +1,24 @@
-import { UserInfo } from '@/components/laravel/user-info';
-import { UserMenuContent } from '@/components/laravel/user-menu-content';
+import { usePage } from '@inertiajs/react'
+import { ChevronsUpDown } from 'lucide-react'
+import { UserInfo } from '@/components/laravel/user-info'
+import { UserMenuContent } from '@/components/laravel/user-menu-content'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu'
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from '@/components/ui/sidebar';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { type SharedData } from '@/types';
-import { usePage } from '@inertiajs/react';
-import { ChevronsUpDown } from 'lucide-react';
+} from '@/components/ui/sidebar'
+import { useIsMobile } from '@/hooks/use-mobile'
+import type { SharedData } from '@/types'
 export function NavUser() {
-  const { auth } = usePage<SharedData>().props;
-  const { state } = useSidebar();
-  const isMobile = useIsMobile();
+  const { auth } = usePage<SharedData>().props
+  const { state } = useSidebar()
+  const isMobile = useIsMobile()
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -44,5 +44,5 @@ export function NavUser() {
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  );
+  )
 }

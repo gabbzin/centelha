@@ -1,6 +1,6 @@
 interface LogoProps extends React.ComponentPropsWithoutRef<'svg'> {
-  width?: number | string;
-  height?: number | string;
+  width?: number | string
+  height?: number | string
 }
 export function Logo({ width = 60, height = 65 }: LogoProps) {
   return (
@@ -136,5 +136,5 @@ export function Logo({ width = 60, height = 65 }: LogoProps) {
         fill="#7EB7DF"
       />
     </svg>
-  );
+  )
 }

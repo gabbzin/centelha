@@ -1,8 +1,9 @@
-import { Badge } from '@/components/ui/badge';
-import { formatDisplayDate } from './data';
-import type { Delivery } from './types';
+import { Badge } from '@/components/ui/badge'
+import { formatDisplayDate } from './data'
+import type { Delivery } from './types'
+
 interface DeliveryTableRowProps {
-  delivery: Delivery;
+  delivery: Delivery
 }
 const statusVariantMap: Record<
   Delivery['status'],
@@ -11,7 +12,7 @@ const statusVariantMap: Record<
   Entregue: 'success_basic',
   Pendente: 'warning',
   Cancelado: 'destructive_basic',
-};
+}
 export function DeliveryTableRow({ delivery }: DeliveryTableRowProps) {
   return (
     <tr className="border-border border-b last:border-b-0 hover:bg-muted/40 transition-colors">
@@ -36,5 +37,5 @@ export function DeliveryTableRow({ delivery }: DeliveryTableRowProps) {
       </td>
       <td className="px-6 py-4 text-sm">{delivery.deliveredBy}</td>
     </tr>
-  );
+  )
 }

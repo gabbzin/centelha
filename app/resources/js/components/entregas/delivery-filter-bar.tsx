@@ -1,13 +1,14 @@
-import { Input } from '@/components/ui/input';
-import { CalendarDays, Search } from 'lucide-react';
-import { applyDateMask } from './data';
+import { CalendarDays, Search } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { applyDateMask } from './data'
+
 interface DeliveryFilterBarProps {
-  search: string;
-  onSearchChange: (value: string) => void;
-  startDate: string;
-  onStartDateChange: (value: string) => void;
-  endDate: string;
-  onEndDateChange: (value: string) => void;
+  search: string
+  onSearchChange: (value: string) => void
+  startDate: string
+  onStartDateChange: (value: string) => void
+  endDate: string
+  onEndDateChange: (value: string) => void
 }
 export function DeliveryFilterBar({
   search,
@@ -56,5 +57,5 @@ export function DeliveryFilterBar({
         </div>
       </div>
     </div>
-  );
+  )
 }

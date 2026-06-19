@@ -1,9 +1,10 @@
-import { Button } from '@/components/ui/button';
-import { ArrowRightIcon } from 'lucide-react';
-import React from 'react';
+import { ArrowRightIcon } from 'lucide-react'
+import type React from 'react'
+import { Button } from '@/components/ui/button'
+
 interface HeroSectionProps {
-  imageUrl: string;
-  ref: React.Ref<HTMLDivElement> | null;
+  imageUrl: string
+  ref: React.Ref<HTMLDivElement> | null
 }
 export function HeroSection({ imageUrl, ref }: HeroSectionProps) {
   return (
@@ -50,5 +51,5 @@ export function HeroSection({ imageUrl, ref }: HeroSectionProps) {
         </div>
       </div>
     </section>
-  );
+  )
 }

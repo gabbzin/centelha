@@ -1,14 +1,4 @@
-import { AlertButton } from '@/components/buttons/alertButton';
-import { toaster } from '@/components/toasters/toast-alert';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { LayoutBase } from '@/layouts/layout';
-import { Family } from '@/types';
-import { calcAge } from '@/utils/calcAge';
-import { formatBRL, formatCEP, formatPhone } from '@/utils/formatters';
-import { Link, router } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react'
 import {
   ArchiveIcon,
   ArrowLeftIcon,
@@ -19,11 +9,22 @@ import {
   PlusIcon,
   UserIcon,
   UsersIcon,
-} from 'lucide-react';
+} from 'lucide-react'
+import { AlertButton } from '@/components/buttons/alertButton'
+import { toaster } from '@/components/toasters/toast-alert'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
+import { LayoutBase } from '@/layouts/layout'
+import type { Family } from '@/types'
+import { calcAge } from '@/utils/calcAge'
+import { formatBRL, formatCEP, formatPhone } from '@/utils/formatters'
+
 interface FamilyInfoPageProps {
-  backUrl: string;
-  id: string;
-  family: Family;
+  backUrl: string
+  id: string
+  family: Family
 }
 export default function FamilyInfoPage({
   backUrl,
@@ -32,8 +33,8 @@ export default function FamilyInfoPage({
 }: FamilyInfoPageProps) {
   const handleToggleActive = () => {
     // Flag para verificar se está ativa
-    const actived = family.is_active ? true : false;
-    const url = `/family/${id}/${actived ? 'deactivate' : 'activate'}`;
+    const actived = family.is_active ? true : false
+    const url = `/family/${id}/${actived ? 'deactivate' : 'activate'}`
     router.patch(
       url,
       {},
@@ -42,11 +43,11 @@ export default function FamilyInfoPage({
           toaster.createSuccess(
             `Sucesso!`,
             `Família ${actived ? 'desativada' : 'ativada'} com sucesso.`,
-          );
+          )
         },
       },
-    );
-  };
+    )
+  }
   return (
     <LayoutBase
       descriptionPage={
@@ -229,7 +230,7 @@ export default function FamilyInfoPage({
         </Button>
       </footer>
     </LayoutBase>
-  );
+  )
 }
 const beneficiosMock = [
   {
@@ -257,15 +258,15 @@ const beneficiosMock = [
     entregue: '10/11/2025',
     status: 'Entregue',
   },
-];
+]
 function HeadingCard({
   icon,
   title,
   primary = true,
 }: {
-  icon: React.ReactNode;
-  title: string;
-  primary?: boolean;
+  icon: React.ReactNode
+  title: string
+  primary?: boolean
 }) {
   return (
     <div
@@ -274,34 +275,34 @@ function HeadingCard({
       {icon}
       <h4 className="text-lg font-semibold uppercase">{title}</h4>
     </div>
-  );
+  )
 }
 function InfoItem({
   className,
   label,
   value,
 }: {
-  className?: string;
-  label: string;
-  value: string | React.ReactNode;
+  className?: string
+  label: string
+  value: string | React.ReactNode
 }) {
   return (
     <div className={`mb-2 ${className}`}>
       <h6 className="text-muted-foreground text-xs uppercase">{label}</h6>
       <p className="text-heading text-lg font-semibold capitalize">{value}</p>
     </div>
-  );
+  )
 }
 function InlineItems({
   children,
   className,
 }: {
-  children: React.ReactNode;
-  className?: string;
+  children: React.ReactNode
+  className?: string
 }) {
   return (
     <div className={`flex items-center justify-between ${className}`}>
       {children}
     </div>
-  );
+  )
 }

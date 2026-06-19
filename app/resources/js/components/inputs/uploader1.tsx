@@ -1,11 +1,12 @@
-import { Button } from '@/components/ui/button';
+import { Trash2Icon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
-  useFileUpload,
   type FileWithPreview,
-} from '@/hooks/inputs/use-file-upload';
-import { Trash2Icon } from 'lucide-react';
+  useFileUpload,
+} from '@/hooks/inputs/use-file-upload'
+
 interface Uploader1Props {
-  onFilesChange?: (files: FileWithPreview[]) => void;
+  onFilesChange?: (files: FileWithPreview[]) => void
 }
 export default function Uploader1({ onFilesChange }: Uploader1Props) {
   const [{ files }, { removeFile, openFileDialog, getInputProps }] =
@@ -15,9 +16,9 @@ export default function Uploader1({ onFilesChange }: Uploader1Props) {
       maxSize: 1024 * 1024,
       // 1MB
       onFilesChange,
-    });
-  const previewUrl = files[0]?.preview || null;
-  const fileName = files[0]?.file.name || null;
+    })
+  const previewUrl = files[0]?.preview || null
+  const fileName = files[0]?.file.name || null
   return (
     <div className="flex flex-col gap-2">
       <div className="inline-flex items-center gap-2 align-top">
@@ -68,5 +69,5 @@ export default function Uploader1({ onFilesChange }: Uploader1Props) {
         </div>
       </div>
     </div>
-  );
+  )
 }

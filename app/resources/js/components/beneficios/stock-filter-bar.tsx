@@ -1,20 +1,21 @@
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Plus } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Plus } from 'lucide-react';
-import { CATEGORY_OPTIONS } from './data';
+} from '@/components/ui/select'
+import { CATEGORY_OPTIONS } from './data'
+
 interface StockFilterBarProps {
-  search: string;
-  onSearchChange: (value: string) => void;
-  category: string;
-  onCategoryChange: (value: string) => void;
-  onAdd: () => void;
+  search: string
+  onSearchChange: (value: string) => void
+  category: string
+  onCategoryChange: (value: string) => void
+  onAdd: () => void
 }
 export function StockFilterBar({
   search,
@@ -62,5 +63,5 @@ export function StockFilterBar({
         </Button>
       </div>
     </div>
-  );
+  )
 }

@@ -3,22 +3,22 @@ export type BenefitCategory =
   | 'Financeiro'
   | 'Saúde'
   | 'Vestuário'
-  | 'Educação';
+  | 'Educação'
 export interface Benefit {
-  code: string;
-  name: string;
-  category: BenefitCategory;
-  stock: number;
-  status: 'Ativo' | 'Revisão' | 'Inativo';
+  code: string
+  name: string
+  category: BenefitCategory
+  stock: number
+  status: 'Ativo' | 'Revisão' | 'Inativo'
 }
 export interface PaginationState {
-  currentPage: number;
-  pageSize: number;
+  currentPage: number
+  pageSize: number
 }
 export interface PaginationResult<T> {
-  items: T[];
-  total: number;
-  totalPages: number;
-  startIndex: number;
-  endIndex: number;
+  items: T[]
+  total: number
+  totalPages: number
+  startIndex: number
+  endIndex: number
 }

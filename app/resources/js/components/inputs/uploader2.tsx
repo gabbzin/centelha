@@ -1,21 +1,22 @@
-import { Button } from '@/components/ui/button';
-import {
-  useFileUpload,
-  type FileWithPreview,
-} from '@/hooks/inputs/use-file-upload';
-import { convertMB } from '@/utils/convertMb';
 import {
   AlertCircleIcon,
   CloudUploadIcon,
   UploadIcon,
   XIcon,
-} from 'lucide-react';
-import { Label } from '../ui/label';
+} from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import {
+  type FileWithPreview,
+  useFileUpload,
+} from '@/hooks/inputs/use-file-upload'
+import { convertMB } from '@/utils/convertMb'
+import { Label } from '../ui/label'
+
 interface Uploader2Props {
-  onFilesChange?: (files: FileWithPreview[]) => void;
+  onFilesChange?: (files: FileWithPreview[]) => void
 }
 export default function Uploader2({ onFilesChange }: Uploader2Props) {
-  const maxSize = convertMB(2);
+  const maxSize = convertMB(2)
   const [
     { files, isDragging, errors },
     {
@@ -31,8 +32,8 @@ export default function Uploader2({ onFilesChange }: Uploader2Props) {
     accept: 'image/svg+xml,image/png,image/jpeg,image/jpg,image/gif',
     maxSize,
     onFilesChange,
-  });
-  const previewUrl = files[0]?.preview || null;
+  })
+  const previewUrl = files[0]?.preview || null
   return (
     <div className="flex flex-col gap-2">
       <Label>Logo da plataforma</Label>
@@ -108,5 +109,5 @@ export default function Uploader2({ onFilesChange }: Uploader2Props) {
         </div>
       )}
     </div>
-  );
+  )
 }

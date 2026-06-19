@@ -12,5 +12,5 @@ export function TriangleAlertIconBack() {
         fill="#BA1A1A"
       />
     </svg>
-  );
+  )
 }

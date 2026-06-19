@@ -1,13 +1,14 @@
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { TriangleAlertIconBack } from '../icons/triangle-alert-icon-back';
-import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
+import { TriangleAlertIconBack } from '../icons/triangle-alert-icon-back'
+
 interface StatsCardProps {
   infos: {
-    label: string;
-    rest: number;
-    alertLevel: 'warning' | 'critical';
-  }[];
+    label: string
+    rest: number
+    alertLevel: 'warning' | 'critical'
+  }[]
 }
 export function AlertCard({ infos }: StatsCardProps) {
   return (
@@ -45,5 +46,5 @@ export function AlertCard({ infos }: StatsCardProps) {
         ))}
       </CardContent>
     </Card>
-  );
+  )
 }

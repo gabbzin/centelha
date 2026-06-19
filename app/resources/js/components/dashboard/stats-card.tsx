@@ -1,18 +1,19 @@
-import { ReactNode } from 'react';
-import { Badge } from '@/components/ui/badge';
+import { TrendingDownIcon, TrendingUpIcon } from 'lucide-react'
+import type { ReactNode } from 'react'
+import { Badge } from '@/components/ui/badge'
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { TrendingDownIcon, TrendingUpIcon } from 'lucide-react';
+} from '@/components/ui/card'
+
 interface StatsCardProps {
-  title: string;
-  value: number | string;
-  icon: ReactNode;
-  percentageChange: number;
+  title: string
+  value: number | string
+  icon: ReactNode
+  percentageChange: number
 }
 export function StatsCard({
   title,
@@ -22,9 +23,9 @@ export function StatsCard({
 }: StatsCardProps) {
   // Constantes
   const badgeVariant =
-    percentageChange > 0 ? 'success_basic' : 'destructive_basic';
+    percentageChange > 0 ? 'success_basic' : 'destructive_basic'
   const trendIcon =
-    percentageChange > 0 ? <TrendingUpIcon /> : <TrendingDownIcon />;
+    percentageChange > 0 ? <TrendingUpIcon /> : <TrendingDownIcon />
 
   // Render
   return (
@@ -48,5 +49,5 @@ export function StatsCard({
         </p>
       </CardFooter>
     </Card>
-  );
+  )
 }

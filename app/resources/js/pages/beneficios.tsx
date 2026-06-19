@@ -1,6 +1,6 @@
-import { StockControlSection } from '@/components/beneficios/stock-control-section';
-import { Header } from '@/components/layout/header';
-import { Head } from '@inertiajs/react';
+import { Head } from '@inertiajs/react'
+import { StockControlSection } from '@/components/beneficios/stock-control-section'
+import { Header } from '@/components/layout/header'
 export default function Beneficios() {
   return (
     <>
@@ -12,5 +12,5 @@ export default function Beneficios() {
         </main>
       </div>
     </>
-  );
+  )
 }

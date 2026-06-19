@@ -1,18 +1,18 @@
-import { Icon } from '@/components/laravel/icon';
+import { Icon } from '@/components/laravel/icon'
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '@/components/ui/sidebar';
-import { type NavItem } from '@/types';
+} from '@/components/ui/sidebar'
+import type { NavItem } from '@/types'
 export function NavFooter({
   items,
   className,
   ...props
 }: React.ComponentPropsWithoutRef<typeof SidebarGroup> & {
-  items: NavItem[];
+  items: NavItem[]
 }) {
   return (
     <SidebarGroup
@@ -39,5 +39,5 @@ export function NavFooter({
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
-  );
+  )
 }

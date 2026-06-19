@@ -2,8 +2,8 @@ export default function Heading({
   title,
   description,
 }: {
-  title: string;
-  description?: string | React.ReactNode;
+  title: string
+  description?: string | React.ReactNode
 }) {
   return (
     <div className="space-y-0.5">
@@ -14,5 +14,5 @@ export default function Heading({
         <p className="text-muted-foreground text-sm">{description}</p>
       )}
     </div>
-  );
+  )
 }

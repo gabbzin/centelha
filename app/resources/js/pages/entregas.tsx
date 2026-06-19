@@ -1,6 +1,6 @@
-import { DeliveryHistorySection } from '@/components/entregas/delivery-history-section';
-import { Header } from '@/components/layout/header';
-import { Head } from '@inertiajs/react';
+import { Head } from '@inertiajs/react'
+import { DeliveryHistorySection } from '@/components/entregas/delivery-history-section'
+import { Header } from '@/components/layout/header'
 export default function Entregas() {
   return (
     <>
@@ -12,5 +12,5 @@ export default function Entregas() {
         </main>
       </div>
     </>
-  );
+  )
 }

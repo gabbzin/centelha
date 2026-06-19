@@ -1,12 +1,9 @@
-import { useForm } from '@inertiajs/react';
-import { FormEventHandler, useRef } from 'react';
-
+import { useForm } from '@inertiajs/react'
+import { type FormEventHandler, useRef } from 'react'
+import HeadingSmall from '@/components/laravel/heading-small'
 // Components...
-import InputError from '@/components/laravel/input-error';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import HeadingSmall from '@/components/laravel/heading-small';
+import InputError from '@/components/laravel/input-error'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogClose,
@@ -15,9 +12,11 @@ import {
   DialogFooter,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 export default function DeleteUser() {
-  const passwordInput = useRef<HTMLInputElement>(null);
+  const passwordInput = useRef<HTMLInputElement>(null)
   const {
     data,
     setData,
@@ -28,20 +27,20 @@ export default function DeleteUser() {
     clearErrors,
   } = useForm({
     password: '',
-  });
+  })
   const deleteUser: FormEventHandler = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     destroy(route('profile.destroy'), {
       preserveScroll: true,
       onSuccess: () => closeModal(),
       onError: () => passwordInput.current?.focus(),
       onFinish: () => reset(),
-    });
-  };
+    })
+  }
   const closeModal = () => {
-    clearErrors();
-    reset();
-  };
+    clearErrors()
+    reset()
+  }
   return (
     <div className="space-y-6">
       <HeadingSmall
@@ -105,5 +104,5 @@ export default function DeleteUser() {
         </Dialog>
       </div>
     </div>
-  );
+  )
 }

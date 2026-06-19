@@ -1,34 +1,34 @@
-import { useState, useEffect } from 'react';
-import { useForm, usePage } from '@inertiajs/react'; // Se for usar o form do Inertia para salvar
-import { InputColor } from '@/components/inputs/input-color';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { LayoutBase } from '@/layouts/layout';
-import { HistoryIcon, SaveIcon } from 'lucide-react';
-import { SharedData } from '@/types';
-import { toaster } from '@/components/toasters/toast-alert';
+import { useForm, usePage } from '@inertiajs/react' // Se for usar o form do Inertia para salvar
+import { HistoryIcon, SaveIcon } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { InputColor } from '@/components/inputs/input-color'
+import { toaster } from '@/components/toasters/toast-alert'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { LayoutBase } from '@/layouts/layout'
+import type { SharedData } from '@/types'
 
 // Interface para tipar o nosso JSON de cores
 interface SystemColors {
-  primary: string;
-  background: string;
-  surface: string;
-  text_primary: string;
-  text_secondary: string;
-  text_disabled: string;
-  hover: string;
-  active: string;
-  success: string;
-  error: string;
-  warning: string;
-  info: string;
-  button: string;
+  primary: string
+  background: string
+  surface: string
+  text_primary: string
+  text_secondary: string
+  text_disabled: string
+  hover: string
+  active: string
+  success: string
+  error: string
+  warning: string
+  info: string
+  button: string
 }
 
 // Componente Principal
 export default function Aparencia() {
-  const { communityCenter } = usePage<SharedData>().props;
-  const colors = communityCenter?.colors;
+  const { communityCenter } = usePage<SharedData>().props
+  const colors = communityCenter?.colors
 
   // Valores padrões
   const defaultColors: SystemColors = {
@@ -45,46 +45,46 @@ export default function Aparencia() {
     warning: '#F59E0B',
     info: '#3B82F6',
     button: '#094785',
-  };
+  }
 
   // Form do Inertia
   const { data, setData, put, processing } = useForm<SystemColors>({
     ...defaultColors,
     ...colors,
-  });
+  })
 
   // Atualiza as variáveis CSS no root sempre que os dados mudarem
   useEffect(() => {
-    const root = document.documentElement;
-    root.style.setProperty('--primary', data.primary);
-    root.style.setProperty('--background', data.background);
-    root.style.setProperty('--surface', data.surface);
-    root.style.setProperty('--foreground', data.text_primary);
-    root.style.setProperty('--muted-foreground', data.text_secondary);
-    root.style.setProperty('--disabled', data.text_disabled);
-    root.style.setProperty('--accent', data.hover);
-    root.style.setProperty('--secondary', data.active);
-    root.style.setProperty('--success', data.success);
-    root.style.setProperty('--destructive', data.error);
-    root.style.setProperty('--warning', data.warning);
-    root.style.setProperty('--info', data.info);
-    root.style.setProperty('--button', data.button);
-  }, [data]);
+    const root = document.documentElement
+    root.style.setProperty('--primary', data.primary)
+    root.style.setProperty('--background', data.background)
+    root.style.setProperty('--surface', data.surface)
+    root.style.setProperty('--foreground', data.text_primary)
+    root.style.setProperty('--muted-foreground', data.text_secondary)
+    root.style.setProperty('--disabled', data.text_disabled)
+    root.style.setProperty('--accent', data.hover)
+    root.style.setProperty('--secondary', data.active)
+    root.style.setProperty('--success', data.success)
+    root.style.setProperty('--destructive', data.error)
+    root.style.setProperty('--warning', data.warning)
+    root.style.setProperty('--info', data.info)
+    root.style.setProperty('--button', data.button)
+  }, [data])
 
   // Funções de envio e reset
   const handleSave = () => {
     put(route('admin.appearance.update'), {
       onSuccess: () => {
-        toaster.createSuccess('Sucesso', 'Cores atualizadas com sucesso!');
+        toaster.createSuccess('Sucesso', 'Cores atualizadas com sucesso!')
       },
       onError: () => {
-        toaster.createError('Erro', 'Algo deu errado!');
+        toaster.createError('Erro', 'Algo deu errado!')
       },
-    });
-  };
+    })
+  }
   const handleReset = () => {
-    setData(defaultColors);
-  };
+    setData(defaultColors)
+  }
   return (
     <LayoutBase
       descriptionPage="Personalize as cores utilizadas na interface da plataforma Centelha."
@@ -195,7 +195,7 @@ export default function Aparencia() {
         </section>
       </div>
     </LayoutBase>
-  );
+  )
 }
 
 // Componente interno para organizar as seções
@@ -204,9 +204,9 @@ function SectionCardAppearance({
   columnDirection = false,
   children,
 }: {
-  title: string;
-  columnDirection?: boolean;
-  children: React.ReactNode;
+  title: string
+  columnDirection?: boolean
+  children: React.ReactNode
 }) {
   return (
     <Card variant={'basic'}>
@@ -221,5 +221,5 @@ function SectionCardAppearance({
         {children}
       </CardContent>
     </Card>
-  );
+  )
 }

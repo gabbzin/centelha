@@ -12,5 +12,5 @@ export function UserAddIcon() {
         fill="#BA1A1A"
       />
     </svg>
-  );
+  )
 }

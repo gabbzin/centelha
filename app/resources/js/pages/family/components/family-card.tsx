@@ -1,22 +1,18 @@
-import { toaster } from '@/components/toasters/toast-alert';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from '@/components/ui/card';
-import { formatCPF, formatProtocol } from '@/utils/formatters';
-import { Link } from '@inertiajs/react';
-import { IdCardIcon, MapPinIcon, Trash2Icon, UsersIcon } from 'lucide-react';
+import { Link } from '@inertiajs/react'
+import { IdCardIcon, MapPinIcon, Trash2Icon, UsersIcon } from 'lucide-react'
+import { toaster } from '@/components/toasters/toast-alert'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+import { formatCPF, formatProtocol } from '@/utils/formatters'
+
 interface FamilyCardProps {
-  id: string;
-  cpf: string;
-  status: boolean; // true para ativo, false para inativo
-  familyName: string;
-  membersCount: number;
-  location: string | undefined;
+  id: string
+  cpf: string
+  status: boolean // true para ativo, false para inativo
+  familyName: string
+  membersCount: number
+  location: string | undefined
 }
 export function FamilyCard({
   id,
@@ -26,7 +22,7 @@ export function FamilyCard({
   membersCount,
   location,
 }: FamilyCardProps) {
-  const sizeIcons = 'size-4';
+  const sizeIcons = 'size-4'
   return (
     <Card className="space-y-3" variant={'basic'}>
       <CardHeader className="flex items-center justify-between">
@@ -83,7 +79,7 @@ export function FamilyCard({
         </Button>
       </CardFooter>
     </Card>
-  );
+  )
 }
 function InfoCardItem({ icon, text }: { icon: React.ReactNode; text: string }) {
   return (
@@ -91,5 +87,5 @@ function InfoCardItem({ icon, text }: { icon: React.ReactNode; text: string }) {
       {icon}
       <p>{text}</p>
     </div>
-  );
+  )
 }

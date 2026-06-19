@@ -12,5 +12,5 @@ export function DashboardIcon({ fill = '#424750' }) {
         fill={fill}
       />
     </svg>
-  );
+  )
 }

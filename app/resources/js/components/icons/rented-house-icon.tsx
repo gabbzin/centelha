@@ -12,5 +12,5 @@ export function RentedHouseIcon() {
         fill="#424750"
       />
     </svg>
-  );
+  )
 }

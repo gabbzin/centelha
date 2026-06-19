@@ -1,13 +1,14 @@
-import Heading from '@/components/layout/heading';
-import { Main } from '@/components/layout/main';
-import { Head } from '@inertiajs/react';
+import { Head } from '@inertiajs/react'
+import Heading from '@/components/layout/heading'
+import { Main } from '@/components/layout/main'
+
 interface LayoutBaseProps {
-  children: React.ReactNode;
-  descriptionPage?: string | React.ReactNode;
-  titlePage: string;
-  tagTitle?: string;
-  description?: string | React.ReactNode;
-  rightComponent?: React.ReactNode;
+  children: React.ReactNode
+  descriptionPage?: string | React.ReactNode
+  titlePage: string
+  tagTitle?: string
+  description?: string | React.ReactNode
+  rightComponent?: React.ReactNode
 }
 export function LayoutBase({
   children,
@@ -29,5 +30,5 @@ export function LayoutBase({
         <div className="flex flex-col">{children}</div>
       </Main>
     </>
-  );
+  )
 }

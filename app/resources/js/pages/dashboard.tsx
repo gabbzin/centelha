@@ -1,21 +1,22 @@
-import { FamilyIcon } from '@/components/dashboard/icons/family-icon';
-import { HandWithHeartIcon } from '@/components/dashboard/icons/hand-with-heart-icon';
-import { UserAddIcon } from '@/components/dashboard/icons/user-add-icon';
-import { StatsCard } from '@/components/dashboard/stats-card';
+import { FamilyIcon } from '@/components/dashboard/icons/family-icon'
+import { HandWithHeartIcon } from '@/components/dashboard/icons/hand-with-heart-icon'
+import { UserAddIcon } from '@/components/dashboard/icons/user-add-icon'
+import { StatsCard } from '@/components/dashboard/stats-card'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/ui/card'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@/components/ui/select'
+
 const OPTIONSSELECT = [
   {
     value: 'maio_2026',
@@ -25,40 +26,42 @@ const OPTIONSSELECT = [
     value: 'junho_2026',
     label: 'Junho 2026',
   },
-];
-import { LayoutBase } from '@/layouts/layout';
-import { Map } from '@/components/dashboard/map';
-import { AlertCard } from '@/components/dashboard/cards/alert-card';
-import { TopItensCard } from '@/components/dashboard/cards/top-itens-card';
-import SimpleBarChart from '@/components/dashboard/simple-bar-chart';
+]
+
+import { AlertCard } from '@/components/dashboard/cards/alert-card'
+import { TopItensCard } from '@/components/dashboard/cards/top-itens-card'
+import { Map } from '@/components/dashboard/map'
+import SimpleBarChart from '@/components/dashboard/simple-bar-chart'
+import { LayoutBase } from '@/layouts/layout'
+
 interface StatsCardData {
-  value: number;
-  percentageChange: number;
+  value: number
+  percentageChange: number
 }
 interface AlertInfo {
-  label: string;
-  rest: number;
-  alertLevel: 'warning' | 'critical';
+  label: string
+  rest: number
+  alertLevel: 'warning' | 'critical'
 }
 interface TopItem {
-  name: string;
-  quantity: number;
-  percentage: number;
+  name: string
+  quantity: number
+  percentage: number
 }
 interface ChartDataItem {
-  name: string;
-  anterior: number;
-  atual: number;
+  name: string
+  anterior: number
+  atual: number
 }
 interface DashboardProps {
   statsCards: {
-    benefitsDelivered: StatsCardData;
-    familiesServed: StatsCardData;
-    newRegistrations: StatsCardData;
-  };
-  alerts: AlertInfo[];
-  topItems: TopItem[];
-  chartData: ChartDataItem[];
+    benefitsDelivered: StatsCardData
+    familiesServed: StatsCardData
+    newRegistrations: StatsCardData
+  }
+  alerts: AlertInfo[]
+  topItems: TopItem[]
+  chartData: ChartDataItem[]
 }
 export default function Dashboard({
   statsCards,
@@ -159,5 +162,5 @@ export default function Dashboard({
         </section>
       </main>
     </LayoutBase>
-  );
+  )
 }

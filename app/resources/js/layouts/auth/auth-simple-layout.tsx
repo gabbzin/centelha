@@ -1,10 +1,11 @@
-import AppLogoIcon from '@/components/app/app-logo-icon';
-import { Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react'
+import AppLogoIcon from '@/components/app/app-logo-icon'
+
 interface AuthLayoutProps {
-  children: React.ReactNode;
-  name?: string;
-  title?: string;
-  description?: string;
+  children: React.ReactNode
+  name?: string
+  title?: string
+  description?: string
 }
 export default function AuthSimpleLayout({
   children,
@@ -37,5 +38,5 @@ export default function AuthSimpleLayout({
         </div>
       </div>
     </div>
-  );
+  )
 }

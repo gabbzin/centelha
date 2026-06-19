@@ -1,39 +1,40 @@
-import { type SharedData } from '@/types';
-import { Head, useForm, usePage } from '@inertiajs/react';
-import { Eye, EyeOff, LoaderCircle, Lock, Mail } from 'lucide-react';
-import { FormEventHandler, useState } from 'react';
-import InputError from '@/components/laravel/input-error';
-import TextLink from '@/components/laravel/text-link';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Head, useForm, usePage } from '@inertiajs/react'
+import { Eye, EyeOff, LoaderCircle, Lock, Mail } from 'lucide-react'
+import { type FormEventHandler, useState } from 'react'
+import InputError from '@/components/laravel/input-error'
+import TextLink from '@/components/laravel/text-link'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import type { SharedData } from '@/types'
+
 interface LoginForm {
-  email: string;
-  password: string;
-  remember: boolean;
+  email: string
+  password: string
+  remember: boolean
 }
 interface LoginProps {
-  status?: string;
-  canResetPassword: boolean;
+  status?: string
+  canResetPassword: boolean
 }
 export default function Login({ status, canResetPassword }: LoginProps) {
-  const { communityCenter } = usePage<SharedData>().props;
+  const { communityCenter } = usePage<SharedData>().props
   const { data, setData, post, processing, errors, reset } = useForm<LoginForm>(
     {
       email: '',
       password: '',
       remember: false,
     },
-  );
-  const [showPassword, setShowPassword] = useState(false);
+  )
+  const [showPassword, setShowPassword] = useState(false)
   const submit: FormEventHandler = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     post(route('login'), {
       onFinish: () => reset('password'),
-    });
-  };
+    })
+  }
   return (
     <div className="flex min-h-svh items-center justify-center bg-[#f6f8fc] px-6 py-12">
       <Head title="Entrar" />
@@ -169,5 +170,5 @@ export default function Login({ status, canResetPassword }: LoginProps) {
         </Card>
       </div>
     </div>
-  );
+  )
 }

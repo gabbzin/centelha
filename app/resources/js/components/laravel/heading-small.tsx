@@ -2,8 +2,8 @@ export default function HeadingSmall({
   title,
   description,
 }: {
-  title: string;
-  description?: string;
+  title: string
+  description?: string
 }) {
   return (
     <header>
@@ -12,5 +12,5 @@ export default function HeadingSmall({
         <p className="text-muted-foreground text-sm">{description}</p>
       )}
     </header>
-  );
+  )
 }

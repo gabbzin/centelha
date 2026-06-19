@@ -1,72 +1,73 @@
-import { Button } from '@/components/ui/button';
+import { Check, FileImage, Minus, Plus, User } from 'lucide-react'
+import { useCallback, useState } from 'react'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { cn } from '@/lib/utils';
-import { Check, FileImage, Minus, Plus, User } from 'lucide-react';
-import { useCallback, useState } from 'react';
-import { CATEGORY_OPTIONS } from './data';
+} from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+import { cn } from '@/lib/utils'
+import { CATEGORY_OPTIONS } from './data'
+
 interface CreateBenefitModalProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }
 export function CreateBenefitModal({
   open,
   onOpenChange,
 }: CreateBenefitModalProps) {
-  const [name, setName] = useState('');
-  const [category, setCategory] = useState<string>('');
-  const [quantity, setQuantity] = useState(1);
-  const [donor, setDonor] = useState('');
-  const [validity, setValidity] = useState('');
-  const [notes, setNotes] = useState('');
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
+  const [name, setName] = useState('')
+  const [category, setCategory] = useState<string>('')
+  const [quantity, setQuantity] = useState(1)
+  const [donor, setDonor] = useState('')
+  const [validity, setValidity] = useState('')
+  const [notes, setNotes] = useState('')
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [isDragging, setIsDragging] = useState(false)
   const reset = useCallback(() => {
-    setName('');
-    setCategory('');
-    setQuantity(1);
-    setDonor('');
-    setValidity('');
-    setNotes('');
-    setImageFile(null);
-    setIsDragging(false);
-  }, []);
+    setName('')
+    setCategory('')
+    setQuantity(1)
+    setDonor('')
+    setValidity('')
+    setNotes('')
+    setImageFile(null)
+    setIsDragging(false)
+  }, [])
   const handleOpenChange = useCallback(
     (next: boolean) => {
-      if (!next) reset();
-      onOpenChange(next);
+      if (!next) reset()
+      onOpenChange(next)
     },
     [onOpenChange, reset],
-  );
-  const increment = () => setQuantity((q) => Math.min(999, q + 1));
-  const decrement = () => setQuantity((q) => Math.max(1, q - 1));
+  )
+  const increment = () => setQuantity((q) => Math.min(999, q + 1))
+  const decrement = () => setQuantity((q) => Math.max(1, q - 1))
   const handleFileChange = (file: File | null) => {
     if (file && file.size <= 5 * 1024 * 1024) {
-      setImageFile(file);
+      setImageFile(file)
     }
-  };
+  }
   const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const file = e.dataTransfer.files[0];
-    handleFileChange(file ?? null);
-  };
+    e.preventDefault()
+    setIsDragging(false)
+    const file = e.dataTransfer.files[0]
+    handleFileChange(file ?? null)
+  }
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     console.log('Submit benefit:', {
       name,
       category,
@@ -75,9 +76,9 @@ export function CreateBenefitModal({
       validity,
       notes,
       imageFile,
-    });
-    handleOpenChange(false);
-  };
+    })
+    handleOpenChange(false)
+  }
   return (
     <Dialog onOpenChange={handleOpenChange} open={open}>
       <DialogContent
@@ -207,8 +208,8 @@ export function CreateBenefitModal({
                   )}
                   onDragLeave={() => setIsDragging(false)}
                   onDragOver={(e) => {
-                    e.preventDefault();
-                    setIsDragging(true);
+                    e.preventDefault()
+                    setIsDragging(true)
                   }}
                   onDrop={handleDrop}
                 >
@@ -257,12 +258,12 @@ export function CreateBenefitModal({
         </form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }
 interface FormFieldProps {
-  label: string;
-  required?: boolean;
-  children: React.ReactNode;
+  label: string
+  required?: boolean
+  children: React.ReactNode
 }
 function FormField({ label, required, children }: FormFieldProps) {
   return (
@@ -273,5 +274,5 @@ function FormField({ label, required, children }: FormFieldProps) {
       </Label>
       {children}
     </div>
-  );
+  )
 }

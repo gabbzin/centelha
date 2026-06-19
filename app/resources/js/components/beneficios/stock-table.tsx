@@ -1,18 +1,19 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { StockPagination } from './stock-pagination';
-import { StockTableRow } from './stock-table-row';
-import type { Benefit } from './types';
+import { Card, CardContent } from '@/components/ui/card'
+import { StockPagination } from './stock-pagination'
+import { StockTableRow } from './stock-table-row'
+import type { Benefit } from './types'
+
 interface StockTableProps {
-  benefits: Benefit[];
-  startIndex: number;
-  endIndex: number;
-  total: number;
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-  onView: (benefit: Benefit) => void;
-  onEdit: (benefit: Benefit) => void;
-  onDelete: (benefit: Benefit) => void;
+  benefits: Benefit[]
+  startIndex: number
+  endIndex: number
+  total: number
+  currentPage: number
+  totalPages: number
+  onPageChange: (page: number) => void
+  onView: (benefit: Benefit) => void
+  onEdit: (benefit: Benefit) => void
+  onDelete: (benefit: Benefit) => void
 }
 export function StockTable({
   benefits,
@@ -66,5 +67,5 @@ export function StockTable({
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

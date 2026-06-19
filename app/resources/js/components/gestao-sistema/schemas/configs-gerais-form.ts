@@ -1,4 +1,4 @@
-import z from 'zod';
+import z from 'zod'
 
 // Zod Schema
 export const configsGeraisSchema = z.object({
@@ -26,7 +26,7 @@ export const configsGeraisSchema = z.object({
     )
     .optional(),
   maintenance_mode: z.boolean().optional(),
-});
+})
 
 // Tipagem do Schema
-export type FormValues = z.infer<typeof configsGeraisSchema>;
+export type FormValues = z.infer<typeof configsGeraisSchema>

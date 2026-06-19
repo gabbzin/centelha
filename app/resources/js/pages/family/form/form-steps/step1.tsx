@@ -1,30 +1,30 @@
-import { DatePicker } from '@/components/inputs/date-picker';
-import { InputLabel } from '@/components/inputs/input-label';
-import { InputSelect } from '@/components/inputs/input-select';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Trash2Icon } from 'lucide-react';
-import { useFieldArray, useFormContext } from 'react-hook-form';
-import { useHookFormMask } from 'use-mask-input';
+import { Trash2Icon } from 'lucide-react'
+import { useFieldArray, useFormContext } from 'react-hook-form'
+import { useHookFormMask } from 'use-mask-input'
+import { DatePicker } from '@/components/inputs/date-picker'
+import { InputLabel } from '@/components/inputs/input-label'
+import { InputSelect } from '@/components/inputs/input-select'
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
 export function Step1() {
   // Puxando contexto do form
   const {
     control,
     register,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext()
 
   // Implementação da máscara
-  const registerWithMask = useHookFormMask(register);
+  const registerWithMask = useHookFormMask(register)
 
   // Criação de novos inputs
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'family_members',
-  });
+  })
   const eightteenYearsAgo = new Date(
     new Date().getTime() - 1000 * 60 * 60 * 24 * 365 * 18,
-  );
+  )
   return (
     <div className="grid grid-cols-1 gap-2 p-1 md:grid-cols-2">
       <div className="col-span-2">
@@ -152,7 +152,7 @@ export function Step1() {
               cpf: '',
               data_nascimento: '',
               relacao_parentesco: '',
-            });
+            })
           }}
           type="button"
           variant={'ghost'}
@@ -161,5 +161,5 @@ export function Step1() {
         </Button>
       </div>
     </div>
-  );
+  )
 }

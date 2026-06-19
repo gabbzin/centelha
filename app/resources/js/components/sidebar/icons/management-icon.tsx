@@ -12,5 +12,5 @@ export function ManagementIcon({ fill = '#424750' }) {
         fill={fill}
       />
     </svg>
-  );
+  )
 }

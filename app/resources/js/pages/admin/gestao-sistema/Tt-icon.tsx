@@ -12,5 +12,5 @@ export function TtIcon() {
         fill="#094785"
       />
     </svg>
-  );
+  )
 }

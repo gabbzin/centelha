@@ -1,8 +1,8 @@
-import type { SharedData } from '@/types';
-import { usePage } from '@inertiajs/react';
-import { Logo } from '../logo';
+import { usePage } from '@inertiajs/react'
+import type { SharedData } from '@/types'
+import { Logo } from '../logo'
 export default function AppLogo() {
-  const { communityCenter } = usePage<SharedData>().props;
+  const { communityCenter } = usePage<SharedData>().props
   return (
     <a className="flex items-center gap-3.5" href="#">
       {/* <AppLogoIcon className="size-5 fill-current text-white dark:text-black" /> */}
@@ -11,5 +11,5 @@ export default function AppLogo() {
         {communityCenter?.name.split(' ')[0]}
       </span>
     </a>
-  );
+  )
 }

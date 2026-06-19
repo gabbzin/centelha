@@ -1,11 +1,12 @@
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Progress } from '@/components/ui/progress'
+
 interface TopItensCardProps {
   itens: {
-    name: string;
-    quantity: number;
-    percentage: number;
-  }[];
+    name: string
+    quantity: number
+    percentage: number
+  }[]
 }
 export function TopItensCard({ itens }: TopItensCardProps) {
   return (
@@ -29,5 +30,5 @@ export function TopItensCard({ itens }: TopItensCardProps) {
         </ul>
       </CardContent>
     </Card>
-  );
+  )
 }

@@ -1,8 +1,9 @@
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
-import '../../../css/sweetalert.css';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+import '../../../css/sweetalert.css'
+
 class Toaster {
-  private swalInstance = withReactContent(Swal);
+  private swalInstance = withReactContent(Swal)
 
   // 1. Alerta de Sucesso
   createSuccess(title: string, message: string) {
@@ -15,7 +16,7 @@ class Toaster {
         title: 'title',
         confirmButton: `confirm-button-success`,
       },
-    });
+    })
   }
 
   // 2. Alerta de Erro
@@ -28,7 +29,7 @@ class Toaster {
       customClass: {
         confirmButton: `confirm-button-error`,
       },
-    });
+    })
   }
 
   // 3. Alerta de Aviso/Confirmação
@@ -41,9 +42,9 @@ class Toaster {
       customClass: {
         confirmButton: `confirm-button-info`,
       },
-    });
+    })
   }
 }
 
 // Exportamos uma única instância para ser usada na aplicação inteira (Singleton)
-export const toaster = new Toaster();
+export const toaster = new Toaster()

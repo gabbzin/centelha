@@ -1,9 +1,10 @@
-import { Card } from '@/components/ui/card';
-import { Separator } from '../ui/separator';
+import { Card } from '@/components/ui/card'
+import { Separator } from '../ui/separator'
+
 interface SettingsPanelCardProps {
-  title: string;
-  icon?: React.ReactNode;
-  children?: React.ReactNode;
+  title: string
+  icon?: React.ReactNode
+  children?: React.ReactNode
 }
 export function SettingsPanelCard({
   title,
@@ -26,6 +27,6 @@ export function SettingsPanelCard({
 
       <div className="pt-2">{children}</div>
     </Card>
-  );
+  )
 }
-export default SettingsPanelCard;
+export default SettingsPanelCard

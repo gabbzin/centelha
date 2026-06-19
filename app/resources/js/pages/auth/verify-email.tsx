@@ -1,16 +1,16 @@
 // Components
-import { Head, useForm } from '@inertiajs/react';
-import { LoaderCircle } from 'lucide-react';
-import { FormEventHandler } from 'react';
-import TextLink from '@/components/laravel/text-link';
-import { Button } from '@/components/ui/button';
-import AuthLayout from '@/layouts/auth-layout';
+import { Head, useForm } from '@inertiajs/react'
+import { LoaderCircle } from 'lucide-react'
+import type { FormEventHandler } from 'react'
+import TextLink from '@/components/laravel/text-link'
+import { Button } from '@/components/ui/button'
+import AuthLayout from '@/layouts/auth-layout'
 export default function VerifyEmail({ status }: { status?: string }) {
-  const { post, processing } = useForm({});
+  const { post, processing } = useForm({})
   const submit: FormEventHandler = (e) => {
-    e.preventDefault();
-    post(route('verification.send'));
-  };
+    e.preventDefault()
+    post(route('verification.send'))
+  }
   return (
     <AuthLayout
       description="Please verify your email address by clicking on the link we just emailed to you."
@@ -40,5 +40,5 @@ export default function VerifyEmail({ status }: { status?: string }) {
         </TextLink>
       </form>
     </AuthLayout>
-  );
+  )
 }

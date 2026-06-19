@@ -1,21 +1,21 @@
 // Components
-import { Head, useForm } from '@inertiajs/react';
-import { LoaderCircle } from 'lucide-react';
-import { FormEventHandler } from 'react';
-import InputError from '@/components/laravel/input-error';
-import TextLink from '@/components/laravel/text-link';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import AuthLayout from '@/layouts/auth-layout';
+import { Head, useForm } from '@inertiajs/react'
+import { LoaderCircle } from 'lucide-react'
+import type { FormEventHandler } from 'react'
+import InputError from '@/components/laravel/input-error'
+import TextLink from '@/components/laravel/text-link'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import AuthLayout from '@/layouts/auth-layout'
 export default function ForgotPassword({ status }: { status?: string }) {
   const { data, setData, post, processing, errors } = useForm({
     email: '',
-  });
+  })
   const submit: FormEventHandler = (e) => {
-    e.preventDefault();
-    post(route('password.email'));
-  };
+    e.preventDefault()
+    post(route('password.email'))
+  }
   return (
     <AuthLayout
       description="Enter your email to receive a password reset link"
@@ -61,5 +61,5 @@ export default function ForgotPassword({ status }: { status?: string }) {
         </div>
       </div>
     </AuthLayout>
-  );
+  )
 }

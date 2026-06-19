@@ -1,16 +1,17 @@
-import { Control, Controller } from 'react-hook-form';
-import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
-import { Label } from '../ui/label';
-import React from 'react';
+import type React from 'react'
+import { type Control, Controller } from 'react-hook-form'
+import { Label } from '../ui/label'
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
+
 interface RadioGroupProps {
-  control: Control;
-  name: string;
+  control: Control
+  name: string
   options: {
-    label: string;
-    value: string;
-    icon?: React.ReactNode;
-  }[];
-  sr_only?: boolean;
+    label: string
+    value: string
+    icon?: React.ReactNode
+  }[]
+  sr_only?: boolean
 }
 export function RadioInput({
   control,
@@ -46,5 +47,5 @@ export function RadioInput({
         </RadioGroup>
       )}
     />
-  );
+  )
 }

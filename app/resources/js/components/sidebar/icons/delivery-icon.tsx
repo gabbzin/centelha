@@ -12,5 +12,5 @@ export function DeliveryIcon({ fill = '#424750' }) {
         fill={fill}
       />
     </svg>
-  );
+  )
 }

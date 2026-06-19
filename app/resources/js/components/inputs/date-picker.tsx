@@ -1,19 +1,20 @@
-import * as React from 'react';
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { Label } from '../ui/label';
-import { format } from 'date-fns';
-import { Matcher } from 'react-day-picker';
-import { Control, Controller } from 'react-hook-form';
+import { format } from 'date-fns'
+import * as React from 'react'
+import type { Matcher } from 'react-day-picker'
+import { type Control, Controller } from 'react-hook-form'
+import { Button } from '@/components/ui/button'
+import { Calendar } from '@/components/ui/calendar'
+import { Label } from '../ui/label'
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
+
 interface DatePickerProps {
-  label?: string;
-  name: string;
-  disabled?: Matcher | Matcher[] | undefined;
-  today?: Date;
+  label?: string
+  name: string
+  disabled?: Matcher | Matcher[] | undefined
+  today?: Date
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  control: Control<any>;
-  required?: boolean;
+  control: Control<any>
+  required?: boolean
 }
 export function DatePicker({
   label,
@@ -23,7 +24,7 @@ export function DatePicker({
   name,
   required,
 }: DatePickerProps) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false)
   return (
     <Controller
       control={control}
@@ -63,8 +64,8 @@ export function DatePicker({
                 mode="single"
                 onSelect={(date: Date | undefined) => {
                   if (date) {
-                    field.onChange(date);
-                    setOpen(false);
+                    field.onChange(date)
+                    setOpen(false)
                   }
                 }}
                 required={required}
@@ -76,5 +77,5 @@ export function DatePicker({
         </div>
       )}
     />
-  );
+  )
 }

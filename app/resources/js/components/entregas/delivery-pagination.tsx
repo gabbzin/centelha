@@ -1,9 +1,10 @@
-import { cn } from '@/lib/utils';
-import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
+import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react'
+import { cn } from '@/lib/utils'
+
 interface DeliveryPaginationProps {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
+  currentPage: number
+  totalPages: number
+  onPageChange: (page: number) => void
 }
 function getPageNumbers(
   current: number,
@@ -15,30 +16,30 @@ function getPageNumbers(
         length: total,
       },
       (_, i) => i + 1,
-    );
+    )
   }
-  const pages: (number | 'ellipsis')[] = [1];
+  const pages: (number | 'ellipsis')[] = [1]
   if (current > 3) {
-    pages.push('ellipsis');
+    pages.push('ellipsis')
   }
-  const start = Math.max(2, current - 1);
-  const end = Math.min(total - 1, current + 1);
+  const start = Math.max(2, current - 1)
+  const end = Math.min(total - 1, current + 1)
   for (let i = start; i <= end; i++) {
-    pages.push(i);
+    pages.push(i)
   }
   if (current < total - 2) {
-    pages.push('ellipsis');
+    pages.push('ellipsis')
   }
-  pages.push(total);
-  return pages;
+  pages.push(total)
+  return pages
 }
 export function DeliveryPagination({
   currentPage,
   totalPages,
   onPageChange,
 }: DeliveryPaginationProps) {
-  if (totalPages <= 1) return null;
-  const pages = getPageNumbers(currentPage, totalPages);
+  if (totalPages <= 1) return null
+  const pages = getPageNumbers(currentPage, totalPages)
   return (
     <nav aria-label="Paginação" className="flex items-center gap-1">
       <button
@@ -88,5 +89,5 @@ export function DeliveryPagination({
         <ChevronRight className="size-4" />
       </button>
     </nav>
-  );
+  )
 }

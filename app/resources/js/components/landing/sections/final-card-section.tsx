@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button'
 export function FinalCardSection() {
   return (
     <section className="bg-background px-6 py-8 lg:px-10 lg:py-24">
@@ -26,5 +26,5 @@ export function FinalCardSection() {
         </p>
       </div>
     </section>
-  );
+  )
 }

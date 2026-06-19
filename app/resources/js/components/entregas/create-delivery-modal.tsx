@@ -1,21 +1,3 @@
-import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { cn } from '@/lib/utils';
 import {
   CalendarDays,
   Check,
@@ -25,101 +7,120 @@ import {
   Search,
   User,
   X,
-} from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+} from 'lucide-react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { Button } from '@/components/ui/button'
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+import { cn } from '@/lib/utils'
+import {
+  applyDateMask,
   BENEFICIARY_OPTIONS,
   BENEFIT_TYPE_OPTIONS,
   LOCATION_OPTIONS,
-  applyDateMask,
-} from './data';
+} from './data'
+
 interface CreateDeliveryModalProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }
 export function CreateDeliveryModal({
   open,
   onOpenChange,
 }: CreateDeliveryModalProps) {
-  const [beneficiarySearch, setBeneficiarySearch] = useState('');
-  const [selectedBeneficiary, setSelectedBeneficiary] = useState<string>('');
-  const [showBeneficiaryList, setShowBeneficiaryList] = useState(false);
-  const [benefitType, setBenefitType] = useState('');
-  const [quantity, setQuantity] = useState(1);
-  const [deliveryDate, setDeliveryDate] = useState('');
-  const [location, setLocation] = useState('');
-  const [notes, setNotes] = useState('');
-  const [receiptFile, setReceiptFile] = useState<File | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const beneficiaryRef = useRef<HTMLDivElement>(null);
+  const [beneficiarySearch, setBeneficiarySearch] = useState('')
+  const [selectedBeneficiary, setSelectedBeneficiary] = useState<string>('')
+  const [showBeneficiaryList, setShowBeneficiaryList] = useState(false)
+  const [benefitType, setBenefitType] = useState('')
+  const [quantity, setQuantity] = useState(1)
+  const [deliveryDate, setDeliveryDate] = useState('')
+  const [location, setLocation] = useState('')
+  const [notes, setNotes] = useState('')
+  const [receiptFile, setReceiptFile] = useState<File | null>(null)
+  const [isDragging, setIsDragging] = useState(false)
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const beneficiaryRef = useRef<HTMLDivElement>(null)
   const reset = useCallback(() => {
-    setBeneficiarySearch('');
-    setSelectedBeneficiary('');
-    setShowBeneficiaryList(false);
-    setBenefitType('');
-    setQuantity(1);
-    setDeliveryDate('');
-    setLocation('');
-    setNotes('');
-    setReceiptFile(null);
-    setIsDragging(false);
-    setErrors({});
-  }, []);
+    setBeneficiarySearch('')
+    setSelectedBeneficiary('')
+    setShowBeneficiaryList(false)
+    setBenefitType('')
+    setQuantity(1)
+    setDeliveryDate('')
+    setLocation('')
+    setNotes('')
+    setReceiptFile(null)
+    setIsDragging(false)
+    setErrors({})
+  }, [])
   const handleOpenChange = useCallback(
     (next: boolean) => {
-      if (!next) reset();
-      onOpenChange(next);
+      if (!next) reset()
+      onOpenChange(next)
     },
     [onOpenChange, reset],
-  );
+  )
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
         beneficiaryRef.current &&
         !beneficiaryRef.current.contains(event.target as Node)
       ) {
-        setShowBeneficiaryList(false);
+        setShowBeneficiaryList(false)
       }
     }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
   const filteredBeneficiaries = BENEFICIARY_OPTIONS.filter(
     (b) =>
       b.label.toLowerCase().includes(beneficiarySearch.toLowerCase()) ||
       b.cpf.includes(beneficiarySearch) ||
       b.nis.includes(beneficiarySearch),
-  );
+  )
   const selectedBeneficiaryLabel =
     BENEFICIARY_OPTIONS.find((b) => b.value === selectedBeneficiary)?.label ??
-    '';
-  const increment = () => setQuantity((q) => Math.min(999, q + 1));
-  const decrement = () => setQuantity((q) => Math.max(1, q - 1));
+    ''
+  const increment = () => setQuantity((q) => Math.min(999, q + 1))
+  const decrement = () => setQuantity((q) => Math.max(1, q - 1))
   const handleFileChange = (file: File | null) => {
     if (file && file.size <= 5 * 1024 * 1024) {
-      setReceiptFile(file);
+      setReceiptFile(file)
     }
-  };
+  }
   const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const file = e.dataTransfer.files[0];
-    handleFileChange(file ?? null);
-  };
+    e.preventDefault()
+    setIsDragging(false)
+    const file = e.dataTransfer.files[0]
+    handleFileChange(file ?? null)
+  }
   const validate = (): boolean => {
-    const nextErrors: Record<string, string> = {};
+    const nextErrors: Record<string, string> = {}
     if (!selectedBeneficiary)
-      nextErrors.beneficiary = 'Selecione um beneficiário';
-    if (!benefitType) nextErrors.benefitType = 'Selecione um tipo de benefício';
-    if (!deliveryDate) nextErrors.deliveryDate = 'Informe a data da entrega';
-    if (!location) nextErrors.location = 'Selecione um local de retirada';
-    setErrors(nextErrors);
-    return Object.keys(nextErrors).length === 0;
-  };
+      nextErrors.beneficiary = 'Selecione um beneficiário'
+    if (!benefitType) nextErrors.benefitType = 'Selecione um tipo de benefício'
+    if (!deliveryDate) nextErrors.deliveryDate = 'Informe a data da entrega'
+    if (!location) nextErrors.location = 'Selecione um local de retirada'
+    setErrors(nextErrors)
+    return Object.keys(nextErrors).length === 0
+  }
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validate()) return;
+    e.preventDefault()
+    if (!validate()) return
     console.log('Submit delivery:', {
       beneficiary: selectedBeneficiary,
       benefitType,
@@ -128,9 +129,9 @@ export function CreateDeliveryModal({
       location,
       notes,
       receiptFile,
-    });
-    handleOpenChange(false);
-  };
+    })
+    handleOpenChange(false)
+  }
   return (
     <Dialog onOpenChange={handleOpenChange} open={open}>
       <DialogContent
@@ -157,9 +158,9 @@ export function CreateDeliveryModal({
                   <Input
                     className="pl-9"
                     onChange={(e) => {
-                      setSelectedBeneficiary('');
-                      setBeneficiarySearch(e.target.value);
-                      setShowBeneficiaryList(true);
+                      setSelectedBeneficiary('')
+                      setBeneficiarySearch(e.target.value)
+                      setShowBeneficiaryList(true)
                     }}
                     onFocus={() => setShowBeneficiaryList(true)}
                     placeholder="Buscar por CPF, Nome ou NIS..."
@@ -173,8 +174,8 @@ export function CreateDeliveryModal({
                     <button
                       className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2"
                       onClick={() => {
-                        setSelectedBeneficiary('');
-                        setBeneficiarySearch('');
+                        setSelectedBeneficiary('')
+                        setBeneficiarySearch('')
                       }}
                       type="button"
                     >
@@ -194,9 +195,9 @@ export function CreateDeliveryModal({
                             key={b.value}
                             className="hover:bg-accent hover:text-accent-foreground w-full rounded-sm px-2 py-2 text-left text-sm"
                             onClick={() => {
-                              setSelectedBeneficiary(b.value);
-                              setBeneficiarySearch(b.label);
-                              setShowBeneficiaryList(false);
+                              setSelectedBeneficiary(b.value)
+                              setBeneficiarySearch(b.label)
+                              setShowBeneficiaryList(false)
                             }}
                             type="button"
                           >
@@ -337,8 +338,8 @@ export function CreateDeliveryModal({
                   )}
                   onDragLeave={() => setIsDragging(false)}
                   onDragOver={(e) => {
-                    e.preventDefault();
-                    setIsDragging(true);
+                    e.preventDefault()
+                    setIsDragging(true)
                   }}
                   onDrop={handleDrop}
                 >
@@ -389,13 +390,13 @@ export function CreateDeliveryModal({
         </form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }
 interface FormFieldProps {
-  label: string;
-  required?: boolean;
-  error?: string;
-  children: React.ReactNode;
+  label: string
+  required?: boolean
+  error?: string
+  children: React.ReactNode
 }
 function FormField({ label, required, error, children }: FormFieldProps) {
   return (
@@ -407,5 +408,5 @@ function FormField({ label, required, error, children }: FormFieldProps) {
       {children}
       {error ? <p className="text-destructive text-xs">{error}</p> : null}
     </div>
-  );
+  )
 }

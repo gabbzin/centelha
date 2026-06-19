@@ -1,13 +1,14 @@
-import { cn } from '@/lib/utils';
-import { BenefitCategoryBadge } from './category-badge';
-import { LOW_STOCK_THRESHOLD } from './data';
-import { StockActionButton } from './stock-action-button';
-import type { Benefit } from './types';
+import { cn } from '@/lib/utils'
+import { BenefitCategoryBadge } from './category-badge'
+import { LOW_STOCK_THRESHOLD } from './data'
+import { StockActionButton } from './stock-action-button'
+import type { Benefit } from './types'
+
 interface StockTableRowProps {
-  benefit: Benefit;
-  onView: (benefit: Benefit) => void;
-  onEdit: (benefit: Benefit) => void;
-  onDelete: (benefit: Benefit) => void;
+  benefit: Benefit
+  onView: (benefit: Benefit) => void
+  onEdit: (benefit: Benefit) => void
+  onDelete: (benefit: Benefit) => void
 }
 export function StockTableRow({
   benefit,
@@ -15,7 +16,7 @@ export function StockTableRow({
   onEdit,
   onDelete,
 }: StockTableRowProps) {
-  const isLowStock = benefit.stock <= LOW_STOCK_THRESHOLD;
+  const isLowStock = benefit.stock <= LOW_STOCK_THRESHOLD
   return (
     <tr className="border-border border-t bg-white">
       <td className="text-foreground/80 px-6 py-4 text-sm font-medium">
@@ -55,5 +56,5 @@ export function StockTableRow({
         </div>
       </td>
     </tr>
-  );
+  )
 }

@@ -1,10 +1,11 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { type LucideIcon } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
+
 type FeatureCardProps = {
-  title: string;
-  description: string;
-  Icon: LucideIcon;
-};
+  title: string
+  description: string
+  Icon: LucideIcon
+}
 export function FeatureCard({ title, description, Icon }: FeatureCardProps) {
   return (
     <Card className="py-6" variant={'basic'}>
@@ -18,5 +19,5 @@ export function FeatureCard({ title, description, Icon }: FeatureCardProps) {
         </p>
       </CardContent>
     </Card>
-  );
+  )
 }

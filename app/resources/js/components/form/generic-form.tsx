@@ -1,21 +1,22 @@
-import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from '@hookform/resolvers/zod'
 import {
   type FieldValues,
   FormProvider,
   type UseFormProps,
   useForm,
-} from 'react-hook-form';
-import type { ZodType } from 'zod';
-import { cn } from '@/lib/utils';
-import { Button } from '../ui/button';
+} from 'react-hook-form'
+import type { ZodType } from 'zod'
+import { cn } from '@/lib/utils'
+import { Button } from '../ui/button'
+
 interface GenericFormProps<T extends FieldValues> extends UseFormProps<T> {
-  schema: ZodType<T, any, any>;
-  onSubmit: (data: T) => Promise<void> | void;
-  children: React.ReactNode;
-  submitText?: string;
-  needButtons?: boolean;
-  buttons?: React.ReactNode;
-  className?: string;
+  schema: ZodType<T, any, any>
+  onSubmit: (data: T) => Promise<void> | void
+  children: React.ReactNode
+  submitText?: string
+  needButtons?: boolean
+  buttons?: React.ReactNode
+  className?: string
 }
 export default function GenericForm<T extends FieldValues>({
   schema,
@@ -30,11 +31,11 @@ export default function GenericForm<T extends FieldValues>({
   const methods = useForm({
     resolver: zodResolver(schema),
     ...hookProps,
-  });
+  })
   const {
     handleSubmit,
     formState: { isSubmitting },
-  } = methods;
+  } = methods
   return (
     <FormProvider {...methods}>
       <form
@@ -54,8 +55,8 @@ export default function GenericForm<T extends FieldValues>({
         )}
       </form>
     </FormProvider>
-  );
+  )
 }
 const Buttons = ({ children }: { children: React.ReactNode }) => {
-  return <div className="mt-4 flex flex-col gap-2 font-bold">{children}</div>;
-};
+  return <div className="mt-4 flex flex-col gap-2 font-bold">{children}</div>
+}

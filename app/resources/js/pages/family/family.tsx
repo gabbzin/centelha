@@ -1,29 +1,30 @@
-import Heading from '@/components/layout/heading';
-import { Main } from '@/components/layout/main';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from '@/components/ui/input-group';
-import { type Family, type PaginatedData, type SharedData } from '@/types';
-import { Head, router, usePage } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react'
 import {
   CheckCircleIcon,
   ListFilterIcon,
   SearchIcon,
   XCircleIcon,
-} from 'lucide-react';
-import { FamilyCard } from './components/family-card';
-import { PaginationConsul } from '@/components/layout/pagination';
-import { useState } from 'react';
+} from 'lucide-react'
+import { useState } from 'react'
+import Heading from '@/components/layout/heading'
+import { Main } from '@/components/layout/main'
+import { PaginationConsul } from '@/components/layout/pagination'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from '@/components/ui/input-group'
+import type { Family, PaginatedData, SharedData } from '@/types'
+import { FamilyCard } from './components/family-card'
+
 interface FamilyProps {
-  families: PaginatedData<Family>;
+  families: PaginatedData<Family>
 }
 export default function Family({ families }: FamilyProps) {
-  const { communityCenter } = usePage<SharedData>().props;
-  const [onlyLastName, setOnlyLastName] = useState(false);
+  const { communityCenter } = usePage<SharedData>().props
+  const [onlyLastName, setOnlyLastName] = useState(false)
   return (
     <>
       <Head title="Módulo Familia" />
@@ -70,15 +71,15 @@ export default function Family({ families }: FamilyProps) {
         <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {families.data.map((family) => {
             const getSobrenome = (name: string) => {
-              const parts = name.trim().split(' ');
+              const parts = name.trim().split(' ')
               return parts.length > 1
                 ? parts[parts.length - 2] + ' ' + parts[parts.length - 1]
-                : name;
-            };
+                : name
+            }
             // Se withoutSobrenome for true, pega o sobrenome, caso contrário, pega o nome completo
             const sobrenome = onlyLastName
               ? getSobrenome(family.responsible_name)
-              : family.responsible_name;
+              : family.responsible_name
             return (
               <FamilyCard
                 key={family.id}
@@ -89,7 +90,7 @@ export default function Family({ families }: FamilyProps) {
                 membersCount={family.total_members_count || 0}
                 status={family.is_active}
               />
-            );
+            )
           })}
         </div>
         <PaginationConsul
@@ -99,5 +100,5 @@ export default function Family({ families }: FamilyProps) {
         />
       </Main>
     </>
-  );
+  )
 }

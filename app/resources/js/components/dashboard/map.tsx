@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 export function Map() {
   return (
     <MapContainer
@@ -18,5 +18,5 @@ export function Map() {
         <Popup>Brasília</Popup>
       </Marker>
     </MapContainer>
-  );
+  )
 }

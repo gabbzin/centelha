@@ -1,15 +1,17 @@
-import { AboutSection } from '@/components/landing/sections/about-section';
-import { FeaturesSection } from '@/components/landing/sections/features-section';
-import { FinalCardSection } from '@/components/landing/sections/final-card-section';
-import { HeroSection } from '@/components/landing/sections/hero-section';
-import { StepsSection } from '@/components/landing/sections/steps-section';
-import { Logo } from '@/components/logo';
-import { buttonVariants } from '@/components/ui/button';
-import { type SharedData } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
-import { CalendarClock, HandCoins, HeartHandshake } from 'lucide-react';
-import React, { useRef } from 'react';
-import { SocialIcon } from 'react-social-icons';
+import { Head, Link, usePage } from '@inertiajs/react'
+import { CalendarClock, HandCoins, HeartHandshake } from 'lucide-react'
+import type React from 'react'
+import { useRef } from 'react'
+import { SocialIcon } from 'react-social-icons'
+import { AboutSection } from '@/components/landing/sections/about-section'
+import { FeaturesSection } from '@/components/landing/sections/features-section'
+import { FinalCardSection } from '@/components/landing/sections/final-card-section'
+import { HeroSection } from '@/components/landing/sections/hero-section'
+import { StepsSection } from '@/components/landing/sections/steps-section'
+import { Logo } from '@/components/logo'
+import { buttonVariants } from '@/components/ui/button'
+import type { SharedData } from '@/types'
+
 const steps = [
   {
     step: '1',
@@ -27,7 +29,7 @@ const steps = [
     step: '4',
     title: 'Acompanhe o impacto com dados reais.',
   },
-];
+]
 const features = [
   {
     title: 'Gestao de Eventos Sem Caos',
@@ -47,7 +49,7 @@ const features = [
       'Receba alertas automaticos de familias desassistidas e garanta um atendimento justo e humanizado.',
     Icon: HeartHandshake,
   },
-];
+]
 const footerColumns = [
   {
     title: 'Produto',
@@ -61,19 +63,19 @@ const footerColumns = [
     title: 'Legal',
     links: ['Termos de Uso', 'Politica de Privacidade', 'Segurança de Dados'],
   },
-];
+]
 export default function Home() {
-  const { communityCenter } = usePage<SharedData>().props;
-  const inicioRef = useRef<HTMLDivElement | null>(null);
-  const beneficiosRef = useRef<HTMLDivElement | null>(null);
-  const comoFuncionaRef = useRef<HTMLDivElement | null>(null);
+  const { communityCenter } = usePage<SharedData>().props
+  const inicioRef = useRef<HTMLDivElement | null>(null)
+  const beneficiosRef = useRef<HTMLDivElement | null>(null)
+  const comoFuncionaRef = useRef<HTMLDivElement | null>(null)
   const scrollTo = (e: React.RefObject<HTMLDivElement | null>) => {
     if (e.current) {
       e.current?.scrollIntoView({
         behavior: 'smooth',
-      });
+      })
     }
-  };
+  }
   const navItems = [
     {
       name: 'Inicio',
@@ -87,7 +89,7 @@ export default function Home() {
       name: 'Como Funciona',
       ref: comoFuncionaRef,
     },
-  ];
+  ]
   return (
     <>
       <Head title={communityCenter?.name ?? 'Centelha'} />
@@ -210,5 +212,5 @@ export default function Home() {
         </footer>
       </main>
     </>
-  );
+  )
 }

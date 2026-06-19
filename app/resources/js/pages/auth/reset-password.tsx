@@ -1,20 +1,21 @@
-import { Head, useForm } from '@inertiajs/react';
-import { LoaderCircle } from 'lucide-react';
-import { FormEventHandler } from 'react';
-import InputError from '@/components/laravel/input-error';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import AuthLayout from '@/layouts/auth-layout';
+import { Head, useForm } from '@inertiajs/react'
+import { LoaderCircle } from 'lucide-react'
+import type { FormEventHandler } from 'react'
+import InputError from '@/components/laravel/input-error'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import AuthLayout from '@/layouts/auth-layout'
+
 interface ResetPasswordProps {
-  token: string;
-  email: string;
+  token: string
+  email: string
 }
 interface ResetPasswordForm {
-  token: string;
-  email: string;
-  password: string;
-  password_confirmation: string;
+  token: string
+  email: string
+  password: string
+  password_confirmation: string
 }
 export default function ResetPassword({ token, email }: ResetPasswordProps) {
   const { data, setData, post, processing, errors, reset } =
@@ -23,13 +24,13 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
       email: email,
       password: '',
       password_confirmation: '',
-    });
+    })
   const submit: FormEventHandler = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     post(route('password.store'), {
       onFinish: () => reset('password', 'password_confirmation'),
-    });
-  };
+    })
+  }
   return (
     <AuthLayout
       description="Please enter your new password below"
@@ -95,5 +96,5 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
         </div>
       </form>
     </AuthLayout>
-  );
+  )
 }

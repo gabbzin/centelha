@@ -1,10 +1,11 @@
-import { StepCard } from '../step-card';
+import { StepCard } from '../step-card'
+
 interface StepsSectionProps {
   steps: {
-    step: string;
-    title: string;
-  }[];
-  ref: React.Ref<HTMLDivElement>;
+    step: string
+    title: string
+  }[]
+  ref: React.Ref<HTMLDivElement>
 }
 export function StepsSection({ steps, ref }: StepsSectionProps) {
   return (
@@ -20,5 +21,5 @@ export function StepsSection({ steps, ref }: StepsSectionProps) {
         </div>
       </div>
     </section>
-  );
+  )
 }

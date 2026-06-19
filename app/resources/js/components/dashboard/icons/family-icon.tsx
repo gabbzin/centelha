@@ -12,5 +12,5 @@ export function FamilyIcon() {
         fill="var(--primary)"
       />
     </svg>
-  );
+  )
 }
