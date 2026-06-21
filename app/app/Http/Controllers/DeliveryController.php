@@ -6,8 +6,10 @@ use App\Http\Requests\StoreDeliveryRequest;
 use App\Models\Benefit;
 use App\Models\Delivery;
 use App\Models\StockMovement;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class DeliveryController extends Controller
@@ -77,7 +79,11 @@ class DeliveryController extends Controller
                 ->withInput();
         }
 
-        // TODO: implementar validação de duplicidade (RN61) quando o período for definido.
+        $this->ensureNoDuplicateDelivery(
+            $data['family_id'],
+            $data['benefit_id'],
+            $data['delivery_date']
+        );
 
         $receiptPath = null;
         if ($request->hasFile('receipt')) {
@@ -122,6 +128,28 @@ class DeliveryController extends Controller
         $delivery->load(['family.address', 'family.members', 'benefit', 'deliveredBy']);
 
         return response()->json($delivery);
+    }
+
+    private function ensureNoDuplicateDelivery(int $familyId, int $benefitId, string $deliveryDate): void
+    {
+        // TODO: mover período para configuração do sistema.
+        $cooldownDays = 7;
+
+        $date = Carbon::parse($deliveryDate);
+
+        $exists = Delivery::where('family_id', $familyId)
+            ->where('benefit_id', $benefitId)
+            ->whereBetween('delivery_date', [
+                $date->copy()->subDays($cooldownDays)->startOfDay(),
+                $date->copy()->endOfDay(),
+            ])
+            ->exists();
+
+        if ($exists) {
+            throw ValidationException::withMessages([
+                'benefit_id' => 'Esta família já recebeu este benefício no período vigente.',
+            ]);
+        }
     }
 
     private function parseDate(?string $value): ?string

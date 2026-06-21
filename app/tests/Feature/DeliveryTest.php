@@ -135,4 +135,35 @@ class DeliveryTest extends TestCase
         $response->assertSessionHasErrors(['receipt']);
         $this->assertDatabaseCount('deliveries', 0);
     }
+
+    public function test_delivery_fails_when_duplicate_in_period()
+    {
+        $user = User::factory()->create();
+        $family = Family::factory()->create();
+        $benefit = Benefit::factory()->create(['stock' => 10]);
+
+        $family->deliveries()->create([
+            'code' => 'ENT-0001',
+            'benefit_id' => $benefit->id,
+            'quantity' => 1,
+            'location' => 'Centro Comunitário A',
+            'delivery_date' => now()->subDays(5),
+            'delivered_by' => $user->id,
+            'status' => 'Entregue',
+        ]);
+
+        $response = $this->withSession(['_token' => 'test-token'])
+            ->actingAs($user)
+            ->post('/entregas', [
+                '_token' => 'test-token',
+                'family_id' => $family->id,
+                'benefit_id' => $benefit->id,
+                'quantity' => 1,
+                'delivery_date' => now()->format('Y-m-d'),
+                'location' => 'Centro Comunitário B',
+            ]);
+
+        $response->assertSessionHasErrors(['benefit_id' => 'Esta família já recebeu este benefício no período vigente.']);
+        $this->assertDatabaseCount('deliveries', 1);
+    }
 }
