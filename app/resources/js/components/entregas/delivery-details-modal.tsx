@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { FileText, X } from 'lucide-react'
+import { ExternalLink, FileText, X } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -69,16 +69,15 @@ export function DeliveryDetailsModal({
               )}
             </div>
             <div className="flex items-center gap-2">
-              <Button
-                disabled
-                className="gap-2"
-                size="sm"
-                type="button"
-                variant="outline"
+              <a
+                className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground disabled:pointer-events-none disabled:opacity-50"
+                href={delivery ? `/entregas/${delivery.id}/pdf` : undefined}
+                rel="noreferrer"
+                target="_blank"
               >
                 <FileText className="size-4" />
                 Imprimir PDF
-              </Button>
+              </a>
               <Button
                 className="size-8 p-0"
                 onClick={() => onOpenChange(false)}
@@ -190,6 +189,23 @@ export function DeliveryDetailsModal({
                   <p className="text-foreground/80 mt-2 text-sm whitespace-pre-line">
                     {delivery.notes}
                   </p>
+                </div>
+              ) : null}
+
+              {delivery.receipt_url ? (
+                <div className="rounded-xl border p-4">
+                  <h3 className="text-sm font-semibold uppercase tracking-wide">
+                    Comprovante Anexado
+                  </h3>
+                  <a
+                    className="text-primary mt-2 inline-flex items-center gap-1.5 text-sm font-medium hover:underline"
+                    href={delivery.receipt_url}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    <ExternalLink className="size-4" />
+                    Visualizar comprovante
+                  </a>
                 </div>
               ) : null}
             </div>

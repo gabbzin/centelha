@@ -4,65 +4,100 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreDeliveryRequest;
 use App\Models\Benefit;
+use App\Models\CommunityCenter;
 use App\Models\Delivery;
 use App\Models\StockMovement;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class DeliveryController extends Controller
 {
+    private const INDEX_TTL = 60;
+    private const SHOW_TTL = 60;
+    private const PDF_TTL = 300;
+
+    private const CACHE_VERSION_KEY = 'deliveries.cache_version';
+
+    private function cacheKey(string $suffix): string
+    {
+        $version = Cache::get(self::CACHE_VERSION_KEY, 1);
+
+        return "deliveries.{$version}.{$suffix}";
+    }
+
+    private function invalidateDeliveryCache(): void
+    {
+        Cache::increment(self::CACHE_VERSION_KEY);
+    }
+
     public function index(Request $request)
     {
         $search = $request->input('search');
         $startDate = $this->parseDate($request->input('startDate'));
         $endDate = $this->parseDate($request->input('endDate'));
+        $page = $request->input('page', 1);
 
-        $query = Delivery::with(['family', 'benefit', 'deliveredBy'])
-            ->orderBy('delivery_date', 'desc')
-            ->orderBy('id', 'desc');
+        $cacheKey = $this->cacheKey('index.' . md5(serialize([
+            $search,
+            $startDate,
+            $endDate,
+            $page,
+        ])));
 
-        if ($search) {
-            $cleanCpf = preg_replace('/\D/', '', $search);
+        $cached = Cache::remember($cacheKey, self::INDEX_TTL, function () use ($search, $startDate, $endDate) {
+            $query = Delivery::with(['family', 'benefit', 'deliveredBy'])
+                ->orderBy('delivery_date', 'desc')
+                ->orderBy('id', 'desc');
 
-            $query->where(function ($q) use ($search, $cleanCpf) {
-                $q->where('code', 'ilike', "%{$search}%")
-                  ->orWhere('location', 'ilike', "%{$search}%")
-                  ->orWhereHas('family', function ($fq) use ($search, $cleanCpf) {
-                      $fq->where('responsible_name', 'ilike', "%{$search}%");
+            if ($search) {
+                $cleanCpf = preg_replace('/\D/', '', $search);
 
-                      if (strlen($cleanCpf) >= 3) {
-                          $fq->orWhere('responsible_cpf', 'like', "%{$cleanCpf}%");
-                      }
-                  })
-                  ->orWhereHas('benefit', function ($bq) use ($search) {
-                      $bq->where('name', 'ilike', "%{$search}%");
-                  });
-            });
-        }
+                $query->where(function ($q) use ($search, $cleanCpf) {
+                    $q->where('code', 'ilike', "%{$search}%")
+                      ->orWhere('location', 'ilike', "%{$search}%")
+                      ->orWhereHas('family', function ($fq) use ($search, $cleanCpf) {
+                          $fq->where('responsible_name', 'ilike', "%{$search}%");
 
-        if ($startDate) {
-            $query->whereDate('delivery_date', '>=', $startDate);
-        }
+                          if (strlen($cleanCpf) >= 3) {
+                              $fq->orWhere('responsible_cpf', 'like', "%{$cleanCpf}%");
+                          }
+                      })
+                      ->orWhereHas('benefit', function ($bq) use ($search) {
+                          $bq->where('name', 'ilike', "%{$search}%");
+                      });
+                });
+            }
 
-        if ($endDate) {
-            $query->whereDate('delivery_date', '<=', $endDate);
-        }
+            if ($startDate) {
+                $query->whereDate('delivery_date', '>=', $startDate);
+            }
 
-        $deliveries = $query->paginate(8)->withQueryString();
+            if ($endDate) {
+                $query->whereDate('delivery_date', '<=', $endDate);
+            }
+
+            return [
+                'deliveries' => $query->paginate(8)->withQueryString(),
+                'benefits' => Benefit::where('status', 'Ativo')
+                    ->orderBy('name')
+                    ->get(['id', 'name', 'stock']),
+            ];
+        });
 
         return Inertia::render('entregas', [
-            'deliveries' => $deliveries,
+            'deliveries' => $cached['deliveries'],
             'filters' => [
                 'search' => $search,
                 'startDate' => $request->input('startDate'),
                 'endDate' => $request->input('endDate'),
             ],
-            'benefits' => Benefit::where('status', 'Ativo')
-                ->orderBy('name')
-                ->get(['id', 'name', 'stock']),
+            'benefits' => $cached['benefits'],
         ]);
     }
 
@@ -87,7 +122,7 @@ class DeliveryController extends Controller
 
         $receiptPath = null;
         if ($request->hasFile('receipt')) {
-            $receiptPath = $request->file('receipt')->store('deliveries/receipts', 'public');
+            $receiptPath = Storage::disk('minio')->putFile('deliveries/receipts', $request->file('receipt'));
         }
 
         DB::transaction(function () use ($data, $benefit, $receiptPath) {
@@ -118,6 +153,8 @@ class DeliveryController extends Controller
             ]);
         });
 
+        $this->invalidateDeliveryCache();
+
         return redirect()
             ->route('entregas')
             ->with('success', 'Entrega confirmada com sucesso!');
@@ -125,9 +162,93 @@ class DeliveryController extends Controller
 
     public function show(Delivery $delivery)
     {
-        $delivery->load(['family.address', 'family.members', 'benefit', 'deliveredBy']);
+        $cacheKey = $this->cacheKey("show.{$delivery->id}");
 
-        return response()->json($delivery);
+        return Cache::remember($cacheKey, self::SHOW_TTL, function () use ($delivery) {
+            $delivery->load(['family.address', 'family.members', 'benefit', 'deliveredBy']);
+
+            return response()->json($delivery);
+        });
+    }
+
+    public function pdf(Delivery $delivery)
+    {
+        $cacheKey = $this->cacheKey("pdf.{$delivery->id}");
+
+        $pdfContent = Cache::remember($cacheKey, self::PDF_TTL, function () use ($delivery) {
+            $delivery->load(['family.address', 'family.members', 'benefit', 'deliveredBy']);
+
+            [$communityCenter, $primaryColor, $logoPath] = $this->getPdfTheme();
+
+            return Pdf::loadView('deliveries.pdf.show', compact('delivery', 'communityCenter', 'primaryColor', 'logoPath'))->output();
+        });
+
+        return response($pdfContent, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => "attachment; filename=\"comprovante-{$delivery->code}.pdf\"",
+        ]);
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $type = $request->input('type', 'current_month');
+
+        if ($type === 'current_month') {
+            $startDate = now()->startOfMonth();
+            $endDate = now()->endOfMonth();
+        } else {
+            $startDate = Carbon::parse($this->parseDate($request->input('startDate')) ?? now()->startOfMonth());
+            $endDate = Carbon::parse($this->parseDate($request->input('endDate')) ?? now()->endOfMonth());
+        }
+
+        $cacheKey = $this->cacheKey('exportPdf.' . md5(serialize([
+            $type,
+            $startDate->toDateString(),
+            $endDate->toDateString(),
+        ])));
+
+        $pdfContent = Cache::remember($cacheKey, self::PDF_TTL, function () use ($startDate, $endDate) {
+            $deliveries = Delivery::with(['benefit', 'deliveredBy'])
+                ->whereBetween('delivery_date', [$startDate->copy()->startOfDay(), $endDate->copy()->endOfDay()])
+                ->orderBy('delivery_date', 'desc')
+                ->get();
+
+            [$communityCenter, $primaryColor, $logoPath] = $this->getPdfTheme();
+
+            return Pdf::loadView('deliveries.pdf.list', compact(
+                'deliveries',
+                'startDate',
+                'endDate',
+                'communityCenter',
+                'primaryColor',
+                'logoPath'
+            ))->output();
+        });
+
+        $periodLabel = $startDate->format('d-m-Y') . '_a_' . $endDate->format('d-m-Y');
+
+        return response($pdfContent, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => "attachment; filename=\"relatorio-entregas-{$periodLabel}.pdf\"",
+        ]);
+    }
+
+    private function getPdfTheme(): array
+    {
+        $communityCenter = CommunityCenter::first();
+        $colors = $communityCenter?->colors ?? [];
+        $primaryColor = $colors['primary'] ?? '#ff002e';
+
+        $logoPath = null;
+        if ($communityCenter?->logo_path) {
+            $logo = ltrim($communityCenter->logo_path, './');
+            $fullPath = public_path($logo);
+            if (file_exists($fullPath)) {
+                $logoPath = $fullPath;
+            }
+        }
+
+        return [$communityCenter, $primaryColor, $logoPath];
     }
 
     private function ensureNoDuplicateDelivery(int $familyId, int $benefitId, string $deliveryDate): void

@@ -3,10 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\Benefit;
+use App\Models\Delivery;
 use App\Models\Family;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class DeliveryTest extends TestCase
@@ -94,6 +96,8 @@ class DeliveryTest extends TestCase
 
     public function test_delivery_accepts_valid_receipt_file()
     {
+        Storage::fake('minio');
+
         $user = User::factory()->create();
         $family = Family::factory()->create();
         $benefit = Benefit::factory()->create(['stock' => 5]);
@@ -102,16 +106,19 @@ class DeliveryTest extends TestCase
             ->actingAs($user)
             ->post('/entregas', [
                 '_token' => 'test-token',
-            'family_id' => $family->id,
-            'benefit_id' => $benefit->id,
-            'quantity' => 1,
-            'delivery_date' => now()->format('Y-m-d'),
-            'location' => 'Centro Comunitário A',
-            'receipt' => UploadedFile::fake()->create('comprovante.jpg', 100, 'image/jpeg'),
-        ]);
+                'family_id' => $family->id,
+                'benefit_id' => $benefit->id,
+                'quantity' => 1,
+                'delivery_date' => now()->format('Y-m-d'),
+                'location' => 'Centro Comunitário A',
+                'receipt' => UploadedFile::fake()->create('comprovante.jpg', 100, 'image/jpeg'),
+            ]);
 
         $response->assertRedirect('/entregas');
         $this->assertDatabaseCount('deliveries', 1);
+
+        $delivery = Delivery::first();
+        Storage::disk('minio')->assertExists($delivery->receipt_path);
     }
 
     public function test_delivery_rejects_invalid_receipt_file()
@@ -165,5 +172,34 @@ class DeliveryTest extends TestCase
 
         $response->assertSessionHasErrors(['benefit_id' => 'Esta família já recebeu este benefício no período vigente.']);
         $this->assertDatabaseCount('deliveries', 1);
+    }
+
+    public function test_authenticated_user_can_download_individual_pdf()
+    {
+        $user = User::factory()->create();
+        $delivery = Delivery::factory()->create([
+            'delivered_by' => $user->id,
+            'status' => 'Entregue',
+        ]);
+
+        $response = $this->actingAs($user)->get("/entregas/{$delivery->id}/pdf");
+
+        $response->assertOk();
+        $response->assertHeader('content-type', 'application/pdf');
+    }
+
+    public function test_authenticated_user_can_download_list_pdf()
+    {
+        $user = User::factory()->create();
+        Delivery::factory()->count(3)->create([
+            'delivered_by' => $user->id,
+            'status' => 'Entregue',
+            'delivery_date' => now(),
+        ]);
+
+        $response = $this->actingAs($user)->get('/entregas/export/pdf?type=current_month');
+
+        $response->assertOk();
+        $response->assertHeader('content-type', 'application/pdf');
     }
 }

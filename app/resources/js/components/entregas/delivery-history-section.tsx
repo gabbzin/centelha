@@ -103,14 +103,16 @@ export function DeliveryHistorySection({
   }, [])
 
   const handleExportCurrentMonth = useCallback(() => {
-    // eslint-disable-next-line no-console
-    console.log('Exportar PDF do mês atual — implementação futura')
+    window.open('/entregas/export/pdf?type=current_month', '_blank')
   }, [])
 
   const handleExportSelectedPeriod = useCallback(() => {
-    // eslint-disable-next-line no-console
-    console.log('Exportar PDF do período selecionado — implementação futura')
-  }, [])
+    const params = new URLSearchParams()
+    params.append('type', 'period')
+    if (startDate) params.append('startDate', startDate)
+    if (endDate) params.append('endDate', endDate)
+    window.open(`/entregas/export/pdf?${params.toString()}`, '_blank')
+  }, [startDate, endDate])
 
   return (
     <section className="space-y-4">

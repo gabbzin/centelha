@@ -52,6 +52,7 @@ export function normalizeDelivery(raw: any): Delivery {
     deliveredBy: raw.delivered_by?.name ?? '-',
     notes: raw.notes ?? null,
     receipt_path: raw.receipt_path ?? null,
+    receipt_url: raw.receipt_url ?? null,
     family: raw.family,
   }
 }
