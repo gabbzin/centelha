@@ -31,6 +31,17 @@ import { cn } from '@/lib/utils'
 import { applyDateMask, parseDate } from './data'
 import type { BeneficiaryOption, BenefitOption } from './types'
 
+function formatCpf(value: string | null | undefined): string {
+  if (!value) return ''
+  const digits = value.replace(/\D/g, '').slice(0, 11)
+  if (digits.length <= 3) return digits
+  if (digits.length <= 6) return `${digits.slice(0, 3)}.${digits.slice(3)}`
+  if (digits.length <= 9) {
+    return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6)}`
+  }
+  return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6, 9)}-${digits.slice(9)}`
+}
+
 interface CreateDeliveryModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -138,7 +149,7 @@ export function CreateDeliveryModal({
     if (file.size > 5 * 1024 * 1024) {
       setErrors((prev) => ({
         ...prev,
-        receipt: 'Arquivo inválido. Formatos aceitos: PNG, JPG, PDF (máx. 5MB).',
+        receipt: 'Arquivo muito grande. O limite é 5MB.',
       }))
       return
     }
@@ -162,7 +173,11 @@ export function CreateDeliveryModal({
     if (!selectedBeneficiaryId)
       nextErrors.beneficiary = 'Selecione um beneficiário'
     if (!benefitId) nextErrors.benefitType = 'Selecione um tipo de benefício'
-    if (!deliveryDate) nextErrors.deliveryDate = 'Informe a data da entrega'
+    if (!deliveryDate) {
+      nextErrors.deliveryDate = 'Informe a data da entrega'
+    } else if (!isValidDeliveryDate(deliveryDate)) {
+      nextErrors.deliveryDate = 'Informe uma data válida e não futura'
+    }
     if (!location) nextErrors.location = 'Informe o local de retirada'
     setErrors(nextErrors)
     return Object.keys(nextErrors).length === 0
@@ -175,6 +190,22 @@ export function CreateDeliveryModal({
     const month = String(date.getMonth() + 1).padStart(2, '0')
     const day = String(date.getDate()).padStart(2, '0')
     return `${year}-${month}-${day}`
+  }
+
+  const isValidDeliveryDate = (value: string): boolean => {
+    const date = parseDate(value)
+    if (!date) return false
+    const [day, month, year] = value.split('/').map(Number)
+    if (
+      date.getDate() !== day ||
+      date.getMonth() + 1 !== month ||
+      date.getFullYear() !== year
+    ) {
+      return false
+    }
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    return date <= today
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -230,7 +261,7 @@ export function CreateDeliveryModal({
                       setShowBeneficiaryList(true)
                     }}
                     onFocus={() => setShowBeneficiaryList(true)}
-                    placeholder="Buscar por CPF, Nome ou NIS..."
+                    placeholder="Buscar por nome ou CPF..."
                     value={
                       selectedBeneficiaryId
                         ? selectedBeneficiaryLabel
@@ -252,7 +283,11 @@ export function CreateDeliveryModal({
 
                   {showBeneficiaryList && !selectedBeneficiaryId && (
                     <div className="absolute z-50 mt-1 max-h-56 w-full overflow-auto rounded-md border border-border bg-popover p-1 shadow-md">
-                      {loadingBeneficiaries ? (
+                      {beneficiarySearch.length < 2 ? (
+                        <p className="text-muted-foreground px-2 py-3 text-center text-sm">
+                          Digite pelo menos 2 caracteres
+                        </p>
+                      ) : loadingBeneficiaries ? (
                         <p className="text-muted-foreground px-2 py-3 text-center text-sm">
                           Buscando...
                         </p>
@@ -275,7 +310,7 @@ export function CreateDeliveryModal({
                             <span className="font-medium">{b.label}</span>
                             {b.cpf ? (
                               <span className="text-muted-foreground block text-xs">
-                                CPF: {b.cpf}
+                                CPF: {formatCpf(b.cpf)}
                               </span>
                             ) : null}
                           </button>
