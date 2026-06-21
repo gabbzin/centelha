@@ -21,6 +21,16 @@ class Benefit extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
+    public function deliveries()
+    {
+        return $this->hasMany(Delivery::class);
+    }
+
+    public function stockMovements()
+    {
+        return $this->hasMany(StockMovement::class);
+    }
+
     public function generateCode(): string
     {
         return 'BNF-' . str_pad((string) $this->id, 3, '0', STR_PAD_LEFT);

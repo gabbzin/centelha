@@ -11,6 +11,7 @@ interface DeliveryTableProps {
   currentPage: number
   totalPages: number
   onPageChange: (page: number) => void
+  onRowClick?: (delivery: Delivery) => void
 }
 
 export function DeliveryTable({
@@ -21,6 +22,7 @@ export function DeliveryTable({
   currentPage,
   totalPages,
   onPageChange,
+  onRowClick,
 }: DeliveryTableProps) {
   return (
     <Card className="rounded-xl border">
@@ -40,7 +42,11 @@ export function DeliveryTable({
             </thead>
             <tbody>
               {deliveries.map((delivery) => (
-                <DeliveryTableRow key={delivery.code} delivery={delivery} />
+                <DeliveryTableRow
+                  key={delivery.id}
+                  delivery={delivery}
+                  onClick={() => onRowClick?.(delivery)}
+                />
               ))}
             </tbody>
           </table>

@@ -4,6 +4,7 @@ import type { Delivery } from './types'
 
 interface DeliveryTableRowProps {
   delivery: Delivery
+  onClick?: () => void
 }
 
 const statusVariantMap: Record<
@@ -15,9 +16,12 @@ const statusVariantMap: Record<
   Cancelado: 'destructive_basic',
 }
 
-export function DeliveryTableRow({ delivery }: DeliveryTableRowProps) {
+export function DeliveryTableRow({ delivery, onClick }: DeliveryTableRowProps) {
   return (
-    <tr className="border-border border-b last:border-b-0 hover:bg-muted/40 transition-colors">
+    <tr
+      className="border-border hover:bg-muted/40 cursor-pointer border-b transition-colors last:border-b-0"
+      onClick={onClick}
+    >
       <td className="px-6 py-4 text-sm font-medium whitespace-nowrap">
         {delivery.code}
       </td>
@@ -26,7 +30,7 @@ export function DeliveryTableRow({ delivery }: DeliveryTableRowProps) {
       </td>
       <td className="px-6 py-4 text-sm">{delivery.benefit}</td>
       <td className="px-6 py-4 text-sm whitespace-nowrap">
-        {delivery.quantity} {delivery.unitLabel}
+        {delivery.quantity} {delivery.quantity === 1 ? 'unidade' : 'unidades'}
       </td>
       <td className="px-6 py-4 text-sm">{delivery.location}</td>
       <td className="px-6 py-4">

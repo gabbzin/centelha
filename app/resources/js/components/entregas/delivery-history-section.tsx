@@ -1,5 +1,6 @@
 import { ChevronDown, FileText, Plus } from 'lucide-react'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { router, usePage } from '@inertiajs/react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -9,65 +10,106 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { CreateDeliveryModal } from './create-delivery-modal'
-import { DELIVERIES, filterDeliveries, formatInputDate, paginate } from './data'
+import { DeliveryDetailsModal } from './delivery-details-modal'
+import { formatInputDate, normalizeDelivery } from './data'
 import { DeliveryFilterBar } from './delivery-filter-bar'
 import { DeliveryTable } from './delivery-table'
+import type { BenefitOption, Delivery, PaginatedDeliveries } from './types'
 
-const PAGE_SIZE = 7
+interface DeliveryHistorySectionProps {
+  deliveries: PaginatedDeliveries
+  filters: {
+    search: string
+    startDate: string
+    endDate: string
+  }
+  benefits: BenefitOption[]
+}
 
-export function DeliveryHistorySection() {
-  const [startDate, setStartDate] = useState(() => {
-    const now = new Date()
-    return formatInputDate(new Date(now.getFullYear(), now.getMonth(), 1))
-  })
-  const [endDate, setEndDate] = useState(() => {
-    const now = new Date()
-    return formatInputDate(new Date(now.getFullYear(), now.getMonth() + 1, 0))
-  })
-  const [search, setSearch] = useState('')
-  const [currentPage, setCurrentPage] = useState(1)
+const PAGE_SIZE = 8
+
+export function DeliveryHistorySection({
+  deliveries,
+  filters,
+  benefits,
+}: DeliveryHistorySectionProps) {
+  const { auth } = usePage().props as { auth: { user: { name: string } } }
+
+  const [search, setSearch] = useState(filters.search ?? '')
+  const [startDate, setStartDate] = useState(filters.startDate ?? '')
+  const [endDate, setEndDate] = useState(filters.endDate ?? '')
   const [isCreateOpen, setIsCreateOpen] = useState(false)
+  const [selectedDeliveryId, setSelectedDeliveryId] = useState<number | null>(
+    null,
+  )
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false)
 
-  const filtered = useMemo(
-    () =>
-      filterDeliveries(DELIVERIES, {
-        search,
-        startDate,
-        endDate,
-      }),
-    [search, startDate, endDate],
+  const normalizedDeliveries = deliveries.data.map(normalizeDelivery)
+
+  const reload = useCallback(
+    (page = deliveries.current_page) => {
+      router.get(
+        '/entregas',
+        {
+          search,
+          startDate,
+          endDate,
+          page,
+        },
+        {
+          preserveState: true,
+          preserveScroll: true,
+          only: ['deliveries', 'filters'],
+        },
+      )
+    },
+    [search, startDate, endDate, deliveries.current_page],
   )
 
-  const pagination = useMemo(
-    () => paginate(filtered, currentPage, PAGE_SIZE),
-    [filtered, currentPage],
-  )
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      reload(1)
+    }, 400)
+
+    return () => clearTimeout(timer)
+  }, [search, startDate, endDate])
 
   const handleSearchChange = useCallback((value: string) => {
     setSearch(value)
-    setCurrentPage(1)
   }, [])
 
   const handleStartDateChange = useCallback((value: string) => {
     setStartDate(value)
-    setCurrentPage(1)
   }, [])
 
   const handleEndDateChange = useCallback((value: string) => {
     setEndDate(value)
-    setCurrentPage(1)
   }, [])
+
+  const handlePageChange = useCallback(
+    (page: number) => {
+      reload(page)
+    },
+    [reload],
+  )
 
   const handleRegister = useCallback(() => {
     setIsCreateOpen(true)
   }, [])
 
+  const handleRowClick = useCallback((delivery: Delivery) => {
+    setSelectedDeliveryId(delivery.id)
+    setIsDetailsOpen(true)
+  }, [])
+
   const handleExportCurrentMonth = useCallback(() => {
-    console.log('Exportar PDF do mês atual')
+    // eslint-disable-next-line no-console
+    console.log('Exportar PDF do mês atual — implementação futura')
   }, [])
 
   const handleExportSelectedPeriod = useCallback(() => {
-    console.log('Exportar PDF do período selecionado')
+    // eslint-disable-next-line no-console
+    console.log('Exportar PDF do período selecionado — implementação futura')
   }, [])
 
   return (
@@ -130,18 +172,30 @@ export function DeliveryHistorySection() {
           />
 
           <DeliveryTable
-            currentPage={currentPage}
-            deliveries={pagination.items}
-            endIndex={pagination.endIndex}
-            onPageChange={setCurrentPage}
-            startIndex={pagination.startIndex}
-            total={pagination.total}
-            totalPages={pagination.totalPages}
+            currentPage={deliveries.current_page}
+            deliveries={normalizedDeliveries}
+            endIndex={deliveries.to ?? 0}
+            onPageChange={handlePageChange}
+            onRowClick={handleRowClick}
+            startIndex={deliveries.from ?? 0}
+            total={deliveries.total}
+            totalPages={deliveries.last_page}
           />
         </CardContent>
       </Card>
 
-      <CreateDeliveryModal onOpenChange={setIsCreateOpen} open={isCreateOpen} />
+      <CreateDeliveryModal
+        benefits={benefits}
+        deliveredBy={auth.user.name}
+        onOpenChange={setIsCreateOpen}
+        open={isCreateOpen}
+      />
+
+      <DeliveryDetailsModal
+        deliveryId={selectedDeliveryId}
+        onOpenChange={setIsDetailsOpen}
+        open={isDetailsOpen}
+      />
     </section>
   )
 }
