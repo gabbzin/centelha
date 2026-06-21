@@ -1,6 +1,7 @@
 export function FamilyIcon() {
   return (
     <svg
+      aria-hidden="true"
       fill="none"
       height="54"
       viewBox="0 0 55 54"
@@ -12,5 +13,5 @@ export function FamilyIcon() {
         fill="var(--primary)"
       />
     </svg>
-  );
+  )
 }

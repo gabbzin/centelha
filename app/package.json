@@ -5,22 +5,14 @@
         "build": "vite build",
         "build:ssr": "vite build && vite build --ssr",
         "dev": "vite",
-        "format": "prettier --write resources/",
-        "format:check": "prettier --check resources/",
-        "lint": "eslint . --fix"
+        "format": "biome format --write",
+        "format:check": "biome format",
+        "lint": "biome lint --write",
+        "check": "biome check --write"
     },
     "devDependencies": {
-        "@eslint/js": "^9.19.0",
-        "@types/leaflet": "^1.9.21",
-        "eslint": "^9.17.0",
-        "eslint-config-prettier": "^10.0.1",
-        "eslint-plugin-react": "^7.37.3",
-        "eslint-plugin-react-hooks": "^5.1.0",
-        "prettier": "^3.4.2",
-        "prettier-plugin-jsx-attr-sort": "^1.0.4",
-        "prettier-plugin-organize-imports": "^4.1.0",
-        "prettier-plugin-tailwindcss": "^0.6.11",
-        "typescript-eslint": "^8.23.0"
+        "@biomejs/biome": "^2.5.0",
+        "@types/leaflet": "^1.9.21"
     },
     "dependencies": {
         "@base-ui/react": "^1.4.1",

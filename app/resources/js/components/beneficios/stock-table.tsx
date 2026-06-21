@@ -1,21 +1,20 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { StockPagination } from './stock-pagination';
-import { StockTableRow } from './stock-table-row';
-import type { Benefit } from './types';
+import { Card, CardContent } from '@/components/ui/card'
+import { StockPagination } from './stock-pagination'
+import { StockTableRow } from './stock-table-row'
+import type { Benefit } from './types'
 
 interface StockTableProps {
-  benefits: Benefit[];
-  startIndex: number;
-  endIndex: number;
-  total: number;
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-  onView: (benefit: Benefit) => void;
-  onEdit: (benefit: Benefit) => void;
-  onDelete: (benefit: Benefit) => void;
+  benefits: Benefit[]
+  startIndex: number
+  endIndex: number
+  total: number
+  currentPage: number
+  totalPages: number
+  onPageChange: (page: number) => void
+  onView: (benefit: Benefit) => void
+  onEdit: (benefit: Benefit) => void
+  onDelete: (benefit: Benefit) => void
 }
-
 export function StockTable({
   benefits,
   startIndex,
@@ -47,9 +46,9 @@ export function StockTable({
                 <StockTableRow
                   key={benefit.id}
                   benefit={benefit}
-                  onView={onView}
-                  onEdit={onEdit}
                   onDelete={onDelete}
+                  onEdit={onEdit}
+                  onView={onView}
                 />
               ))}
             </tbody>
@@ -60,9 +59,13 @@ export function StockTable({
           <p className="text-foreground/70 text-sm">
             Mostrando {startIndex} a {endIndex} de {total} registros
           </p>
-          <StockPagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
+          <StockPagination
+            currentPage={currentPage}
+            onPageChange={onPageChange}
+            totalPages={totalPages}
+          />
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

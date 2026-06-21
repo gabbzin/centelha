@@ -1,6 +1,7 @@
 export function UserAddIcon() {
   return (
     <svg
+      aria-hidden="true"
       fill="none"
       height="43"
       viewBox="0 0 59 43"
@@ -12,5 +13,5 @@ export function UserAddIcon() {
         fill="#BA1A1A"
       />
     </svg>
-  );
+  )
 }

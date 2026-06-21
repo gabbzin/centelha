@@ -7,5 +7,5 @@ export function Main({ children, hideHeader = false }: { children: React.ReactNo
         {children}
       </div>
     </div>
-  );
+  )
 }

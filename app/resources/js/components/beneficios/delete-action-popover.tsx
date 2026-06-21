@@ -1,4 +1,6 @@
-import { Button } from '@/components/ui/button';
+import { Trash2 } from 'lucide-react'
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
 import {
   Popover,
   PopoverContent,
@@ -6,23 +8,24 @@ import {
   PopoverHeader,
   PopoverTitle,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
-import { Trash2 } from 'lucide-react';
-import { useState } from 'react';
+} from '@/components/ui/popover'
+import { cn } from '@/lib/utils'
 
 interface DeleteActionPopoverProps {
-  onDelete: () => void;
-  ariaLabel?: string;
+  onDelete: () => void
+  ariaLabel?: string
 }
 
-export function DeleteActionPopover({ onDelete, ariaLabel }: DeleteActionPopoverProps) {
-  const [open, setOpen] = useState(false);
+export function DeleteActionPopover({
+  onDelete,
+  ariaLabel,
+}: DeleteActionPopoverProps) {
+  const [open, setOpen] = useState(false)
 
   const handleConfirm = () => {
-    onDelete();
-    setOpen(false);
-  };
+    onDelete()
+    setOpen(false)
+  }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -43,14 +46,24 @@ export function DeleteActionPopover({ onDelete, ariaLabel }: DeleteActionPopover
           </PopoverDescription>
         </PopoverHeader>
         <div className="flex justify-end gap-2">
-          <Button variant="outline" size="sm" className="h-8 text-xs" onClick={() => setOpen(false)}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-8 text-xs"
+            onClick={() => setOpen(false)}
+          >
             Cancelar
           </Button>
-          <Button variant="destructive" size="sm" className="h-8 text-xs" onClick={handleConfirm}>
+          <Button
+            variant="destructive"
+            size="sm"
+            className="h-8 text-xs"
+            onClick={handleConfirm}
+          >
             Excluir
           </Button>
         </div>
       </PopoverContent>
     </Popover>
-  );
+  )
 }

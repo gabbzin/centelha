@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from 'react'
 import {
   Combobox,
   ComboboxChip,
@@ -9,16 +9,17 @@ import {
   ComboboxItem,
   ComboboxList,
   ComboboxValue,
-} from '../ui/combo-box';
+} from '../ui/combo-box'
+
 const tagsNecessidades = [
   'Cesta Básica',
   'Auxílio Gás',
   'Bolsa Família',
   'Auxílio Brasil',
   'Kit Higiene',
-];
+]
 export function ComboboxMulti() {
-  const [value, setValue] = React.useState<string[]>([]);
+  const [value, setValue] = React.useState<string[]>([])
   return (
     <Combobox
       items={tagsNecessidades}
@@ -47,5 +48,5 @@ export function ComboboxMulti() {
         </ComboboxList>
       </ComboboxContent>
     </Combobox>
-  );
+  )
 }

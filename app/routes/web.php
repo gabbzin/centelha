@@ -41,8 +41,13 @@ Route::middleware(['auth'])->group(function () {
     Route::put('beneficios/{benefit}', [BenefitController::class, 'update'])->name('beneficios.update');
     Route::delete('beneficios/{benefit}', [BenefitController::class, 'destroy'])->name('beneficios.destroy');
 
+    Route::get('entregas', [DeliveryController::class, 'index'])->name('entregas');
+    Route::post('entregas', [DeliveryController::class, 'store'])->name('entregas.store');
+    Route::get('entregas/{delivery}', [DeliveryController::class, 'show'])->name('entregas.show');
+
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('family', [FamilyController::class, 'index'])->name('family');
+    Route::get('family/search', [FamilyController::class, 'search'])->name('family.search');
     Route::post('family', [FamilyController::class, 'store'])->name('family.store');
     Route::get('family/register', function () {
         return Inertia::render('family/form/register');

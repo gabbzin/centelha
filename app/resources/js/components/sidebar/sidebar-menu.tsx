@@ -1,7 +1,7 @@
-import { cn } from '@/lib/utils';
-import { Link, usePage } from '@inertiajs/react';
-import { MenuIcon } from 'lucide-react';
-import { Button } from '../ui/button';
+import { Link, usePage } from '@inertiajs/react'
+import { MenuIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Button } from '../ui/button'
 import {
   Sheet,
   SheetContent,
@@ -9,14 +9,15 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '../ui/sheet';
+} from '../ui/sheet'
 import {
   BenefityIcon,
   DashboardIcon,
   DeliveryIcon,
   FamilyIcon,
   ManagementIcon,
-} from './icons';
+} from './icons'
+
 const LINKS = [
   {
     id: 'dashboard',
@@ -48,10 +49,10 @@ const LINKS = [
     icon: ManagementIcon,
     href: '/gestao-sistema',
   },
-];
-const activeColor = '#C5D9FF';
+]
+const activeColor = '#C5D9FF'
 export function SidebarMenu() {
-  const url = usePage().url;
+  const url = usePage().url
   return (
     <Sheet>
       <SheetTrigger
@@ -100,5 +101,5 @@ export function SidebarMenu() {
         </SheetFooter>
       </SheetContent>
     </Sheet>
-  );
+  )
 }

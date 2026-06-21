@@ -32,4 +32,9 @@ class Family extends Model
     {
         return $this->belongsToMany(SpecificNeed::class);
     }
+
+    public function deliveries()
+    {
+        return $this->hasMany(Delivery::class);
+    }
 }

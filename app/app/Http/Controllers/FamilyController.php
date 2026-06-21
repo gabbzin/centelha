@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreFamilyRequest;
 use App\Http\Requests\UpdateFamilyRequest;
 use App\Models\Family;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
@@ -40,6 +41,26 @@ class FamilyController extends Controller
             'id'      => $id,
             'family'  => $family,
         ]);
+    }
+
+    public function search(Request $request)
+    {
+        $q = $request->input('q', '');
+        $cleanCpf = preg_replace('/\D/', '', $q);
+
+        $families = Family::query()
+            ->when($q, function ($query) use ($q, $cleanCpf) {
+                $query->where('responsible_name', 'ilike', "%{$q}%");
+
+                if (strlen($cleanCpf) >= 3) {
+                    $query->orWhere('responsible_cpf', 'like', "%{$cleanCpf}%");
+                }
+            })
+            ->where('is_active', true)
+            ->limit(20)
+            ->get(['id', 'responsible_name', 'responsible_cpf']);
+
+        return response()->json($families);
     }
 
     public function edit(Family $family)

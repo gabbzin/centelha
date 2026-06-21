@@ -1,9 +1,9 @@
-import Heading from '@/components/layout/heading';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils';
-import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react'
+import Heading from '@/components/layout/heading'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
+import { cn } from '@/lib/utils'
+import type { NavItem } from '@/types'
 
 const sidebarNavItems: NavItem[] = [
   {
@@ -21,14 +21,19 @@ const sidebarNavItems: NavItem[] = [
     url: '/settings/appearance',
     icon: null,
   },
-];
-
-export default function SettingsLayout({ children }: { children: React.ReactNode }) {
-  const currentPath = window.location.pathname;
-
+]
+export default function SettingsLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  const currentPath = window.location.pathname
   return (
     <div className="px-4 py-6">
-      <Heading title="Settings" description="Manage your profile and account settings" />
+      <Heading
+        description="Manage your profile and account settings"
+        title="Settings"
+      />
 
       <div className="flex flex-col space-y-8 lg:flex-row lg:space-y-0 lg:space-x-12">
         <aside className="w-full max-w-xl lg:w-48">
@@ -36,12 +41,12 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
             {sidebarNavItems.map((item) => (
               <Button
                 key={item.url}
-                size="sm"
-                variant="ghost"
                 asChild
                 className={cn('w-full justify-start', {
                   'bg-muted': currentPath === item.url,
                 })}
+                size="sm"
+                variant="ghost"
               >
                 <Link href={item.url} prefetch>
                   {item.title}
@@ -58,5 +63,5 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
         </div>
       </div>
     </div>
-  );
+  )
 }

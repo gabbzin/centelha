@@ -1,11 +1,12 @@
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Trash2Icon } from 'lucide-react';
-import { SocialIcon } from 'react-social-icons';
+import { Trash2Icon } from 'lucide-react'
+import { SocialIcon } from 'react-social-icons'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+
 interface SocialInputRowProps {
-  value?: string;
-  placeholder?: string;
-  onDelete?: () => void;
+  value?: string
+  placeholder?: string
+  onDelete?: () => void
 }
 export function SocialInputRow({
   value = '',
@@ -40,5 +41,5 @@ export function SocialInputRow({
         <Trash2Icon className="size-4" />
       </Button>
     </div>
-  );
+  )
 }

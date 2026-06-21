@@ -1,14 +1,14 @@
-import { FamilyIcon } from '@/components/dashboard/icons/family-icon';
-import { HandWithHeartIcon } from '@/components/dashboard/icons/hand-with-heart-icon';
-import { UserAddIcon } from '@/components/dashboard/icons/user-add-icon';
-import { StatsCard } from '@/components/dashboard/stats-card';
+import { FamilyIcon } from '@/components/dashboard/icons/family-icon'
+import { HandWithHeartIcon } from '@/components/dashboard/icons/hand-with-heart-icon'
+import { UserAddIcon } from '@/components/dashboard/icons/user-add-icon'
+import { StatsCard } from '@/components/dashboard/stats-card'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/ui/card'
 import {
   Select,
   SelectContent,
@@ -24,23 +24,23 @@ import SimpleBarChart from '@/components/dashboard/simple-bar-chart';
 import { usePage } from '@inertiajs/react';
 import type { SharedData } from '@/types';
 interface StatsCardData {
-  value: number;
-  percentageChange: number;
+  value: number
+  percentageChange: number
 }
 interface AlertInfo {
-  label: string;
-  rest: number;
-  alertLevel: 'warning' | 'critical';
+  label: string
+  rest: number
+  alertLevel: 'warning' | 'critical'
 }
 interface TopItem {
-  name: string;
-  quantity: number;
-  percentage: number;
+  name: string
+  quantity: number
+  percentage: number
 }
 interface ChartDataItem {
-  name: string;
-  anterior: number;
-  atual: number;
+  name: string
+  anterior: number
+  atual: number
 }
 interface DashboardProps {
   statsCards: {
@@ -169,7 +169,7 @@ export default function Dashboard({
         </section>
       </main>
     </LayoutBase>
-  );
+  )
 }
 const defaultConfigs = {
   widgets: {

@@ -24,5 +24,5 @@ export default function Beneficios({ benefits, previewSettings }: BeneficiosPage
         </main>
       </div>
     </>
-  );
+  )
 }

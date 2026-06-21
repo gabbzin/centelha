@@ -1,15 +1,15 @@
-import { useCallback, useState } from 'react';
-import { BenefitFormModal } from './create-benefit-modal';
-import { ViewBenefitModal } from './view-benefit-modal';
-import { StockFilterBar } from './stock-filter-bar';
-import { StockSectionHeader } from './stock-section-header';
-import { StockTable } from './stock-table';
-import { toaster } from '@/components/toasters/toast-alert';
-import type { Benefit, PaginatedBenefits } from './types';
-import { router } from '@inertiajs/react';
+import { router } from '@inertiajs/react'
+import { useCallback, useState } from 'react'
+import { toaster } from '@/components/toasters/toast-alert'
+import { BenefitFormModal } from './create-benefit-modal'
+import { StockFilterBar } from './stock-filter-bar'
+import { StockSectionHeader } from './stock-section-header'
+import { StockTable } from './stock-table'
+import type { Benefit, PaginatedBenefits } from './types'
+import { ViewBenefitModal } from './view-benefit-modal'
 
 interface StockControlSectionProps {
-  benefits: PaginatedBenefits;
+  benefits: PaginatedBenefits
 }
 
 interface StockControlSectionProps {
@@ -58,37 +58,37 @@ export function StockControlSection({ benefits, texts = {} }: StockControlSectio
   }, [search, category]);
 
   const handleView = useCallback((benefit: Benefit) => {
-    setBenefitToView(benefit);
-    setIsViewOpen(true);
-  }, []);
+    setBenefitToView(benefit)
+    setIsViewOpen(true)
+  }, [])
 
   const handleEdit = useCallback((benefit: Benefit) => {
-    setBenefitToEdit(benefit);
-    setIsFormOpen(true);
-  }, []);
+    setBenefitToEdit(benefit)
+    setIsFormOpen(true)
+  }, [])
 
   const handleDelete = useCallback((benefit: Benefit) => {
     router.delete(`/beneficios/${benefit.id}`, {
       preserveState: true,
       preserveScroll: true,
       onSuccess: () => {
-        toaster.createSuccess('Sucesso', 'Benefício excluído com sucesso!');
+        toaster.createSuccess('Sucesso', 'Benefício excluído com sucesso!')
       },
       onError: () => {
-        toaster.createError('Erro', 'Não foi possível excluir o benefício.');
+        toaster.createError('Erro', 'Não foi possível excluir o benefício.')
       },
-    });
-  }, []);
+    })
+  }, [])
 
   const handleAdd = useCallback(() => {
-    setBenefitToEdit(null);
-    setIsFormOpen(true);
-  }, []);
+    setBenefitToEdit(null)
+    setIsFormOpen(true)
+  }, [])
 
   const handleCloseFormModal = useCallback(() => {
-    setIsFormOpen(false);
-    setBenefitToEdit(null);
-  }, []);
+    setIsFormOpen(false)
+    setBenefitToEdit(null)
+  }, [])
 
   return (
     <section className="space-y-0">
@@ -98,10 +98,7 @@ export function StockControlSection({ benefits, texts = {} }: StockControlSectio
       />
 
       <StockFilterBar
-        search={search}
-        onSearchChange={handleSearchChange}
         category={category}
-        onCategoryChange={handleCategoryChange}
         onAdd={handleAdd}
         searchPlaceholder={t('search_placeholder', 'Buscar por benefícios...')}
         addButtonLabel={t('add_button', 'Adicionar novo benefício')}
@@ -110,30 +107,30 @@ export function StockControlSection({ benefits, texts = {} }: StockControlSectio
       <div className="mt-4">
         <StockTable
           benefits={benefits.data}
-          startIndex={benefits.from ?? 1}
-          endIndex={benefits.to ?? benefits.data.length}
-          total={benefits.total}
           currentPage={benefits.current_page}
-          totalPages={benefits.last_page}
+          endIndex={benefits.to ?? benefits.data.length}
+          onDelete={handleDelete}
+          onEdit={handleEdit}
           onPageChange={handlePageChange}
           onView={handleView}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
+          startIndex={benefits.from ?? 1}
+          total={benefits.total}
+          totalPages={benefits.last_page}
         />
       </div>
 
       <BenefitFormModal
         key={benefitToEdit ? `edit-${benefitToEdit.id}` : 'create'}
-        open={isFormOpen}
-        onOpenChange={handleCloseFormModal}
         benefitToEdit={benefitToEdit}
+        onOpenChange={handleCloseFormModal}
+        open={isFormOpen}
       />
 
       <ViewBenefitModal
         benefit={benefitToView}
-        open={isViewOpen}
         onOpenChange={setIsViewOpen}
+        open={isViewOpen}
       />
     </section>
-  );
+  )
 }

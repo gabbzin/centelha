@@ -1,15 +1,15 @@
-import type { SharedData } from '@/types';
-import { usePage } from '@inertiajs/react';
-import { Logo } from '../logo';
+import { usePage } from '@inertiajs/react'
+import type { SharedData } from '@/types'
+import { Logo } from '../logo'
 export default function AppLogo() {
-  const { communityCenter } = usePage<SharedData>().props;
+  const { communityCenter } = usePage<SharedData>().props
   return (
-    <a className="flex items-center gap-3.5" href="#">
+    <a className="flex items-center gap-3.5" href={route('dashboard')}>
       {/* <AppLogoIcon className="size-5 fill-current text-white dark:text-black" /> */}
       <Logo height={46} width={42} />
       <span className="text-heading sm:w-fit sm:text-xl font-bold tracking-[0.01em]">
         {communityCenter?.name.split(' ')[0]}
       </span>
     </a>
-  );
+  )
 }

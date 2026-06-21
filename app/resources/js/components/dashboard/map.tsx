@@ -1,5 +1,5 @@
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-export function Map() {
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+export function DashboardMap() {
   return (
     <MapContainer
       center={[-15.793, -47.882]}
@@ -19,5 +19,5 @@ export function Map() {
         <Popup>Brasília</Popup>
       </Marker>
     </MapContainer>
-  );
+  )
 }

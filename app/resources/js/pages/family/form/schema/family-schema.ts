@@ -1,6 +1,7 @@
-import { format, parseISO } from 'date-fns';
-import { z } from 'zod';
-import type { Family } from '@/types';
+import { format, parseISO } from 'date-fns'
+import { z } from 'zod'
+import type { Family } from '@/types'
+
 export const familyMemberSchema = z.object({
   name: z
     .string()
@@ -16,7 +17,8 @@ export const familyMemberSchema = z.object({
     })
     .transform((date) => format(date, 'yyyy-MM-dd')),
   relacao_parentesco: z.string().min(1, 'Relação de parentesco é obrigatória'),
-});
+})
+
 export const familySchema = z.object({
   name: z.string().min(1, 'Nome do responsável é obrigatório'),
   cpf: z
@@ -73,7 +75,7 @@ export const defaultValues: FormData = {
 };
 
 function strip(value: string | null | undefined): string {
-  return (value ?? '').replace(/\D/g, '');
+  return (value ?? '').replace(/\D/g, '')
 }
 
 export function familyToFormData(family: Family): FormData {

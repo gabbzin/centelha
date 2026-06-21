@@ -1,19 +1,17 @@
-import { LucideIcon } from 'lucide-react';
-import { FeatureCard } from '../feature-card';
+import type { LucideIcon } from 'lucide-react'
+import { FeatureCard } from '../feature-card'
 
 interface FeaturesSectionProps {
   features: {
-    title: string;
-    description: string;
-    Icon: LucideIcon;
-  }[];
-
-  ref: React.Ref<HTMLDivElement>;
+    title: string
+    description: string
+    Icon: LucideIcon
+  }[]
+  ref: React.Ref<HTMLDivElement>
 }
-
 export function FeaturesSection({ features, ref }: FeaturesSectionProps) {
   return (
-    <section className="bg-surface" ref={ref}>
+    <section ref={ref} className="bg-surface">
       <div className="max-w-lm mx-auto w-full px-6 py-24 lg:px-10">
         <div className="grid gap-6 lg:grid-cols-3">
           {features.map((item) => (
@@ -22,5 +20,5 @@ export function FeaturesSection({ features, ref }: FeaturesSectionProps) {
         </div>
       </div>
     </section>
-  );
+  )
 }

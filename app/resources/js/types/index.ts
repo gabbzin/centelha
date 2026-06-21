@@ -32,7 +32,6 @@ export interface CommunityCenter {
 	created_at: string;
 	updated_at: string;
 }
-
 export interface SocialLink {
 	id: number;
 	community_center_id: number;

@@ -1,22 +1,20 @@
-import { type SharedData } from '@/types';
-import { Head, useForm, usePage } from '@inertiajs/react';
-import { Eye, EyeOff, LoaderCircle, Lock, Mail } from 'lucide-react';
-import { FormEventHandler, useState } from 'react';
-
-import InputError from '@/components/laravel/input-error';
-import TextLink from '@/components/laravel/text-link';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Head, useForm, usePage } from '@inertiajs/react'
+import { Eye, EyeOff, LoaderCircle, Lock, Mail } from 'lucide-react'
+import { type FormEventHandler, useState } from 'react'
+import InputError from '@/components/laravel/input-error'
+import TextLink from '@/components/laravel/text-link'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import type { SharedData } from '@/types'
 
 interface LoginForm {
-  email: string;
-  password: string;
-  remember: boolean;
+  email: string
+  password: string
+  remember: boolean
 }
-
 interface LoginProps {
   status?: string;
   canResetPassword: boolean;
@@ -36,12 +34,11 @@ export default function Login({ status, canResetPassword, previewSettings }: Log
   const [showPassword, setShowPassword] = useState(false);
 
   const submit: FormEventHandler = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     post(route('login'), {
       onFinish: () => reset('password'),
-    });
-  };
-
+    })
+  }
   return (
     <div className="flex min-h-svh items-center justify-center bg-[#f6f8fc] px-6 py-12">
       <Head title={t('submit_button', 'Entrar')} />
@@ -49,7 +46,11 @@ export default function Login({ status, canResetPassword, previewSettings }: Log
         <Card className="border-0 shadow-[0_20px_60px_-40px_rgba(24,49,84,0.55)]">
           <CardContent className="px-10 py-12">
             <div className="flex flex-col items-center gap-5 text-center">
-              <img src="/logo.svg" alt={communityCenter?.name ?? 'Centelha'} className="h-20 w-auto" />
+              <img
+                alt={communityCenter?.name ?? 'Centelha'}
+                className="h-20 w-auto"
+                src="/logo.svg"
+              />
               <div className="space-y-2">
                 <h1 className="text-[22px] font-semibold text-slate-700">{t('welcome_title', 'Bem-vindo ao')} {communityCenter?.name ?? 'Centelha'}</h1>
                 <p className="text-sm text-slate-400">{t('subtitle', 'Acesse sua conta para gerenciar as atividades comunitarias.')}</p>
@@ -64,13 +65,10 @@ export default function Login({ status, canResetPassword, previewSettings }: Log
                 <div className="relative">
                   <Mail className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400" />
                   <Input
-                    id="email"
-                    type="email"
-                    required
-                    autoFocus
-                    tabIndex={1}
                     autoComplete="email"
-                    value={data.email}
+                    autoFocus
+                    className="h-11 rounded-md border-slate-200 bg-white pl-10 text-slate-700 placeholder:text-slate-300"
+                    id="email"
                     onChange={(e) => setData('email', e.target.value)}
                     placeholder={t('email_placeholder', 'nome@exemplo.com.br')}
                     className="h-11 rounded-md border-slate-200 bg-white pl-10 text-slate-700 placeholder:text-slate-300"
@@ -86,9 +84,9 @@ export default function Login({ status, canResetPassword, previewSettings }: Log
                   </Label>
                   {canResetPassword && (
                     <TextLink
-                      href={route('password.request')}
                       className="text-xs font-medium text-slate-400"
-                      tabIndex={5}
+                      href={route('password.request')}
+                      tabIndex="0"
                     >
                       {t('forgot_link', 'Esqueceu sua senha?')}
                     </TextLink>
@@ -97,24 +95,27 @@ export default function Login({ status, canResetPassword, previewSettings }: Log
                 <div className="relative">
                   <Lock className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400" />
                   <Input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    tabIndex={2}
                     autoComplete="current-password"
-                    value={data.password}
+                    className="h-11 rounded-md border-slate-200 bg-white pr-10 pl-10 text-slate-700 placeholder:text-slate-300"
+                    id="password"
                     onChange={(e) => setData('password', e.target.value)}
                     placeholder={t('password_placeholder', 'Sua senha')}
                     className="h-11 rounded-md border-slate-200 bg-white pr-10 pl-10 text-slate-700 placeholder:text-slate-300"
                   />
                   <button
-                    type="button"
-                    onClick={() => setShowPassword((prev) => !prev)}
+                    aria-label={
+                      showPassword ? 'Ocultar senha' : 'Mostrar senha'
+                    }
                     className="absolute top-1/2 right-3 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                    tabIndex={4}
-                    aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    tabIndex="0"
+                    type="button"
                   >
-                    {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                    {showPassword ? (
+                      <EyeOff className="size-4" />
+                    ) : (
+                      <Eye className="size-4" />
+                    )}
                   </button>
                 </div>
                 <InputError message={errors.password} />
@@ -122,11 +123,13 @@ export default function Login({ status, canResetPassword, previewSettings }: Log
 
               <div className="flex items-center gap-3">
                 <Checkbox
+                  checked={data.remember}
                   id="remember"
                   name="remember"
-                  tabIndex={3}
-                  checked={data.remember}
-                  onCheckedChange={(value) => setData('remember', value === true)}
+                  onCheckedChange={(value) =>
+                    setData('remember', value === true)
+                  }
+                  tabIndex="0"
                 />
                 <Label htmlFor="remember" className="text-sm text-slate-400">
                   {t('remember_label', 'Lembrar de mim')}
@@ -134,20 +137,24 @@ export default function Login({ status, canResetPassword, previewSettings }: Log
               </div>
 
               <Button
-                type="submit"
                 className="mt-2 h-12 w-full rounded-md bg-[#3e6fb6] text-white"
-                tabIndex={6}
                 disabled={processing}
+                tabIndex="0"
+                type="submit"
               >
                 {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                 {t('submit_button', 'Entrar')}
               </Button>
             </form>
 
-            {status && <div className="mt-6 text-center text-sm font-medium text-green-600">{status}</div>}
+            {status && (
+              <div className="mt-6 text-center text-sm font-medium text-green-600">
+                {status}
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
     </div>
-  );
+  )
 }

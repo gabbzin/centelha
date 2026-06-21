@@ -1,11 +1,12 @@
-import { forwardRef, type InputHTMLAttributes } from 'react';
-import InputError from '../laravel/input-error';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { cn } from '@/lib/utils';
+import { forwardRef, type InputHTMLAttributes } from 'react'
+import { cn } from '@/lib/utils'
+import InputError from '../laravel/input-error'
+import { Input } from '../ui/input'
+import { Label } from '../ui/label'
+
 interface InputLabelProps extends InputHTMLAttributes<HTMLInputElement> {
-  label: string;
-  error?: string;
+  label: string
+  error?: string
 }
 export const InputLabel = forwardRef<HTMLInputElement, InputLabelProps>(
   (
@@ -42,7 +43,7 @@ export const InputLabel = forwardRef<HTMLInputElement, InputLabelProps>(
         </div>
         <InputError message={error} />
       </div>
-    );
+    )
   },
-);
-InputLabel.displayName = 'InputLabel';
+)
+InputLabel.displayName = 'InputLabel'

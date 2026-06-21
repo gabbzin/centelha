@@ -30,7 +30,7 @@ export default function RegisterFamilyPage() {
 
             {STEPS.map((step, index) => (
               <div
-                key={index}
+                key={step.title}
                 className={`flex items-center gap-3 rounded-lg px-4 py-3 ${index === currentStep ? 'bg-[#094785] font-bold text-white' : 'hover:bg-muted'}`}
               >
                 <step.icon className="size-6" />
@@ -50,5 +50,5 @@ export default function RegisterFamilyPage() {
         </div>
       </div>
     </>
-  );
+  )
 }

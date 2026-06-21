@@ -32,6 +32,8 @@ services:
     depends_on:
       pgsql:
         condition: service_healthy
+      minio:
+        condition: service_healthy
     networks:
       - centelha
 
@@ -71,10 +73,48 @@ services:
     networks:
       - centelha
 
+  minio:
+    image: minio/minio:latest
+    container_name: centelha-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: centelha
+      MINIO_ROOT_PASSWORD: centelha-secret
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - centelha
+
+  minio-init:
+    image: minio/mc:latest
+    container_name: centelha-minio-init
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      MINIO_ROOT_USER: centelha
+      MINIO_ROOT_PASSWORD: centelha-secret
+    entrypoint: >
+      sh -c "
+      /usr/bin/mc alias set local http://minio:9000 $${MINIO_ROOT_USER} $${MINIO_ROOT_PASSWORD} --api s3v4 &&
+      /usr/bin/mc mb local/centelha --ignore-existing &&
+      /usr/bin/mc anonymous set download local/centelha
+      "
+    networks:
+      - centelha
+
 volumes:
   pgsql-data:
     driver: local
   app_public:
+    driver: local
+  minio-data:
     driver: local
 
 networks:

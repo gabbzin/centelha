@@ -1,15 +1,17 @@
-import { AboutSection } from '@/components/landing/sections/about-section';
-import { FeaturesSection } from '@/components/landing/sections/features-section';
-import { FinalCardSection } from '@/components/landing/sections/final-card-section';
-import { HeroSection } from '@/components/landing/sections/hero-section';
-import { StepsSection } from '@/components/landing/sections/steps-section';
-import { Logo } from '@/components/logo';
-import { buttonVariants } from '@/components/ui/button';
-import { type SharedData } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
-import { CalendarClock, HandCoins, HeartHandshake } from 'lucide-react';
-import React, { useRef } from 'react';
-import { SocialIcon } from 'react-social-icons';
+import { Head, Link, usePage } from '@inertiajs/react'
+import { CalendarClock, HandCoins, HeartHandshake } from 'lucide-react'
+import type React from 'react'
+import { useRef } from 'react'
+import { SocialIcon } from 'react-social-icons'
+import { AboutSection } from '@/components/landing/sections/about-section'
+import { FeaturesSection } from '@/components/landing/sections/features-section'
+import { FinalCardSection } from '@/components/landing/sections/final-card-section'
+import { HeroSection } from '@/components/landing/sections/hero-section'
+import { StepsSection } from '@/components/landing/sections/steps-section'
+import { Logo } from '@/components/logo'
+import { buttonVariants } from '@/components/ui/button'
+import type { SharedData } from '@/types'
+
 const steps = [
   {
     step: '1',
@@ -27,7 +29,7 @@ const steps = [
     step: '4',
     title: 'Acompanhe o impacto com dados reais.',
   },
-];
+]
 const features = [
   {
     title: 'Gestao de Eventos Sem Caos',
@@ -47,7 +49,7 @@ const features = [
       'Receba alertas automaticos de familias desassistidas e garanta um atendimento justo e humanizado.',
     Icon: HeartHandshake,
   },
-];
+]
 const footerColumns = [
   {
     title: 'Produto',
@@ -104,7 +106,7 @@ export default function Home({ previewSettings }: { previewSettings?: Record<str
       title: t('footer_legal', 'Legal'),
       links: [t('footer_legal_1', 'Termos de Uso'), t('footer_legal_2', 'Política de Privacidade'), t('footer_legal_3', 'Segurança de Dados')],
     },
-  ];
+  ]
   return (
     <>
       <Head title={communityCenter?.name ?? 'Centelha'} />
@@ -112,7 +114,7 @@ export default function Home({ previewSettings }: { previewSettings?: Record<str
       <main className="bg-background text-foreground min-h-screen scroll-smooth">
         <header className="bg-background sticky top-0 z-50 border-b border-zinc-200 backdrop-blur-lg">
           <div className="max-w-lm mx-auto flex w-full items-center justify-between px-2 py-2 lg:px-10">
-            <Link className="flex items-center gap-3" href="#">
+            <Link className="flex items-center gap-3" href={route('home')}>
               <Logo />
               <p className="text-heading text-xl font-extrabold tracking-tight">
                 {communityCenter?.name ?? 'Centelha'}
@@ -121,13 +123,14 @@ export default function Home({ previewSettings }: { previewSettings?: Record<str
 
             <nav className="hidden items-center gap-8 lg:flex">
               {navItems.map((item) => (
-                <p
+                <button
                   key={item.name}
                   className="hover:text-heading border-heading cursor-pointer text-sm transition duration-200 hover:border-b"
                   onClick={() => scrollTo(item.ref)}
+                  type="button"
                 >
                   {item.name}
-                </p>
+                </button>
               ))}
             </nav>
 
@@ -225,5 +228,5 @@ export default function Home({ previewSettings }: { previewSettings?: Record<str
         </footer>
       </main>
     </>
-  );
+  )
 }

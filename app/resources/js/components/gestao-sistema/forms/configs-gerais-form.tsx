@@ -1,18 +1,23 @@
-import Uploader1 from '@/components/inputs/uploader1';
-import Uploader2 from '@/components/inputs/uploader2';
-import { Card, CardContent } from '@/components/ui/card';
-import { TtIcon } from '@/pages/admin/gestao-sistema/Tt-icon';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Switch } from '@/components/ui/switch';
-import { Textarea } from '@headlessui/react';
-import { BrushIcon, Share2Icon, Plus, WrenchIcon } from 'lucide-react';
-import { Label } from '@/components/ui/label';
-import SettingsPanelCard from '../settings-panel-card';
-import { SocialInputRow } from '../social-input-row';
-import { Controller, useFieldArray, useFormContext, useWatch } from 'react-hook-form';
-import { InputSelect } from '@/components/inputs/input-select';
-import { type FileWithPreview } from '@/hooks/inputs/use-file-upload';
+import { Textarea } from '@headlessui/react'
+import { BrushIcon, Plus, Share2Icon, WrenchIcon } from 'lucide-react'
+import {
+  Controller,
+  useFieldArray,
+  useFormContext,
+  useWatch,
+} from 'react-hook-form'
+import { InputSelect } from '@/components/inputs/input-select'
+import Uploader1 from '@/components/inputs/uploader1'
+import Uploader2 from '@/components/inputs/uploader2'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
+import type { FileWithPreview } from '@/hooks/inputs/use-file-upload'
+import { TtIcon } from '@/pages/admin/gestao-sistema/Tt-icon'
+import SettingsPanelCard from '../settings-panel-card'
+import { SocialInputRow } from '../social-input-row'
 
 // Opções
 const options = [
@@ -28,32 +33,34 @@ const options = [
     label: 'Open Sans',
     value: 'open-sans',
   },
-];
-
+]
 interface ConfigsGeraisFormProps {
-  onLogoChange?: (files: FileWithPreview[]) => void;
-  onFaviconChange?: (files: FileWithPreview[]) => void;
+  onLogoChange?: (files: FileWithPreview[]) => void
+  onFaviconChange?: (files: FileWithPreview[]) => void
 }
 
 // Render
-export function ConfigsGeraisForm({ onLogoChange, onFaviconChange }: ConfigsGeraisFormProps) {
+export function ConfigsGeraisForm({
+  onLogoChange,
+  onFaviconChange,
+}: ConfigsGeraisFormProps) {
   // Form Context
-  const { control, register } = useFormContext();
+  const { control, register } = useFormContext()
 
   // Criando novos fields
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'social_links',
-  });
+  })
 
   // Assistindo os fields
   const socialLinksWatch = useWatch({
     control,
     name: 'social_links',
-  });
+  })
 
   // Classe repetida
-  const classIcons = 'size-5';
+  const classIcons = 'size-5'
   return (
     <>
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
@@ -123,7 +130,7 @@ export function ConfigsGeraisForm({ onLogoChange, onFaviconChange }: ConfigsGera
         >
           <div className="space-y-3">
             {fields.map((field, index) => {
-              const currentValue = socialLinksWatch?.[index]?.value || '';
+              const currentValue = socialLinksWatch?.[index]?.value || ''
               return (
                 <SocialInputRow
                   key={field.id}
@@ -132,7 +139,7 @@ export function ConfigsGeraisForm({ onLogoChange, onFaviconChange }: ConfigsGera
                   value={currentValue}
                   {...register(`social_links.${index}.value`)}
                 />
-              );
+              )
             })}
             <Button
               className="mt-2 inline-flex items-center gap-2"
@@ -191,5 +198,5 @@ export function ConfigsGeraisForm({ onLogoChange, onFaviconChange }: ConfigsGera
         </Card>
       </div>
     </>
-  );
+  )
 }
