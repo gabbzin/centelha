@@ -1,14 +1,41 @@
-export type DeliveryStatus = 'Entregue' | 'Pendente' | 'Cancelado'
+export type DeliveryStatus = 'Entregue'
+
+export interface DeliveryFamily {
+  id: number
+  responsible_name: string
+  responsible_cpf?: string | null
+  address?: {
+    street: string
+    number?: string | null
+    neighborhood: string
+    city: string
+    state: string
+  } | null
+  members?: Array<{ name: string; relationship?: string | null }>
+}
+
+export interface DeliveryBenefit {
+  id: number
+  name: string
+}
+
+export interface DeliveryUser {
+  id: number
+  name: string
+}
 
 export interface Delivery {
+  id: number
   code: string
   date: string
   benefit: string
   quantity: number
-  unitLabel: string
   location: string
   status: DeliveryStatus
   deliveredBy: string
+  notes?: string | null
+  receipt_path?: string | null
+  family?: DeliveryFamily
 }
 
 export interface SelectOption {
@@ -19,8 +46,13 @@ export interface SelectOption {
 export interface BeneficiaryOption {
   value: string
   label: string
-  cpf: string
-  nis: string
+  cpf?: string | null
+}
+
+export interface BenefitOption {
+  id: number
+  name: string
+  stock: number
 }
 
 export interface PaginationState {

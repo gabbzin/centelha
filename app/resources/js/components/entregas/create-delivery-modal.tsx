@@ -9,6 +9,7 @@ import {
   X,
 } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { router, usePage } from '@inertiajs/react'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -27,26 +28,31 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
-import {
-  applyDateMask,
-  BENEFICIARY_OPTIONS,
-  BENEFIT_TYPE_OPTIONS,
-  LOCATION_OPTIONS,
-} from './data'
+import { applyDateMask, parseDate } from './data'
+import type { BeneficiaryOption, BenefitOption } from './types'
 
 interface CreateDeliveryModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  benefits: BenefitOption[]
+  deliveredBy: string
 }
 
 export function CreateDeliveryModal({
   open,
   onOpenChange,
+  benefits,
+  deliveredBy,
 }: CreateDeliveryModalProps) {
+  const { errors: pageErrors } = usePage().props as {
+    errors: Record<string, string>
+  }
+
   const [beneficiarySearch, setBeneficiarySearch] = useState('')
-  const [selectedBeneficiary, setSelectedBeneficiary] = useState<string>('')
+  const [selectedBeneficiaryId, setSelectedBeneficiaryId] = useState('')
+  const [beneficiaries, setBeneficiaries] = useState<BeneficiaryOption[]>([])
   const [showBeneficiaryList, setShowBeneficiaryList] = useState(false)
-  const [benefitType, setBenefitType] = useState('')
+  const [benefitId, setBenefitId] = useState('')
   const [quantity, setQuantity] = useState(1)
   const [deliveryDate, setDeliveryDate] = useState('')
   const [location, setLocation] = useState('')
@@ -54,12 +60,15 @@ export function CreateDeliveryModal({
   const [receiptFile, setReceiptFile] = useState<File | null>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [loadingBeneficiaries, setLoadingBeneficiaries] = useState(false)
   const beneficiaryRef = useRef<HTMLDivElement>(null)
+
   const reset = useCallback(() => {
     setBeneficiarySearch('')
-    setSelectedBeneficiary('')
+    setSelectedBeneficiaryId('')
+    setBeneficiaries([])
     setShowBeneficiaryList(false)
-    setBenefitType('')
+    setBenefitId('')
     setQuantity(1)
     setDeliveryDate('')
     setLocation('')
@@ -68,6 +77,7 @@ export function CreateDeliveryModal({
     setIsDragging(false)
     setErrors({})
   }, [])
+
   const handleOpenChange = useCallback(
     (next: boolean) => {
       if (!next) reset()
@@ -75,6 +85,7 @@ export function CreateDeliveryModal({
     },
     [onOpenChange, reset],
   )
+
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -87,52 +98,107 @@ export function CreateDeliveryModal({
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
-  const filteredBeneficiaries = BENEFICIARY_OPTIONS.filter(
-    (b) =>
-      b.label.toLowerCase().includes(beneficiarySearch.toLowerCase()) ||
-      b.cpf.includes(beneficiarySearch) ||
-      b.nis.includes(beneficiarySearch),
-  )
+
+  useEffect(() => {
+    if (selectedBeneficiaryId || beneficiarySearch.length < 2) {
+      setBeneficiaries([])
+      return
+    }
+
+    setLoadingBeneficiaries(true)
+    const timer = setTimeout(() => {
+      fetch(`/family/search?q=${encodeURIComponent(beneficiarySearch)}`, {
+        headers: { Accept: 'application/json' },
+      })
+        .then((res) => (res.ok ? res.json() : []))
+        .then((data: Array<{ id: number; responsible_name: string; responsible_cpf?: string | null }>) => {
+          setBeneficiaries(
+            data.map((family) => ({
+              value: String(family.id),
+              label: family.responsible_name,
+              cpf: family.responsible_cpf,
+            })),
+          )
+        })
+        .catch(() => setBeneficiaries([]))
+        .finally(() => setLoadingBeneficiaries(false))
+    }, 300)
+
+    return () => clearTimeout(timer)
+  }, [beneficiarySearch, selectedBeneficiaryId])
+
   const selectedBeneficiaryLabel =
-    BENEFICIARY_OPTIONS.find((b) => b.value === selectedBeneficiary)?.label ??
-    ''
+    beneficiaries.find((b) => b.value === selectedBeneficiaryId)?.label ?? ''
+
   const increment = () => setQuantity((q) => Math.min(999, q + 1))
   const decrement = () => setQuantity((q) => Math.max(1, q - 1))
+
   const handleFileChange = (file: File | null) => {
-    if (file && file.size <= 5 * 1024 * 1024) {
-      setReceiptFile(file)
+    if (!file) return
+    if (file.size > 5 * 1024 * 1024) {
+      setErrors((prev) => ({
+        ...prev,
+        receipt: 'Arquivo inválido. Formatos aceitos: PNG, JPG, PDF (máx. 5MB).',
+      }))
+      return
     }
+    setReceiptFile(file)
+    setErrors((prev) => {
+      const next = { ...prev }
+      delete next.receipt
+      return next
+    })
   }
+
   const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault()
     setIsDragging(false)
     const file = e.dataTransfer.files[0]
     handleFileChange(file ?? null)
   }
+
   const validate = (): boolean => {
     const nextErrors: Record<string, string> = {}
-    if (!selectedBeneficiary)
+    if (!selectedBeneficiaryId)
       nextErrors.beneficiary = 'Selecione um beneficiário'
-    if (!benefitType) nextErrors.benefitType = 'Selecione um tipo de benefício'
+    if (!benefitId) nextErrors.benefitType = 'Selecione um tipo de benefício'
     if (!deliveryDate) nextErrors.deliveryDate = 'Informe a data da entrega'
-    if (!location) nextErrors.location = 'Selecione um local de retirada'
+    if (!location) nextErrors.location = 'Informe o local de retirada'
     setErrors(nextErrors)
     return Object.keys(nextErrors).length === 0
   }
+
+  const toISODate = (value: string): string => {
+    const date = parseDate(value)
+    if (!date) return ''
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!validate()) return
-    console.log('Submit delivery:', {
-      beneficiary: selectedBeneficiary,
-      benefitType,
-      quantity,
-      deliveryDate,
-      location,
-      notes,
-      receiptFile,
+
+    const formData = new FormData()
+    formData.append('family_id', selectedBeneficiaryId)
+    formData.append('benefit_id', benefitId)
+    formData.append('quantity', String(quantity))
+    formData.append('delivery_date', toISODate(deliveryDate))
+    formData.append('location', location)
+    if (notes) formData.append('notes', notes)
+    if (receiptFile) formData.append('receipt', receiptFile)
+
+    router.post('/entregas', formData, {
+      forceFormData: true,
+      preserveScroll: true,
+      onSuccess: () => handleOpenChange(false),
     })
-    handleOpenChange(false)
   }
+
+  const mergedErrors = { ...errors, ...pageErrors }
+
   return (
     <Dialog onOpenChange={handleOpenChange} open={open}>
       <DialogContent
@@ -150,7 +216,7 @@ export function CreateDeliveryModal({
 
             <div className="mt-6 space-y-4">
               <FormField
-                error={errors.beneficiary}
+                error={mergedErrors.beneficiary || mergedErrors.family_id}
                 label="Seleção do Beneficiário"
                 required
               >
@@ -159,23 +225,23 @@ export function CreateDeliveryModal({
                   <Input
                     className="pl-9"
                     onChange={(e) => {
-                      setSelectedBeneficiary('')
+                      setSelectedBeneficiaryId('')
                       setBeneficiarySearch(e.target.value)
                       setShowBeneficiaryList(true)
                     }}
                     onFocus={() => setShowBeneficiaryList(true)}
                     placeholder="Buscar por CPF, Nome ou NIS..."
                     value={
-                      selectedBeneficiary
+                      selectedBeneficiaryId
                         ? selectedBeneficiaryLabel
                         : beneficiarySearch
                     }
                   />
-                  {selectedBeneficiary ? (
+                  {selectedBeneficiaryId ? (
                     <button
                       className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2"
                       onClick={() => {
-                        setSelectedBeneficiary('')
+                        setSelectedBeneficiaryId('')
                         setBeneficiarySearch('')
                       }}
                       type="button"
@@ -184,28 +250,34 @@ export function CreateDeliveryModal({
                     </button>
                   ) : null}
 
-                  {showBeneficiaryList && !selectedBeneficiary && (
+                  {showBeneficiaryList && !selectedBeneficiaryId && (
                     <div className="absolute z-50 mt-1 max-h-56 w-full overflow-auto rounded-md border border-border bg-popover p-1 shadow-md">
-                      {filteredBeneficiaries.length === 0 ? (
+                      {loadingBeneficiaries ? (
+                        <p className="text-muted-foreground px-2 py-3 text-center text-sm">
+                          Buscando...
+                        </p>
+                      ) : beneficiaries.length === 0 ? (
                         <p className="text-muted-foreground px-2 py-3 text-center text-sm">
                           Nenhum beneficiário encontrado
                         </p>
                       ) : (
-                        filteredBeneficiaries.map((b) => (
+                        beneficiaries.map((b) => (
                           <button
                             key={b.value}
                             className="hover:bg-accent hover:text-accent-foreground w-full rounded-sm px-2 py-2 text-left text-sm"
                             onClick={() => {
-                              setSelectedBeneficiary(b.value)
+                              setSelectedBeneficiaryId(b.value)
                               setBeneficiarySearch(b.label)
                               setShowBeneficiaryList(false)
                             }}
                             type="button"
                           >
                             <span className="font-medium">{b.label}</span>
-                            <span className="text-muted-foreground block text-xs">
-                              CPF: {b.cpf} · NIS: {b.nis}
-                            </span>
+                            {b.cpf ? (
+                              <span className="text-muted-foreground block text-xs">
+                                CPF: {b.cpf}
+                              </span>
+                            ) : null}
                           </button>
                         ))
                       )}
@@ -216,18 +288,21 @@ export function CreateDeliveryModal({
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <FormField
-                  error={errors.benefitType}
+                  error={mergedErrors.benefitType || mergedErrors.benefit_id}
                   label="Tipo de Benefício"
                   required
                 >
-                  <Select onValueChange={setBenefitType} value={benefitType}>
+                  <Select onValueChange={setBenefitId} value={benefitId}>
                     <SelectTrigger className="border-border w-full border">
                       <SelectValue placeholder="Selecione um tipo..." />
                     </SelectTrigger>
                     <SelectContent>
-                      {BENEFIT_TYPE_OPTIONS.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
+                      {benefits.map((option) => (
+                        <SelectItem
+                          key={option.id}
+                          value={String(option.id)}
+                        >
+                          {option.name} (estoque: {option.stock})
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -263,7 +338,7 @@ export function CreateDeliveryModal({
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <FormField
-                  error={errors.deliveryDate}
+                  error={mergedErrors.deliveryDate}
                   label="Data da Entrega"
                   required
                 >
@@ -281,29 +356,22 @@ export function CreateDeliveryModal({
                 </FormField>
 
                 <FormField
-                  error={errors.location}
+                  error={mergedErrors.location}
                   label="Local de Retirada"
                   required
                 >
-                  <Select onValueChange={setLocation} value={location}>
-                    <SelectTrigger className="border-border w-full border">
-                      <SelectValue placeholder="Selecione um local..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {LOCATION_OPTIONS.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Input
+                    onChange={(e) => setLocation(e.target.value)}
+                    placeholder="Informe o local de retirada"
+                    value={location}
+                  />
                 </FormField>
               </div>
 
               <FormField label="Responsável pela Entrega (preenchido automaticamente)">
                 <div className="border-input bg-muted/40 text-foreground/70 flex h-9 items-center gap-2 rounded-md border px-2.5 text-sm">
                   <User className="text-foreground/60 size-4" />
-                  <span>João Silva (Assistente Social)</span>
+                  <span>{deliveredBy}</span>
                 </div>
               </FormField>
 
@@ -347,6 +415,7 @@ export function CreateDeliveryModal({
                   <input
                     accept="image/png,image/jpeg,application/pdf"
                     className="sr-only"
+                    name="receipt"
                     onChange={(e) =>
                       handleFileChange(e.target.files?.[0] ?? null)
                     }
@@ -370,6 +439,11 @@ export function CreateDeliveryModal({
                       : 'PNG, JPG ou PDF (Máx. 5MB)'}
                   </p>
                 </label>
+                {mergedErrors.receipt ? (
+                  <p className="text-destructive mt-1 text-xs">
+                    {mergedErrors.receipt}
+                  </p>
+                ) : null}
               </div>
             </div>
           </div>
