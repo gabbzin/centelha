@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Delivery extends Model
 {
@@ -15,6 +16,8 @@ class Delivery extends Model
         'delivery_date' => 'date',
         'quantity' => 'integer',
     ];
+
+    protected $appends = ['receipt_url'];
 
     public function family()
     {
@@ -34,5 +37,14 @@ class Delivery extends Model
     public function generateCode(): string
     {
         return 'ENT-' . str_pad((string) $this->id, 4, '0', STR_PAD_LEFT);
+    }
+
+    public function getReceiptUrlAttribute(): ?string
+    {
+        if (!$this->receipt_path) {
+            return null;
+        }
+
+        return Storage::disk('minio')->url($this->receipt_path);
     }
 }

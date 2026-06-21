@@ -8,6 +8,7 @@ use App\Models\Family;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class DeliveryTest extends TestCase
@@ -95,6 +96,8 @@ class DeliveryTest extends TestCase
 
     public function test_delivery_accepts_valid_receipt_file()
     {
+        Storage::fake('minio');
+
         $user = User::factory()->create();
         $family = Family::factory()->create();
         $benefit = Benefit::factory()->create(['stock' => 5]);
@@ -103,16 +106,19 @@ class DeliveryTest extends TestCase
             ->actingAs($user)
             ->post('/entregas', [
                 '_token' => 'test-token',
-            'family_id' => $family->id,
-            'benefit_id' => $benefit->id,
-            'quantity' => 1,
-            'delivery_date' => now()->format('Y-m-d'),
-            'location' => 'Centro Comunitário A',
-            'receipt' => UploadedFile::fake()->create('comprovante.jpg', 100, 'image/jpeg'),
-        ]);
+                'family_id' => $family->id,
+                'benefit_id' => $benefit->id,
+                'quantity' => 1,
+                'delivery_date' => now()->format('Y-m-d'),
+                'location' => 'Centro Comunitário A',
+                'receipt' => UploadedFile::fake()->create('comprovante.jpg', 100, 'image/jpeg'),
+            ]);
 
         $response->assertRedirect('/entregas');
         $this->assertDatabaseCount('deliveries', 1);
+
+        $delivery = Delivery::first();
+        Storage::disk('minio')->assertExists($delivery->receipt_path);
     }
 
     public function test_delivery_rejects_invalid_receipt_file()

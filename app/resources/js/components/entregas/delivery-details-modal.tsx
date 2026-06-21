@@ -192,14 +192,14 @@ export function DeliveryDetailsModal({
                 </div>
               ) : null}
 
-              {delivery.receipt_path ? (
+              {delivery.receipt_url ? (
                 <div className="rounded-xl border p-4">
                   <h3 className="text-sm font-semibold uppercase tracking-wide">
                     Comprovante Anexado
                   </h3>
                   <a
                     className="text-primary mt-2 inline-flex items-center gap-1.5 text-sm font-medium hover:underline"
-                    href={`/storage/${delivery.receipt_path}`}
+                    href={delivery.receipt_url}
                     rel="noreferrer"
                     target="_blank"
                   >

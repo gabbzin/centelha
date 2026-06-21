@@ -35,6 +35,7 @@ export interface Delivery {
   deliveredBy: string
   notes?: string | null
   receipt_path?: string | null
+  receipt_url?: string | null
   family?: DeliveryFamily
 }
 
