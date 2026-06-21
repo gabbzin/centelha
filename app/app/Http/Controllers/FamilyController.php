@@ -88,6 +88,7 @@ class FamilyController extends Controller
                 'receives_government_aid'    => ($data['recebe_auxilio'] ?? 'nao') === 'sim',
                 'government_aid_description' => $data['auxilios_recebidos'] ?? null,
                 'housing_condition'          => $data['moradia'] ?? null,
+                'general_observations'       => $data['general_observations'] ?? null,
             ]);
 
             $family->address()->create([
@@ -128,6 +129,7 @@ class FamilyController extends Controller
                 'receives_government_aid'    => ($data['recebe_auxilio'] ?? 'nao') === 'sim',
                 'government_aid_description' => $data['auxilios_recebidos'] ?? null,
                 'housing_condition'          => $data['moradia'] ?? null,
+                'general_observations'       => $data['general_observations'] ?? null,
             ]);
 
             $family->address()->updateOrCreate(

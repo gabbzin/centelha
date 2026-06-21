@@ -20,39 +20,43 @@ import type { Family, PaginatedData, SharedData } from '@/types'
 import { FamilyCard } from './components/family-card'
 
 interface FamilyProps {
-  families: PaginatedData<Family>
+  families: PaginatedData<Family>;
+  previewSettings?: Record<string, unknown>;
+  hideHeader?: boolean;
 }
-
-export default function FamilyPage({ families }: FamilyProps) {
-  const { communityCenter } = usePage<SharedData>().props
-  const [onlyLastName, setOnlyLastName] = useState(false)
+export default function Family({ families, previewSettings, hideHeader }: FamilyProps) {
+  const { communityCenter, pageSettings: sharedSettings } = usePage<SharedData>().props;
+  const pageSettings = previewSettings ?? sharedSettings;
+  const texts = (pageSettings?.texts as Record<string, string>) ?? {};
+  const t = (key: string, fallback: string) => texts[key] ?? fallback;
+  const [onlyLastName, setOnlyLastName] = useState(false);
   const [search, setSearch] = useState(
     () => new URL(window.location.href).searchParams.get('search') || '',
   )
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.get('/family', { search }, { preserveState: true, replace: true })
-    }, 400)
-    return () => clearTimeout(timer)
-  }, [search])
+      router.get('/family', { search }, { preserveState: true, replace: true });
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [search]);
 
   return (
     <>
-      <Head title="Módulo Familia" />
+      <Head title={t('page_title', 'Módulo Familia')} />
 
       <Main>
         <div className="flex items-center justify-between gap-4">
           <Heading
-            description={`Gerencie e acompanhe o cadastro das famílias atendidas pela rede ${communityCenter?.name}`}
-            title="Gestão de Familias"
+            description={`${t('page_description', 'Gerencie e acompanhe o cadastro das famílias atendidas pela rede')} ${communityCenter?.name}`}
+            title={t('page_title', 'Gestão de Familias')}
           />
           <Button
             className={'uppercase'}
             onClick={() => router.visit('/family/register')}
             variant={'primary'}
           >
-            Nova Família +
+            {t('new_button', 'Nova Família +')}
           </Button>
         </div>
 
@@ -61,7 +65,7 @@ export default function FamilyPage({ families }: FamilyProps) {
             <InputGroup className="bg-muted">
               <InputGroupInput
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Buscar família..."
+                placeholder={t('search_placeholder', 'Buscar família...')}
                 value={search}
               />
               <InputGroupAddon>
@@ -89,10 +93,9 @@ export default function FamilyPage({ families }: FamilyProps) {
             const getSobrenome = (name: string) => {
               const parts = name.trim().split(' ')
               return parts.length > 1
-                ? `${parts[parts.length - 2]} ${parts[parts.length - 1]}`
-                : name
-            }
-            // Se withoutSobrenome for true, pega o sobrenome, caso contrário, pega o nome completo
+                ? parts[parts.length - 2] + ' ' + parts[parts.length - 1]
+                : name;
+            };
             const sobrenome = onlyLastName
               ? getSobrenome(family.responsible_name)
               : family.responsible_name
@@ -110,16 +113,15 @@ export default function FamilyPage({ families }: FamilyProps) {
           })}
         </div>
 
-        {families.data.length > 0 && (
+        {families.data.length > 0 ? (
           <PaginationConsul
             links={families.links}
             next_page_url={families.next_page_url}
             prev_page_url={families.prev_page_url}
           />
+        ) : (
+          <div>{t('empty_state', 'Nenhuma família encontrada.')}</div>
         )}
-
-        {/* Editar a parte de não encontrado */}
-        <div>Não encontrado</div>
       </Main>
     </>
   )

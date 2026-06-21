@@ -144,6 +144,23 @@ export default function FamilyInfoPage({
 
               <Separator className={'my-1'} />
 
+              {family.general_observations && (
+                <>
+                  <Separator className={'my-1'} />
+                  <section>
+                    <HeadingCard
+                      icon={<ArchiveIcon className="size-4" />}
+                      title="Observações"
+                    />
+                    <p className="text-heading text-base">
+                      {family.general_observations}
+                    </p>
+                  </section>
+                </>
+              )}
+
+              <Separator className={'my-1'} />
+
               <section>
                 <HeadingCard
                   icon={<MapIcon className="size-4" />}

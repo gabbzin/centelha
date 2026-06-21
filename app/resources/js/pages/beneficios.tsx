@@ -1,20 +1,26 @@
-import { Head } from '@inertiajs/react'
-import { StockControlSection } from '@/components/beneficios/stock-control-section'
-import type { PaginatedBenefits } from '@/components/beneficios/types'
-import { Header } from '@/components/layout/header'
+import { StockControlSection } from '@/components/beneficios/stock-control-section';
+import { Header } from '@/components/layout/header';
+import { Head, usePage } from '@inertiajs/react';
+import type { PaginatedBenefits } from '@/components/beneficios/types';
+import type { SharedData } from '@/types';
 
 interface BeneficiosPageProps {
-  benefits: PaginatedBenefits
+  benefits: PaginatedBenefits;
+  previewSettings?: Record<string, unknown>;
 }
 
-export default function Beneficios({ benefits }: BeneficiosPageProps) {
+export default function Beneficios({ benefits, previewSettings }: BeneficiosPageProps) {
+  const { pageSettings: sharedSettings } = usePage<SharedData>().props;
+  const pageSettings = previewSettings ?? sharedSettings;
+  const texts = (pageSettings?.texts as Record<string, string>) ?? {};
+
   return (
     <>
-      <Head title="Benefícios" />
+      <Head title={texts.page_title ?? 'Benefícios'} />
       <div className="bg-surface min-h-screen">
         <Header />
         <main className="max-w-lm mx-auto w-full px-8 pt-8 pb-12">
-          <StockControlSection benefits={benefits} />
+          <StockControlSection benefits={benefits} texts={texts} />
         </main>
       </div>
     </>

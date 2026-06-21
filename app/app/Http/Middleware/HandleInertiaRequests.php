@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\CommunityCenter;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -39,6 +40,8 @@ class HandleInertiaRequests extends Middleware
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
+        $center = Cache::remember('community_center', 300, fn () => CommunityCenter::with('socialLinks')->first());
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -46,12 +49,54 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'communityCenter' => CommunityCenter::with('socialLinks')->first() ?? null,
+            'communityCenter' => $center,
+            'pageSettings' => $this->resolvePageSettings($request, $center),
 
             'flash' => [
                 'success' => $request->session()->get('success'),
                 'error'   => $request->session()->get('error'),
             ],
         ];
+    }
+
+    private function resolvePageKey(Request $request): ?string
+    {
+        $route = $request->route();
+        if (! $route) {
+            return null;
+        }
+
+        $name = $route->getName();
+
+        return match ($name) {
+            'dashboard' => 'dashboard',
+            'home' => 'home',
+            'login' => 'login',
+            'family' => 'familia',
+            'family.register' => 'familia',
+            'family.edit' => 'familia',
+            'beneficios' => 'beneficios',
+            default => null,
+        };
+    }
+
+    private function resolvePageSettings(Request $request, ?CommunityCenter $center): ?array
+    {
+        $pageKey = $this->resolvePageKey($request);
+
+        if (! $pageKey) {
+            return null;
+        }
+
+        $path = config_path("pages/{$pageKey}.php");
+
+        if (! file_exists($path)) {
+            return null;
+        }
+
+        $defaults = require $path;
+        $saved = $center?->settings[$pageKey] ?? [];
+
+        return array_replace_recursive($defaults, $saved);
     }
 }

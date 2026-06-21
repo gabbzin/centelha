@@ -12,53 +12,50 @@ interface StockControlSectionProps {
   benefits: PaginatedBenefits
 }
 
-export function StockControlSection({ benefits }: StockControlSectionProps) {
-  const [isFormOpen, setIsFormOpen] = useState(false)
-  const [benefitToEdit, setBenefitToEdit] = useState<Benefit | null>(null)
+interface StockControlSectionProps {
+  benefits?: PaginatedBenefits;
+  texts?: Record<string, string>;
+}
 
-  const [isViewOpen, setIsViewOpen] = useState(false)
-  const [benefitToView, setBenefitToView] = useState<Benefit | null>(null)
+export function StockControlSection({ benefits, texts = {} }: StockControlSectionProps) {
+  const t = (key: string, fallback: string) => texts[key] ?? fallback;
+  const [search, setSearch] = useState('');
+  const [category, setCategory] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
-  const searchParams = new URLSearchParams(window.location.search)
-  const [search, setSearch] = useState(searchParams.get('search') ?? '')
-  const [category, setCategory] = useState(
-    searchParams.get('category') ?? 'all',
-  )
+  const [isViewOpen, setIsViewOpen] = useState(false);
+  const [benefitToView, setBenefitToView] = useState<Benefit | null>(null);
 
-  const handleSearchChange = useCallback(
-    (value: string) => {
-      setSearch(value)
-      router.get(
-        '/beneficios',
-        { search: value, category, page: 1 },
-        { preserveState: true, preserveScroll: true, replace: true },
-      )
-    },
-    [category],
-  )
+  const searchParams = new URLSearchParams(window.location.search);
+  const [search, setSearch] = useState(searchParams.get('search') ?? '');
+  const [category, setCategory] = useState(searchParams.get('category') ?? 'all');
 
-  const handleCategoryChange = useCallback(
-    (value: string) => {
-      setCategory(value)
-      router.get(
-        '/beneficios',
-        { search, category: value, page: 1 },
-        { preserveState: true, preserveScroll: true, replace: true },
-      )
-    },
-    [search],
-  )
+  const handleSearchChange = useCallback((value: string) => {
+    setSearch(value);
+    router.get(
+      '/beneficios',
+      { search: value, category, page: 1 },
+      { preserveState: true, preserveScroll: true, replace: true },
+    );
+  }, [category]);
 
-  const handlePageChange = useCallback(
-    (page: number) => {
-      router.get(
-        '/beneficios',
-        { search, category, page },
-        { preserveState: true, preserveScroll: true, replace: true },
-      )
-    },
-    [search, category],
-  )
+  const handleCategoryChange = useCallback((value: string) => {
+    setCategory(value);
+    router.get(
+      '/beneficios',
+      { search, category: value, page: 1 },
+      { preserveState: true, preserveScroll: true, replace: true },
+    );
+  }, [search]);
+
+  const handlePageChange = useCallback((page: number) => {
+    router.get(
+      '/beneficios',
+      { search, category, page },
+      { preserveState: true, preserveScroll: true, replace: true },
+    );
+  }, [search, category]);
 
   const handleView = useCallback((benefit: Benefit) => {
     setBenefitToView(benefit)
@@ -96,16 +93,15 @@ export function StockControlSection({ benefits }: StockControlSectionProps) {
   return (
     <section className="space-y-0">
       <StockSectionHeader
-        subtitle="Gerencie, edite e acompanhe a disponibilidade dos benefícios do centro."
-        title="Controle de estoque"
+        title={t('section_title', 'Controle de estoque')}
+        subtitle={t('section_subtitle', 'Gerencie, edite e acompanhe a disponibilidade dos benefícios do centro.')}
       />
 
       <StockFilterBar
         category={category}
         onAdd={handleAdd}
-        onCategoryChange={handleCategoryChange}
-        onSearchChange={handleSearchChange}
-        search={search}
+        searchPlaceholder={t('search_placeholder', 'Buscar por benefícios...')}
+        addButtonLabel={t('add_button', 'Adicionar novo benefício')}
       />
 
       <div className="mt-4">

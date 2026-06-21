@@ -11,7 +11,6 @@ export const familyMemberSchema = z.object({
     .string()
     .transform((v) => v.replace(/\D/g, ''))
     .pipe(z.string().length(11, 'CPF inválido')),
-  // Zod agora aceita o objeto Date e converte pra string pro Backend!
   data_nascimento: z
     .date({
       error: 'Data de nascimento é obrigatória',
@@ -51,10 +50,9 @@ export const familySchema = z.object({
   renda_familiar: z.union([z.string(), z.number()]).optional(),
   recebe_auxilio: z.enum(['sim', 'nao']).optional(),
   auxilios_recebidos: z.string().optional(),
-})
-
-export type FormData = z.infer<typeof familySchema>
-
+  general_observations: z.string().optional(),
+});
+export type FormData = z.infer<typeof familySchema>;
 export const defaultValues: FormData = {
   name: '',
   cpf: '',
@@ -73,7 +71,8 @@ export const defaultValues: FormData = {
   renda_familiar: '',
   recebe_auxilio: undefined,
   auxilios_recebidos: '',
-}
+  general_observations: '',
+};
 
 function strip(value: string | null | undefined): string {
   return (value ?? '').replace(/\D/g, '')
@@ -107,5 +106,6 @@ export function familyToFormData(family: Family): FormData {
     renda_familiar: family.total_income ? family.total_income / 100 : '',
     recebe_auxilio: family.receives_government_aid ? 'sim' : 'nao',
     auxilios_recebidos: family.government_aid_description ?? '',
-  }
+    general_observations: family.general_observations ?? '',
+  };
 }
