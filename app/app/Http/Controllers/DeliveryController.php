@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreDeliveryRequest;
 use App\Models\Benefit;
+use App\Models\CommunityCenter;
 use App\Models\Delivery;
 use App\Models\StockMovement;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -128,6 +130,68 @@ class DeliveryController extends Controller
         $delivery->load(['family.address', 'family.members', 'benefit', 'deliveredBy']);
 
         return response()->json($delivery);
+    }
+
+    public function pdf(Delivery $delivery)
+    {
+        $delivery->load(['family.address', 'family.members', 'benefit', 'deliveredBy']);
+
+        [$communityCenter, $primaryColor, $logoPath] = $this->getPdfTheme();
+
+        $pdf = Pdf::loadView('deliveries.pdf.show', compact('delivery', 'communityCenter', 'primaryColor', 'logoPath'));
+
+        return $pdf->download("comprovante-{$delivery->code}.pdf");
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $type = $request->input('type', 'current_month');
+
+        if ($type === 'current_month') {
+            $startDate = now()->startOfMonth();
+            $endDate = now()->endOfMonth();
+        } else {
+            $startDate = Carbon::parse($this->parseDate($request->input('startDate')) ?? now()->startOfMonth());
+            $endDate = Carbon::parse($this->parseDate($request->input('endDate')) ?? now()->endOfMonth());
+        }
+
+        $deliveries = Delivery::with(['benefit', 'deliveredBy'])
+            ->whereBetween('delivery_date', [$startDate->copy()->startOfDay(), $endDate->copy()->endOfDay()])
+            ->orderBy('delivery_date', 'desc')
+            ->get();
+
+        [$communityCenter, $primaryColor, $logoPath] = $this->getPdfTheme();
+
+        $pdf = Pdf::loadView('deliveries.pdf.list', compact(
+            'deliveries',
+            'startDate',
+            'endDate',
+            'communityCenter',
+            'primaryColor',
+            'logoPath'
+        ));
+
+        $periodLabel = $startDate->format('d-m-Y') . '_a_' . $endDate->format('d-m-Y');
+
+        return $pdf->download("relatorio-entregas-{$periodLabel}.pdf");
+    }
+
+    private function getPdfTheme(): array
+    {
+        $communityCenter = CommunityCenter::first();
+        $colors = $communityCenter?->colors ?? [];
+        $primaryColor = $colors['primary'] ?? '#ff002e';
+
+        $logoPath = null;
+        if ($communityCenter?->logo_path) {
+            $logo = ltrim($communityCenter->logo_path, './');
+            $fullPath = public_path($logo);
+            if (file_exists($fullPath)) {
+                $logoPath = $fullPath;
+            }
+        }
+
+        return [$communityCenter, $primaryColor, $logoPath];
     }
 
     private function ensureNoDuplicateDelivery(int $familyId, int $benefitId, string $deliveryDate): void

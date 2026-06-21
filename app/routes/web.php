@@ -39,7 +39,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('entregas', [DeliveryController::class, 'index'])->name('entregas');
     Route::post('entregas', [DeliveryController::class, 'store'])->name('entregas.store');
+    Route::get('entregas/export/pdf', [DeliveryController::class, 'exportPdf'])->name('entregas.exportPdf');
     Route::get('entregas/{delivery}', [DeliveryController::class, 'show'])->name('entregas.show');
+    Route::get('entregas/{delivery}/pdf', [DeliveryController::class, 'pdf'])->name('entregas.pdf');
 
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('family', [FamilyController::class, 'index'])->name('family');

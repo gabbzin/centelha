@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Benefit;
+use App\Models\Delivery;
 use App\Models\Family;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -165,5 +166,34 @@ class DeliveryTest extends TestCase
 
         $response->assertSessionHasErrors(['benefit_id' => 'Esta família já recebeu este benefício no período vigente.']);
         $this->assertDatabaseCount('deliveries', 1);
+    }
+
+    public function test_authenticated_user_can_download_individual_pdf()
+    {
+        $user = User::factory()->create();
+        $delivery = Delivery::factory()->create([
+            'delivered_by' => $user->id,
+            'status' => 'Entregue',
+        ]);
+
+        $response = $this->actingAs($user)->get("/entregas/{$delivery->id}/pdf");
+
+        $response->assertOk();
+        $response->assertHeader('content-type', 'application/pdf');
+    }
+
+    public function test_authenticated_user_can_download_list_pdf()
+    {
+        $user = User::factory()->create();
+        Delivery::factory()->count(3)->create([
+            'delivered_by' => $user->id,
+            'status' => 'Entregue',
+            'delivery_date' => now(),
+        ]);
+
+        $response = $this->actingAs($user)->get('/entregas/export/pdf?type=current_month');
+
+        $response->assertOk();
+        $response->assertHeader('content-type', 'application/pdf');
     }
 }
