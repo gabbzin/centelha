@@ -5,12 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBenefitRequest;
 use App\Http\Requests\UpdateBenefitRequest;
 use App\Models\Benefit;
+use App\Services\StorageService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class BenefitController extends Controller
 {
+    private const IMAGE_DISK = 'minio';
+
+    private const IMAGE_DIRECTORY = 'benefits/images';
+
+    public function __construct(private readonly StorageService $storage) {}
+
     public function index(Request $request)
     {
         $query = Benefit::with('creator');
@@ -19,8 +25,8 @@ class BenefitController extends Controller
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'ilike', "%{$search}%")
-                  ->orWhere('code', 'ilike', "%{$search}%")
-                  ->orWhere('category', 'ilike', "%{$search}%");
+                    ->orWhere('code', 'ilike', "%{$search}%")
+                    ->orWhere('category', 'ilike', "%{$search}%");
             });
         }
 
@@ -41,7 +47,7 @@ class BenefitController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('benefits', 'public');
+            $imagePath = $this->storage->upload(self::IMAGE_DISK, self::IMAGE_DIRECTORY, $request->file('image'));
         }
 
         $benefit = Benefit::create([
@@ -68,17 +74,17 @@ class BenefitController extends Controller
         $imagePath = $benefit->image_path;
 
         if ($request->has('remove_image')) {
-            if ($imagePath) {
-                Storage::disk('public')->delete($imagePath);
-            }
+            $this->storage->delete(self::IMAGE_DISK, $imagePath);
             $imagePath = null;
         }
 
         if ($request->hasFile('image')) {
-            if ($imagePath) {
-                Storage::disk('public')->delete($imagePath);
-            }
-            $imagePath = $request->file('image')->store('benefits', 'public');
+            $imagePath = $this->storage->replace(
+                self::IMAGE_DISK,
+                self::IMAGE_DIRECTORY,
+                $request->file('image'),
+                $imagePath,
+            );
         }
 
         $updateData = [
@@ -102,9 +108,7 @@ class BenefitController extends Controller
 
     public function destroy(Benefit $benefit)
     {
-        if ($benefit->image_path) {
-            Storage::disk('public')->delete($benefit->image_path);
-        }
+        $this->storage->delete(self::IMAGE_DISK, $benefit->image_path);
 
         $benefit->delete();
 

@@ -1,13 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use App\Http\Controllers\FamilyController;
 use App\Http\Controllers\Admin\AppearanceController;
 use App\Http\Controllers\Admin\ConfiguracoesGeraisController;
+use App\Http\Controllers\Admin\PageCustomizationController;
 use App\Http\Controllers\BenefitController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Admin\PageCustomizationController;
+use App\Http\Controllers\DeliveryController;
+use App\Http\Controllers\FamilyController;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('home');
@@ -61,7 +62,5 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('family/{family}/activate', [FamilyController::class, 'activate'])->name('family.activate');
 });
 
-
-
-require __DIR__ . '/settings.php';
-require __DIR__ . '/auth.php';
+require __DIR__.'/settings.php';
+require __DIR__.'/auth.php';

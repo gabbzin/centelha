@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\StorageService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,6 +16,8 @@ class Benefit extends Model
         'stock' => 'integer',
         'validity' => 'date',
     ];
+
+    protected $appends = ['image_url'];
 
     public function creator()
     {
@@ -33,6 +36,15 @@ class Benefit extends Model
 
     public function generateCode(): string
     {
-        return 'BNF-' . str_pad((string) $this->id, 3, '0', STR_PAD_LEFT);
+        return 'BNF-'.str_pad((string) $this->id, 3, '0', STR_PAD_LEFT);
+    }
+
+    public function getImageUrlAttribute(): ?string
+    {
+        if (! $this->image_path) {
+            return null;
+        }
+
+        return app(StorageService::class)->url('minio', $this->image_path);
     }
 }

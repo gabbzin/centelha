@@ -16,6 +16,7 @@ export interface Benefit {
   validity: string | null
   notes: string | null
   image_path: string | null
+  image_url: string | null
   created_by: number | null
   creator: { id: number; name: string } | null
   created_at: string

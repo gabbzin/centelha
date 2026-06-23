@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { LayoutBase } from '@/layouts/layout';
-import { Map } from '@/components/dashboard/map';
+import { DashboardMap as Map } from '@/components/dashboard/map';
 import { AlertCard } from '@/components/dashboard/cards/alert-card';
 import { TopItensCard } from '@/components/dashboard/cards/top-itens-card';
 import SimpleBarChart from '@/components/dashboard/simple-bar-chart';

@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Services\StorageService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class Delivery extends Model
 {
@@ -36,15 +36,15 @@ class Delivery extends Model
 
     public function generateCode(): string
     {
-        return 'ENT-' . str_pad((string) $this->id, 4, '0', STR_PAD_LEFT);
+        return 'ENT-'.str_pad((string) $this->id, 4, '0', STR_PAD_LEFT);
     }
 
     public function getReceiptUrlAttribute(): ?string
     {
-        if (!$this->receipt_path) {
+        if (! $this->receipt_path) {
             return null;
         }
 
-        return Storage::disk('minio')->url($this->receipt_path);
+        return app(StorageService::class)->url('minio', $this->receipt_path);
     }
 }

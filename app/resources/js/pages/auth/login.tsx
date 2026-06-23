@@ -16,22 +16,29 @@ interface LoginForm {
   remember: boolean
 }
 interface LoginProps {
-  status?: string;
-  canResetPassword: boolean;
-  previewSettings?: Record<string, unknown>;
+  status?: string
+  canResetPassword: boolean
+  previewSettings?: Record<string, unknown>
 }
 
-export default function Login({ status, canResetPassword, previewSettings }: LoginProps) {
-  const { communityCenter, pageSettings: sharedSettings } = usePage<SharedData>().props;
-  const pageSettings = previewSettings ?? sharedSettings;
-  const texts = (pageSettings?.texts as Record<string, string>) ?? {};
-  const t = (key: string, fallback: string) => texts[key] ?? fallback;
-  const { data, setData, post, processing, errors, reset } = useForm<LoginForm>({
-    email: '',
-    password: '',
-    remember: false,
-  });
-  const [showPassword, setShowPassword] = useState(false);
+export default function Login({
+  status,
+  canResetPassword,
+  previewSettings,
+}: LoginProps) {
+  const { communityCenter, pageSettings: sharedSettings } =
+    usePage<SharedData>().props
+  const pageSettings = previewSettings ?? sharedSettings
+  const texts = (pageSettings?.texts as Record<string, string>) ?? {}
+  const t = (key: string, fallback: string) => texts[key] ?? fallback
+  const { data, setData, post, processing, errors, reset } = useForm<LoginForm>(
+    {
+      email: '',
+      password: '',
+      remember: false,
+    },
+  )
+  const [showPassword, setShowPassword] = useState(false)
 
   const submit: FormEventHandler = (e) => {
     e.preventDefault()
@@ -52,14 +59,25 @@ export default function Login({ status, canResetPassword, previewSettings }: Log
                 src="/logo.svg"
               />
               <div className="space-y-2">
-                <h1 className="text-[22px] font-semibold text-slate-700">{t('welcome_title', 'Bem-vindo ao')} {communityCenter?.name ?? 'Centelha'}</h1>
-                <p className="text-sm text-slate-400">{t('subtitle', 'Acesse sua conta para gerenciar as atividades comunitarias.')}</p>
+                <h1 className="text-[22px] font-semibold text-slate-700">
+                  {t('welcome_title', 'Bem-vindo ao')}{' '}
+                  {communityCenter?.name ?? 'Centelha'}
+                </h1>
+                <p className="text-sm text-slate-400">
+                  {t(
+                    'subtitle',
+                    'Acesse sua conta para gerenciar as atividades comunitarias.',
+                  )}
+                </p>
               </div>
             </div>
 
             <form className="mt-10 flex flex-col gap-6" onSubmit={submit}>
               <div className="grid gap-2">
-                <Label htmlFor="email" className="text-xs font-semibold text-slate-400">
+                <Label
+                  htmlFor="email"
+                  className="text-xs font-semibold text-slate-400"
+                >
                   {t('email_label', 'E-mail')}
                 </Label>
                 <div className="relative">
@@ -71,7 +89,6 @@ export default function Login({ status, canResetPassword, previewSettings }: Log
                     id="email"
                     onChange={(e) => setData('email', e.target.value)}
                     placeholder={t('email_placeholder', 'nome@exemplo.com.br')}
-                    className="h-11 rounded-md border-slate-200 bg-white pl-10 text-slate-700 placeholder:text-slate-300"
                   />
                 </div>
                 <InputError message={errors.email} />
@@ -79,7 +96,10 @@ export default function Login({ status, canResetPassword, previewSettings }: Log
 
               <div className="grid gap-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="password" className="text-xs font-semibold text-slate-400">
+                  <Label
+                    htmlFor="password"
+                    className="text-xs font-semibold text-slate-400"
+                  >
                     {t('password_label', 'Senha')}
                   </Label>
                   {canResetPassword && (
@@ -100,7 +120,7 @@ export default function Login({ status, canResetPassword, previewSettings }: Log
                     id="password"
                     onChange={(e) => setData('password', e.target.value)}
                     placeholder={t('password_placeholder', 'Sua senha')}
-                    className="h-11 rounded-md border-slate-200 bg-white pr-10 pl-10 text-slate-700 placeholder:text-slate-300"
+                    type={showPassword ? 'text' : 'password'}
                   />
                   <button
                     aria-label={
@@ -142,7 +162,9 @@ export default function Login({ status, canResetPassword, previewSettings }: Log
                 tabIndex="0"
                 type="submit"
               >
-                {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                {processing && (
+                  <LoaderCircle className="h-4 w-4 animate-spin" />
+                )}
                 {t('submit_button', 'Entrar')}
               </Button>
             </form>
