@@ -7,22 +7,30 @@ use App\Models\Benefit;
 use App\Models\CommunityCenter;
 use App\Models\Delivery;
 use App\Models\StockMovement;
+use App\Services\StorageService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class DeliveryController extends Controller
 {
     private const INDEX_TTL = 60;
+
     private const SHOW_TTL = 60;
+
     private const PDF_TTL = 300;
 
     private const CACHE_VERSION_KEY = 'deliveries.cache_version';
+
+    private const RECEIPT_DISK = 'minio';
+
+    private const RECEIPT_DIRECTORY = 'deliveries/receipts';
+
+    public function __construct(private readonly StorageService $storage) {}
 
     private function cacheKey(string $suffix): string
     {
@@ -43,7 +51,7 @@ class DeliveryController extends Controller
         $endDate = $this->parseDate($request->input('endDate'));
         $page = $request->input('page', 1);
 
-        $cacheKey = $this->cacheKey('index.' . md5(serialize([
+        $cacheKey = $this->cacheKey('index.'.md5(serialize([
             $search,
             $startDate,
             $endDate,
@@ -60,17 +68,17 @@ class DeliveryController extends Controller
 
                 $query->where(function ($q) use ($search, $cleanCpf) {
                     $q->where('code', 'ilike', "%{$search}%")
-                      ->orWhere('location', 'ilike', "%{$search}%")
-                      ->orWhereHas('family', function ($fq) use ($search, $cleanCpf) {
-                          $fq->where('responsible_name', 'ilike', "%{$search}%");
+                        ->orWhere('location', 'ilike', "%{$search}%")
+                        ->orWhereHas('family', function ($fq) use ($search, $cleanCpf) {
+                            $fq->where('responsible_name', 'ilike', "%{$search}%");
 
-                          if (strlen($cleanCpf) >= 3) {
-                              $fq->orWhere('responsible_cpf', 'like', "%{$cleanCpf}%");
-                          }
-                      })
-                      ->orWhereHas('benefit', function ($bq) use ($search) {
-                          $bq->where('name', 'ilike', "%{$search}%");
-                      });
+                            if (strlen($cleanCpf) >= 3) {
+                                $fq->orWhere('responsible_cpf', 'like', "%{$cleanCpf}%");
+                            }
+                        })
+                        ->orWhereHas('benefit', function ($bq) use ($search) {
+                            $bq->where('name', 'ilike', "%{$search}%");
+                        });
                 });
             }
 
@@ -122,7 +130,7 @@ class DeliveryController extends Controller
 
         $receiptPath = null;
         if ($request->hasFile('receipt')) {
-            $receiptPath = Storage::disk('minio')->putFile('deliveries/receipts', $request->file('receipt'));
+            $receiptPath = $this->storage->upload(self::RECEIPT_DISK, self::RECEIPT_DIRECTORY, $request->file('receipt'));
         }
 
         DB::transaction(function () use ($data, $benefit, $receiptPath) {
@@ -201,7 +209,7 @@ class DeliveryController extends Controller
             $endDate = Carbon::parse($this->parseDate($request->input('endDate')) ?? now()->endOfMonth());
         }
 
-        $cacheKey = $this->cacheKey('exportPdf.' . md5(serialize([
+        $cacheKey = $this->cacheKey('exportPdf.'.md5(serialize([
             $type,
             $startDate->toDateString(),
             $endDate->toDateString(),
@@ -225,7 +233,7 @@ class DeliveryController extends Controller
             ))->output();
         });
 
-        $periodLabel = $startDate->format('d-m-Y') . '_a_' . $endDate->format('d-m-Y');
+        $periodLabel = $startDate->format('d-m-Y').'_a_'.$endDate->format('d-m-Y');
 
         return response($pdfContent, 200, [
             'Content-Type' => 'application/pdf',
@@ -275,7 +283,7 @@ class DeliveryController extends Controller
 
     private function parseDate(?string $value): ?string
     {
-        if (!$value) {
+        if (! $value) {
             return null;
         }
 

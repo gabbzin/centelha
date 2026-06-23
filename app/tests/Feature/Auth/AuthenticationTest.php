@@ -27,7 +27,7 @@ class AuthenticationTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect('/');
+        $response->assertRedirect(route('dashboard', absolute: false));
     }
 
     public function test_admin_is_redirected_to_gestao_sistema()

@@ -40,7 +40,7 @@ export function ViewBenefitModal({
 }: ViewBenefitModalProps) {
   if (!benefit) return null
 
-  const imageUrl = benefit.image_path ? `/storage/${benefit.image_path}` : null
+  const imageUrl = benefit.image_url
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

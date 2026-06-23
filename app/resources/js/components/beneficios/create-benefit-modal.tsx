@@ -169,8 +169,8 @@ export function BenefitFormModal({
   }
 
   const existingImageUrl =
-    isEdit && benefitToEdit?.image_path && !removeImage
-      ? `/storage/${benefitToEdit.image_path}`
+    isEdit && benefitToEdit?.image_url && !removeImage
+      ? benefitToEdit.image_url
       : null
 
   return (
