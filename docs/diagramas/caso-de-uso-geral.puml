@@ -1,0 +1,133 @@
+@startuml
+' Centelha - Diagrama de Caso de Uso Geral
+
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorBorderColor #2563EB
+skinparam actorFontColor #2563EB
+skinparam usecaseBorderColor #475569
+skinparam usecaseFontColor #1E293B
+
+actor "Gestor\n(Admin)" as Admin
+actor "Operador" as Oper
+actor "Usuário\n(Não autenticado)" as Guest
+
+rectangle "Sistema Centelha" {
+  ' ── Autenticação ──
+  usecase "UC01 - Realizar Login" as UC01
+  usecase "UC02 - Recuperar Senha" as UC02
+  usecase "UC03 - Sair do Sistema" as UC03
+
+  ' ── Centro Comunitário ──
+  usecase "UC04 - Gerenciar Centro\nComunitário" as UC04
+  usecase "UC05 - Personalizar\nIdentidade Visual" as UC05
+  usecase "UC06 - Gerenciar Redes\nSociais" as UC06
+  usecase "UC07 - Customizar\nTelas do Sistema" as UC07
+  usecase "UC08 - Gerenciar Modo\n de Manutenção" as UC08
+
+  ' ── Usuários ──
+  usecase "UC09 - Gerenciar\nUsuários" as UC09
+
+  ' ── Famílias ──
+  usecase "UC10 - Cadastrar Família" as UC10
+  usecase "UC11 - Editar Família" as UC11
+  usecase "UC12 - Visualizar\nFamílias" as UC12
+  usecase "UC13 - Ativar/Desativar\nFamília" as UC13
+  usecase "UC14 - Gerenciar\nMembros Familiares" as UC14
+  usecase "UC15 - Consultar\nEndereço" as UC15
+  usecase "UC16 - Buscar Família\n(Autocomplete)" as UC16
+
+  ' ── Benefícios ──
+  usecase "UC17 - Cadastrar\nBenefício" as UC17
+  usecase "UC18 - Editar Benefício" as UC18
+  usecase "UC19 - Excluir Benefício" as UC19
+  usecase "UC20 - Controlar\nEstoque" as UC20
+
+  ' ── Entregas ──
+  usecase "UC21 - Registrar\nEntrega" as UC21
+  usecase "UC22 - Visualizar\nHistórico de Entregas" as UC22
+  usecase "UC23 - Exportar\nRelatório PDF" as UC23
+  usecase "UC24 - Gerar\nComprovante PDF" as UC24
+
+  ' ── Dashboard ──
+  usecase "UC25 - Visualizar\nDashboard" as UC25
+
+  ' ── Configurações ──
+  usecase "UC26 - Gerenciar\nPerfil Próprio" as UC26
+  usecase "UC27 - Alterar\nTema (Claro/Escuro)" as UC27
+}
+
+' ── Relacionamentos Atores ──
+Admin --> UC01 : estende
+Admin --> UC02
+Admin --> UC03
+Admin --> UC04
+Admin --> UC05
+Admin --> UC06
+Admin --> UC07
+Admin --> UC08
+Admin --> UC09
+Admin --> UC10
+Admin --> UC11
+Admin --> UC12
+Admin --> UC13
+Admin --> UC14
+Admin --> UC15
+Admin --> UC16
+Admin --> UC17
+Admin --> UC18
+Admin --> UC19
+Admin --> UC20
+Admin --> UC21
+Admin --> UC22
+Admin --> UC23
+Admin --> UC24
+Admin --> UC25
+Admin --> UC26
+Admin --> UC27
+
+Oper --> UC01
+Oper --> UC03
+Oper --> UC10
+Oper --> UC11
+Oper --> UC12
+Oper --> UC13
+Oper --> UC14
+Oper --> UC15
+Oper --> UC16
+Oper --> UC17
+Oper --> UC18
+Oper --> UC19
+Oper --> UC20
+Oper --> UC21
+Oper --> UC22
+Oper --> UC23
+Oper --> UC24
+Oper --> UC25
+Oper --> UC26
+Oper --> UC27
+
+Guest --> UC01
+Guest --> UC02
+
+' ── Includes / Extends ──
+UC12 <. UC10 <<include>>
+UC12 <. UC11 <<include>>
+UC10 ..> UC14 <<include>>
+UC11 ..> UC14 <<include>>
+UC10 ..> UC15 <<include>>
+UC11 ..> UC15 <<include>>
+UC21 ..> UC16 <<include>>
+UC21 ..> UC20 <<include>>
+UC21 ..> UC14 <<include>>
+UC22 ..> UC21 <<include>>
+UC24 ..> UC21 <<include>>
+UC25 ..> UC22 <<include>>
+UC25 ..> UC12 <<include>>
+UC25 ..> UC20 <<include>>
+UC04 ..> UC05 <<include>>
+UC04 ..> UC06 <<include>>
+UC04 ..> UC08 <<include>>
+UC04 ..> UC07 <<include>>
+
+@enduml
