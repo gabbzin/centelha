@@ -56,7 +56,7 @@ export default function Login({
               <img
                 alt={communityCenter?.name ?? 'Centelha'}
                 className="h-20 w-auto"
-                src="/logo.svg"
+                src={communityCenter?.logo_url ?? '/logo.svg'}
               />
               <div className="space-y-2">
                 <h1 className="text-[22px] font-semibold text-slate-700">

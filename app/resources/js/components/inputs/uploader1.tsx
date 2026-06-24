@@ -7,8 +7,9 @@ import {
 
 interface Uploader1Props {
   onFilesChange?: (files: FileWithPreview[]) => void
+  currentFaviconUrl?: string
 }
-export default function Uploader1({ onFilesChange }: Uploader1Props) {
+export default function Uploader1({ onFilesChange, currentFaviconUrl }: Uploader1Props) {
   const [{ files }, { removeFile, openFileDialog, getInputProps }] =
     useFileUpload({
       accept: 'image/*',
@@ -37,7 +38,7 @@ export default function Uploader1({ onFilesChange }: Uploader1Props) {
             />
           ) : (
             <div aria-hidden="true" className="rounded-lg bg-zinc-200 py-1">
-              <img alt="Favicon atual" className="size-9" src="/logo.png" />
+              <img alt="Favicon atual" className="size-9" src={currentFaviconUrl ?? '/logo.png'} />
             </div>
           )}
         </div>

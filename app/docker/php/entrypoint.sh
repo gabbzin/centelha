@@ -20,6 +20,8 @@ mkdir -p storage/framework/cache storage/framework/data storage/framework/views 
 chmod -R 775 storage bootstrap/cache || true
 chown -R www-data:www-data storage bootstrap/cache || true
 
+php artisan storage:link --relative=false --ansi || true
+
 if [ -n "${RUN_MIGRATIONS}" ]; then
   if [ "${APP_ENV}" = "production" ]; then
     php artisan migrate --force --ansi

@@ -24,6 +24,8 @@ export interface CommunityCenter {
 	rodape_text: string;
 	logo_path: string | null;
 	favicon_path: string | null;
+	logo_url: string;
+	favicon_url: string;
 	fontFamily: string;
 	settings: Record<string, unknown>;
 	colors: Record<string, string>;
