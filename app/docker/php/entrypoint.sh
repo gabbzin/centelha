@@ -18,11 +18,10 @@ fi
 
 mkdir -p storage/framework/cache storage/framework/data storage/framework/views storage/logs bootstrap/cache
 chmod -R 775 storage bootstrap/cache || true
-chown -R www-data:www-data storage bootstrap/cache || true
 
 php artisan storage:link --relative=false --ansi || true
 
-if [ -n "${RUN_MIGRATIONS}" ]; then
+if [ "${RUN_MIGRATIONS}" = "1" ]; then
   if [ "${APP_ENV}" = "production" ]; then
     php artisan migrate --force --ansi
   else
@@ -30,7 +29,7 @@ if [ -n "${RUN_MIGRATIONS}" ]; then
   fi
 fi
 
-if [ -n "${RUN_SEEDERS}" ]; then
+if [ "${RUN_SEEDERS}" = "1" ]; then
   if [ "${APP_ENV}" = "production" ]; then
     php artisan db:seed --force --ansi
   else
@@ -38,8 +37,19 @@ if [ -n "${RUN_SEEDERS}" ]; then
   fi
 fi
 
+if [ ! -f public/build/manifest.json ] && [ ! -f public/build/hot ]; then
+  if [ -d node_modules ]; then
+    echo "[entrypoint] Vite manifest ausente e dev server inativo. Gerando build de fallback..."
+    npm run build --silent || echo "[entrypoint] AVISO: npm run build falhou. Inicie o serviço 'vite' para HMR."
+  else
+    echo "[entrypoint] AVISO: node_modules ausente. Inicie o serviço 'vite' (npm install) ou rode 'npm ci && npm run build'."
+  fi
+fi
+
 if [ -d /var/www/html/public.dist ] && [ ! -d /var/www/html/public/build ]; then
   cp -a /var/www/html/public.dist/* /var/www/html/public/
 fi
+
+chown -R www-data:www-data storage bootstrap/cache || true
 
 exec "$@"
