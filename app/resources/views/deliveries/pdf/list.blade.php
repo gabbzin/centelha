@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relatório de Entregas</title>
     <style>
-        @page { margin: 12mm 14mm; }
         * {
             margin: 0;
             padding: 0;
@@ -18,7 +17,7 @@
             line-height: 1.4;
         }
         .container {
-            width: 100%;
+            padding: 15mm;
         }
         .header {
             border-bottom: 2px solid {{ $primaryColor }};
