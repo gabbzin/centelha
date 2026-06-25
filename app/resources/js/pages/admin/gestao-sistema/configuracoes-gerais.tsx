@@ -42,6 +42,7 @@ export default function ConfiguracoesGerais() {
         schema={configsGeraisSchema}
       >
         <FormContent
+          communityCenter={communityCenter}
           faviconFile={faviconFile}
           logoFile={logoFile}
           onFaviconChange={(files) =>
@@ -60,11 +61,13 @@ export default function ConfiguracoesGerais() {
 
 // Componente interno
 function FormContent({
+  communityCenter,
   logoFile,
   faviconFile,
   onLogoChange,
   onFaviconChange,
 }: {
+  communityCenter: SharedData['communityCenter']
   logoFile: File | null
   faviconFile: File | null
   onLogoChange: (files: FileWithPreview[]) => void
@@ -91,6 +94,8 @@ function FormContent({
   return (
     <>
       <ConfigsGeraisForm
+        currentFaviconUrl={communityCenter?.favicon_url}
+        currentLogoUrl={communityCenter?.logo_url}
         onFaviconChange={onFaviconChange}
         onLogoChange={onLogoChange}
       />

@@ -247,14 +247,7 @@ class DeliveryController extends Controller
         $colors = $communityCenter?->colors ?? [];
         $primaryColor = $colors['primary'] ?? '#ff002e';
 
-        $logoPath = null;
-        if ($communityCenter?->logo_path) {
-            $logo = ltrim($communityCenter->logo_path, './');
-            $fullPath = public_path($logo);
-            if (file_exists($fullPath)) {
-                $logoPath = $fullPath;
-            }
-        }
+        $logoPath = $communityCenter?->logoFilePath();
 
         return [$communityCenter, $primaryColor, $logoPath];
     }

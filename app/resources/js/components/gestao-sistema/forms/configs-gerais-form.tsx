@@ -37,12 +37,16 @@ const options = [
 interface ConfigsGeraisFormProps {
   onLogoChange?: (files: FileWithPreview[]) => void
   onFaviconChange?: (files: FileWithPreview[]) => void
+  currentLogoUrl?: string
+  currentFaviconUrl?: string
 }
 
 // Render
 export function ConfigsGeraisForm({
   onLogoChange,
   onFaviconChange,
+  currentLogoUrl,
+  currentFaviconUrl,
 }: ConfigsGeraisFormProps) {
   // Form Context
   const { control, register } = useFormContext()
@@ -71,13 +75,19 @@ export function ConfigsGeraisForm({
           >
             <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-5">
               <div className="md:col-span-3">
-                <Uploader2 onFilesChange={onLogoChange} />
+                <Uploader2
+                  currentLogoUrl={currentLogoUrl}
+                  onFilesChange={onLogoChange}
+                />
               </div>
               <div className="space-y-8 md:col-span-2">
                 <div className="space-y-2">
                   <Label>Ícone do Navegador (Favicon)</Label>
                   <div>
-                    <Uploader1 onFilesChange={onFaviconChange} />
+                    <Uploader1
+                      currentFaviconUrl={currentFaviconUrl}
+                      onFilesChange={onFaviconChange}
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">

@@ -70,6 +70,20 @@ export default function Home({ previewSettings }: { previewSettings?: Record<str
   const texts = (pageSettings?.texts as Record<string, string>) ?? {};
   const t = (key: string, fallback: string) => texts[key] ?? fallback;
 
+  const inicioRef = useRef<HTMLElement>(null);
+  const beneficiosRef = useRef<HTMLElement>(null);
+  const comoFuncionaRef = useRef<HTMLElement>(null);
+
+  const scrollTo = (ref: React.RefObject<HTMLElement | null>) => {
+    ref.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const navItems = [
+    { name: t('nav_inicio', 'Início'), ref: inicioRef },
+    { name: t('nav_beneficios', 'Benefícios'), ref: beneficiosRef },
+    { name: t('nav_como_funciona', 'Como funciona'), ref: comoFuncionaRef },
+  ];
+
   const steps = [
     { step: '1', title: t('step_1_title', 'Cadastre sua comunidade em minutos.') },
     { step: '2', title: t('step_2_title', 'Organize seus fluxos e doacoes.') },

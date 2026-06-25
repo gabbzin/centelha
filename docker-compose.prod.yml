@@ -27,6 +27,8 @@ services:
       RUN_MIGRATIONS: "1"
       RUN_SEEDERS: "1"
       APP_ENV: production
+      APP_URL: ${APP_PUBLIC_URL:-http://localhost}
+      AWS_URL: ${MINIO_PUBLIC_URL:-http://localhost:9000/centelha}
     volumes:
       - app_public:/var/www/html/public
     depends_on:
@@ -81,6 +83,8 @@ services:
     environment:
       MINIO_ROOT_USER: centelha
       MINIO_ROOT_PASSWORD: centelha-secret
+    ports:
+      - "9000:9000"
     volumes:
       - minio-data:/data
     healthcheck:
