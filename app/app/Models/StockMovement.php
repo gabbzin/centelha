@@ -11,7 +11,15 @@ class StockMovement extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'benefit_id',
+        'quantity',
+        'type',
+        'reference_type',
+        'reference_id',
+        'created_by',
+        'reason',
+    ];
 
     protected $casts = [
         'quantity' => 'integer',

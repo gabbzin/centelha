@@ -12,7 +12,18 @@ class Delivery extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'code',
+        'family_id',
+        'benefit_id',
+        'quantity',
+        'location',
+        'delivery_date',
+        'notes',
+        'receipt_path',
+        'delivered_by',
+        'status',
+    ];
 
     protected $casts = [
         'delivery_date' => 'date',

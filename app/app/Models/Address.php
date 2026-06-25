@@ -11,7 +11,15 @@ class Address extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'family_id',
+        'zipcode',
+        'street',
+        'number',
+        'neighborhood',
+        'city',
+        'state',
+    ];
 
     public function family()
     {
