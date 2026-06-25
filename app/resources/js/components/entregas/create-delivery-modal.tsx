@@ -141,8 +141,12 @@ export function CreateDeliveryModal({
 
   const selectedBeneficiaryId = selectedBeneficiary?.value ?? ''
   const selectedBeneficiaryLabel = selectedBeneficiary?.label ?? ''
+  const selectedBenefit = benefitId
+    ? benefits.find((b) => String(b.id) === benefitId)
+    : null
+  const maxQuantity = selectedBenefit ? selectedBenefit.stock : 999
 
-  const increment = () => setQuantity((q) => Math.min(999, q + 1))
+  const increment = () => setQuantity((q) => (q >= maxQuantity ? q : q + 1))
   const decrement = () => setQuantity((q) => Math.max(1, q - 1))
 
   const handleFileChange = (file: File | null) => {
@@ -174,6 +178,13 @@ export function CreateDeliveryModal({
     if (!selectedBeneficiaryId)
       nextErrors.beneficiary = 'Selecione um beneficiário'
     if (!benefitId) nextErrors.benefitType = 'Selecione um tipo de benefício'
+    if (
+      benefitId &&
+      selectedBenefit &&
+      quantity > selectedBenefit.stock
+    ) {
+      nextErrors.quantity = `Quantidade excede o estoque disponível (${selectedBenefit.stock}).`
+    }
     if (!deliveryDate) {
       nextErrors.deliveryDate = 'Informe a data da entrega'
     } else if (!isValidDeliveryDate(deliveryDate)) {
@@ -341,17 +352,21 @@ export function CreateDeliveryModal({
                     <SelectContent>
                       {benefits.map((option) => (
                         <SelectItem
+                          disabled={option.stock <= 0}
                           key={option.id}
                           value={String(option.id)}
                         >
-                          {option.name} (estoque: {option.stock})
+                          {option.name}{' '}
+                          {option.stock <= 0
+                            ? '(sem estoque)'
+                            : `(estoque: ${option.stock})`}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </FormField>
 
-                <FormField label="Quantidade" required>
+                <FormField error={mergedErrors.quantity} label="Quantidade" required>
                   <div className="border-input flex h-9 items-stretch rounded-md border shadow-xs">
                     <button
                       aria-label="Diminuir quantidade"
@@ -366,10 +381,10 @@ export function CreateDeliveryModal({
                       {quantity}
                     </div>
                     <button
-                      aria-label="Aumentar quantidade"
-                      className="text-foreground/70 hover:bg-muted flex w-10 items-center justify-center transition-colors disabled:cursor-not-allowed disabled:opacity-40"
-                      disabled={quantity >= 999}
-                      onClick={increment}
+                    aria-label="Aumentar quantidade"
+                    className="text-foreground/70 hover:bg-muted flex w-10 items-center justify-center transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+                    disabled={quantity >= maxQuantity}
+                    onClick={increment}
                       type="button"
                     >
                       <Plus className="size-4" />

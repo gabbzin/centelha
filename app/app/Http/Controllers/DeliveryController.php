@@ -113,15 +113,6 @@ class DeliveryController extends Controller
     {
         $data = $request->validated();
 
-        $benefit = Benefit::findOrFail($data['benefit_id']);
-
-        if ($benefit->stock < $data['quantity']) {
-            return redirect()
-                ->route('entregas')
-                ->withErrors(['quantity' => 'Estoque insuficiente para este benefício.'])
-                ->withInput();
-        }
-
         $this->ensureNoDuplicateDelivery(
             $data['family_id'],
             $data['benefit_id'],
@@ -133,7 +124,15 @@ class DeliveryController extends Controller
             $receiptPath = $this->storage->upload(self::RECEIPT_DISK, self::RECEIPT_DIRECTORY, $request->file('receipt'));
         }
 
-        DB::transaction(function () use ($data, $benefit, $receiptPath) {
+        DB::transaction(function () use ($data, $receiptPath) {
+            $benefit = Benefit::lockForUpdate()->findOrFail($data['benefit_id']);
+
+            if ($benefit->stock < $data['quantity']) {
+                throw ValidationException::withMessages([
+                    'quantity' => 'Estoque insuficiente para este benefício.',
+                ]);
+            }
+
             $delivery = Delivery::create([
                 'family_id' => $data['family_id'],
                 'benefit_id' => $data['benefit_id'],
