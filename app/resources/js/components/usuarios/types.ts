@@ -10,6 +10,7 @@ export interface User {
   id: number
   name: string
   email: string
+  data_nascimento: string | null
   role: UserRole
   status: UserStatus
   last_access: string | null

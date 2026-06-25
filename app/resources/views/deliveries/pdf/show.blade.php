@@ -17,8 +17,7 @@
             line-height: 1.4;
         }
         .container {
-            width: 100%;
-            padding: 20px;
+            padding: 15mm;
         }
         .header {
             border-bottom: 2px solid {{ $primaryColor }};
@@ -33,7 +32,9 @@
             display: table-cell;
             vertical-align: middle;
         }
+        .header-left { width: 60%; }
         .header-right {
+            width: 40%;
             text-align: right;
         }
         .logo {
@@ -82,11 +83,18 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 8px;
+            table-layout: fixed;
         }
         th, td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        .info-row, .org-name {
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
         th {
             background-color: {{ $primaryColor }};
@@ -142,8 +150,9 @@
             @if($delivery->family->address)
                 <div class="info-row">
                     <span class="label">Endereço:</span>
-                    {{ $delivery->family->address->street }}{{ $delivery->family->address->number ? ', '.$delivery->family->address->number : '' }}
-                    - {{ $delivery->family->address->neighborhood }}, {{ $delivery->family->address->city }}/{{ $delivery->family->address->state }}
+                    {{ $delivery->family->address->street }}{{ $delivery->family->address->number ? ', '.$delivery->family->address->number : '' }}<br>
+                    {{ $delivery->family->address->neighborhood }}<br>
+                    {{ $delivery->family->address->city }}/{{ $delivery->family->address->state }}
                 </div>
             @endif
             @if($delivery->family->members && $delivery->family->members->count())
@@ -164,6 +173,12 @@
         <div class="card">
             <div class="card-title">Itens da Entrega</div>
             <table>
+                <colgroup>
+                    <col style="width: 12%;">
+                    <col style="width: 40%;">
+                    <col style="width: 12%;">
+                    <col style="width: 36%;">
+                </colgroup>
                 <thead>
                     <tr>
                         <th>Cód. Item</th>
@@ -186,7 +201,7 @@
         @if($delivery->notes)
             <div class="card">
                 <div class="card-title">Observações do Agente</div>
-                <div style="white-space: pre-line;">{{ $delivery->notes }}</div>
+                <div style="white-space: pre-line; word-break: break-word; overflow-wrap: break-word;">{{ $delivery->notes }}</div>
             </div>
         @endif
 

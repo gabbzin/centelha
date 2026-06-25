@@ -30,6 +30,8 @@ class DeliveryController extends Controller
 
     private const RECEIPT_DIRECTORY = 'deliveries/receipts';
 
+    private const DEFAULT_PRIMARY_COLOR = '#1558D6';
+
     public function __construct(private readonly StorageService $storage) {}
 
     private function cacheKey(string $suffix): string
@@ -239,18 +241,21 @@ class DeliveryController extends Controller
             'Content-Disposition' => "attachment; filename=\"relatorio-entregas-{$periodLabel}.pdf\"",
         ]);
     }
-
     private function getPdfTheme(): array
     {
         $communityCenter = CommunityCenter::first();
+
         $colors = $communityCenter?->colors ?? [];
-        $primaryColor = $colors['primary'] ?? '#ff002e';
+
+        $primary = is_string($colors['primary'] ?? null)
+            && preg_match('/^#([0-9a-f]{3}|[0-9a-f]{6})$/i', $colors['primary'])
+            ? $colors['primary']
+            : self::DEFAULT_PRIMARY_COLOR;
 
         $logoPath = $communityCenter?->logoFilePath();
 
-        return [$communityCenter, $primaryColor, $logoPath];
+        return [$communityCenter, $primary, $logoPath];
     }
-
     private function ensureNoDuplicateDelivery(int $familyId, int $benefitId, string $deliveryDate): void
     {
         // TODO: mover período para configuração do sistema.

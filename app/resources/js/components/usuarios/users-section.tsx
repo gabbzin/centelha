@@ -4,8 +4,8 @@ import { toaster } from '@/components/toasters/toast-alert'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { MOCK_USERS } from './data'
-import type { User, UserRole, UserStatus } from './types'
-import { UserFormModal } from './user-form-modal'
+import type { User } from './types'
+import { UserFormModal, type UserFormPayload } from './user-form-modal'
 import { UsersFilterBar } from './users-filter-bar'
 import { UsersTable } from './users-table'
 import { ViewUserModal } from './view-user-modal'
@@ -62,22 +62,31 @@ export function UsersSection() {
   }, [])
 
   const handleSubmit = useCallback(
-    (data: {
-      name: string
-      email: string
-      role: UserRole
-      status: UserStatus
-    }) => {
-      if (userToEdit) {
+    (data: UserFormPayload) => {
+      if (data.mode === 'edit' && userToEdit) {
         setUsers((prev) =>
-          prev.map((u) => (u.id === userToEdit.id ? { ...u, ...data } : u)),
+          prev.map((u) =>
+            u.id === userToEdit.id
+              ? {
+                  ...u,
+                  name: data.name,
+                  email: data.email,
+                  role: data.role,
+                  status: data.status,
+                }
+              : u,
+          ),
         )
         toaster.createSuccess('Sucesso', 'Usuário atualizado.')
-      } else {
-        const newId = Math.max(...users.map((u) => u.id)) + 1
+      } else if (data.mode === 'create') {
+        const newId = Math.max(...users.map((u) => u.id), 0) + 1
         const newUser: User = {
           id: newId,
-          ...data,
+          name: data.name,
+          email: data.email,
+          data_nascimento: data.data_nascimento,
+          role: data.role,
+          status: 'Ativo',
           last_access: null,
           created_at: new Date().toISOString(),
         }
@@ -140,7 +149,7 @@ export function UsersSection() {
           <Button
             className="gap-2 rounded-md px-4"
             onClick={handleAdd}
-            variant="default"
+            variant="primary"
           >
             <Plus className="size-4" />
             Novo usuário

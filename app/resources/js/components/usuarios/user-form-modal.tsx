@@ -1,5 +1,4 @@
-import { Check } from 'lucide-react'
-import { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -24,16 +23,30 @@ import {
   type UserStatus,
 } from './types'
 
+export type CreateUserPayload = {
+  mode: 'create'
+  name: string
+  email: string
+  data_nascimento: string
+  role: UserRole
+  admin_password: string
+}
+
+export type EditUserPayload = {
+  mode: 'edit'
+  name: string
+  email: string
+  role: UserRole
+  status: UserStatus
+}
+
+export type UserFormPayload = CreateUserPayload | EditUserPayload
+
 interface UserFormModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   userToEdit?: User | null
-  onSubmit: (data: {
-    name: string
-    email: string
-    role: UserRole
-    status: UserStatus
-  }) => void
+  onSubmit: (data: UserFormPayload) => void
 }
 
 export function UserFormModal({
@@ -44,132 +57,245 @@ export function UserFormModal({
 }: UserFormModalProps) {
   const isEdit = !!userToEdit
 
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [role, setRole] = useState<UserRole>('Voluntário')
-  const [status, setStatus] = useState<UserStatus>('Ativo')
-
-  const reset = useCallback(() => {
-    setName('')
-    setEmail('')
-    setRole('Voluntário')
-    setStatus('Ativo')
-  }, [])
-
-  useEffect(() => {
-    if (isEdit && userToEdit) {
-      setName(userToEdit.name)
-      setEmail(userToEdit.email)
-      setRole(userToEdit.role)
-      setStatus(userToEdit.status)
-    } else if (open) {
-      reset()
-    }
-  }, [isEdit, userToEdit, open, reset])
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    onSubmit({ name, email, role, status })
-  }
-
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent
         className="max-w-lg gap-0 p-0 sm:max-w-lg"
         showCloseButton={false}
       >
-        <form className="flex max-h-[90vh] flex-col" onSubmit={handleSubmit}>
-          <div className="overflow-y-auto px-8 py-6">
-            <DialogTitle className="text-center text-2xl font-bold tracking-[-0.03em] uppercase">
-              {isEdit ? 'Editar usuário' : 'Novo usuário'}
-            </DialogTitle>
-            <DialogDescription className="sr-only">
-              {isEdit
-                ? 'Atualize os dados do usuário.'
-                : 'Preencha os campos abaixo para cadastrar um novo usuário.'}
-            </DialogDescription>
-
-            <div className="mt-6 space-y-4">
-              <FormField label="Nome completo" required>
-                <Input
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Nome do usuário"
-                  required
-                  value={name}
-                />
-              </FormField>
-
-              <FormField label="E-mail" required>
-                <Input
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="usuario@centelha.org"
-                  required
-                  type="email"
-                  value={email}
-                />
-              </FormField>
-
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <FormField label="Perfil" required>
-                  <Select
-                    onValueChange={(v) => setRole(v as UserRole)}
-                    value={role}
-                  >
-                    <SelectTrigger className="border-border w-full border">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {ROLE_OPTIONS_FORM.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormField>
-
-                <FormField label="Status" required>
-                  <Select
-                    onValueChange={(v) => setStatus(v as UserStatus)}
-                    value={status}
-                  >
-                    <SelectTrigger className="border-border w-full border">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {STATUS_OPTIONS_FORM.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormField>
-              </div>
-
-              <p className="text-destructive text-xs font-semibold tracking-wide uppercase">
-                Todos os campos com * são obrigatórios
-              </p>
-            </div>
-          </div>
-
-          <div className="border-border flex items-center justify-end gap-3 rounded-b-xl border-t bg-background px-8 py-4">
-            <Button
-              className="px-5"
-              onClick={() => onOpenChange(false)}
-              type="button"
-              variant="outline"
-            >
-              Cancelar
-            </Button>
-            <Button className="gap-2 px-5" type="submit" variant="default">
-              <Check className="size-4" />
-              {isEdit ? 'Salvar Alterações' : 'Concluir Cadastro'}
-            </Button>
-          </div>
-        </form>
+        {isEdit && userToEdit ? (
+          <EditUserForm onCancel={() => onOpenChange(false)} onSubmit={onSubmit} userToEdit={userToEdit} />
+        ) : (
+          <CreateUserForm onCancel={() => onOpenChange(false)} onSubmit={onSubmit} />
+        )}
       </DialogContent>
     </Dialog>
+  )
+}
+
+function CreateUserForm({
+  onCancel,
+  onSubmit,
+}: {
+  onCancel: () => void
+  onSubmit: (data: CreateUserPayload) => void
+}) {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [dataNascimento, setDataNascimento] = useState('')
+  const [role, setRole] = useState<UserRole | ''>('')
+  const [adminPassword, setAdminPassword] = useState('')
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!role) return
+    onSubmit({
+      mode: 'create',
+      name,
+      email,
+      data_nascimento: dataNascimento,
+      role,
+      admin_password: adminPassword,
+    })
+  }
+
+  return (
+    <form className="flex max-h-[90vh] flex-col" onSubmit={handleSubmit}>
+      <div className="overflow-y-auto px-8 py-6">
+        <DialogTitle className="text-center text-2xl font-bold tracking-[-0.03em] uppercase">
+          Cadastrar Novo Usuário
+        </DialogTitle>
+        <DialogDescription className="sr-only">
+          Preencha os campos abaixo para cadastrar um novo usuário.
+        </DialogDescription>
+
+        <div className="mt-6 space-y-4">
+          <FormField label="Nome do Usuário" required>
+            <Input
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Digite o nome do usuário"
+              required
+              value={name}
+            />
+          </FormField>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <FormField label="Tipo de Usuário" required>
+              <Select onValueChange={(v) => setRole(v as UserRole)} value={role}>
+                <SelectTrigger className="border-border w-full border">
+                  <SelectValue placeholder="Selecione o tipo de usuário" />
+                </SelectTrigger>
+                <SelectContent>
+                  {ROLE_OPTIONS_FORM.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormField>
+
+            <FormField label="Data da Nascimento" required>
+              <Input
+                onChange={(e) => setDataNascimento(e.target.value)}
+                required
+                type="date"
+                value={dataNascimento}
+              />
+            </FormField>
+          </div>
+
+          <FormField label="E-mail do Usuário" required>
+            <Input
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Digite o email do usuário que vai ser adicionado"
+              required
+              type="email"
+              value={email}
+            />
+          </FormField>
+
+          <FormField label="Senha do administrador" required>
+            <Input
+              autoComplete="current-password"
+              onChange={(e) => setAdminPassword(e.target.value)}
+              placeholder="Digite sua senha, precisamos confirmar sua senha para poder adicionar o usuário"
+              required
+              type="password"
+              value={adminPassword}
+            />
+          </FormField>
+
+          <p className="text-destructive text-xs font-semibold tracking-wide uppercase">
+            Todos os campos que tem * são obrigatórios
+          </p>
+        </div>
+      </div>
+
+      <div className="border-border flex items-center justify-end gap-3 rounded-b-xl border-t bg-background px-8 py-4">
+        <Button
+          className="px-5"
+          onClick={onCancel}
+          type="button"
+          variant="outline"
+        >
+          Cancelar
+        </Button>
+        <Button className="px-5" type="submit" variant="default">
+          Cadastrar
+        </Button>
+      </div>
+    </form>
+  )
+}
+
+function EditUserForm({
+  onCancel,
+  onSubmit,
+  userToEdit,
+}: {
+  onCancel: () => void
+  onSubmit: (data: EditUserPayload) => void
+  userToEdit: User
+}) {
+  const [name, setName] = useState(userToEdit.name)
+  const [email, setEmail] = useState(userToEdit.email)
+  const [role, setRole] = useState<UserRole>(userToEdit.role)
+  const [status, setStatus] = useState<UserStatus>(userToEdit.status)
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    onSubmit({ mode: 'edit', name, email, role, status })
+  }
+
+  return (
+    <form className="flex max-h-[90vh] flex-col" onSubmit={handleSubmit}>
+      <div className="overflow-y-auto px-8 py-6">
+        <DialogTitle className="text-center text-2xl font-bold tracking-[-0.03em] uppercase">
+          Editar usuário
+        </DialogTitle>
+        <DialogDescription className="sr-only">
+          Atualize os dados do usuário.
+        </DialogDescription>
+
+        <div className="mt-6 space-y-4">
+          <FormField label="Nome completo" required>
+            <Input
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Nome do usuário"
+              required
+              value={name}
+            />
+          </FormField>
+
+          <FormField label="E-mail" required>
+            <Input
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="usuario@centelha.org"
+              required
+              type="email"
+              value={email}
+            />
+          </FormField>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <FormField label="Perfil" required>
+              <Select
+                onValueChange={(v) => setRole(v as UserRole)}
+                value={role}
+              >
+                <SelectTrigger className="border-border w-full border">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {ROLE_OPTIONS_FORM.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormField>
+
+            <FormField label="Status" required>
+              <Select
+                onValueChange={(v) => setStatus(v as UserStatus)}
+                value={status}
+              >
+                <SelectTrigger className="border-border w-full border">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {STATUS_OPTIONS_FORM.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormField>
+          </div>
+
+          <p className="text-destructive text-xs font-semibold tracking-wide uppercase">
+            Todos os campos com * são obrigatórios
+          </p>
+        </div>
+      </div>
+
+      <div className="border-border flex items-center justify-end gap-3 rounded-b-xl border-t bg-background px-8 py-4">
+        <Button
+          className="px-5"
+          onClick={onCancel}
+          type="button"
+          variant="outline"
+        >
+          Cancelar
+        </Button>
+        <Button className="gap-2 px-5" type="submit" variant="default">
+          Salvar Alterações
+        </Button>
+      </div>
+    </form>
   )
 }
 
