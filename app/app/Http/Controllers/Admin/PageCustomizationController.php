@@ -6,13 +6,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CommunityCenter;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class PageCustomizationController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
         $availablePages = [
             [
@@ -49,7 +51,7 @@ class PageCustomizationController extends Controller
 
     private const ALLOWED_PAGES = ['dashboard', 'home', 'login', 'familia', 'beneficios'];
 
-    public function show(string $pageKey)
+    public function show(string $pageKey): Response
     {
         abort_if(! in_array($pageKey, self::ALLOWED_PAGES, true), 404, "Página '{$pageKey}' não encontrada.");
 
@@ -74,7 +76,7 @@ class PageCustomizationController extends Controller
         ]);
     }
 
-    public function update(Request $request, string $pageKey)
+    public function update(Request $request, string $pageKey): RedirectResponse
     {
         abort_if(! in_array($pageKey, self::ALLOWED_PAGES, true), 404, "Página '{$pageKey}' não encontrada.");
 
