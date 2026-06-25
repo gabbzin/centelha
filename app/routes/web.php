@@ -34,6 +34,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('gestao-sistema/customizacao-tela', [PageCustomizationController::class, 'index'])->name('gestao-sistema.customizacao-tela');
     Route::get('gestao-sistema/customizacao-tela/{pageKey}', [PageCustomizationController::class, 'show'])->name('gestao-sistema.customizacao-tela.edit');
     Route::put('gestao-sistema/customizacao-tela/{pageKey}', [PageCustomizationController::class, 'update'])->name('gestao-sistema.customizacao-tela.update');
+
+    Route::get('gestao-sistema/usuarios-beneficios', function () {
+        return Inertia::render('admin/gestao-sistema/usuarios-beneficios');
+    })->name('gestao-sistema.usuarios-beneficios');
 });
 
 Route::middleware(['auth'])->group(function () {

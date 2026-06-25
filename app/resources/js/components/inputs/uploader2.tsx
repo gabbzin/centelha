@@ -14,8 +14,9 @@ import { Label } from '../ui/label'
 
 interface Uploader2Props {
   onFilesChange?: (files: FileWithPreview[]) => void
+  currentLogoUrl?: string
 }
-export default function Uploader2({ onFilesChange }: Uploader2Props) {
+export default function Uploader2({ onFilesChange, currentLogoUrl }: Uploader2Props) {
   const maxSize = convertMB(2)
   const [
     { files, isDragging, errors },
@@ -62,12 +63,22 @@ export default function Uploader2({ onFilesChange }: Uploader2Props) {
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center px-4 py-3 text-center">
-              <div
-                aria-hidden="true"
-                className="mb-2 flex size-11 shrink-0 items-center justify-center bg-transparent"
-              >
-                <CloudUploadIcon className="size-8 opacity-60" />
-              </div>
+              {currentLogoUrl ? (
+                <div className="mb-2 flex h-11 shrink-0 items-center justify-center bg-transparent">
+                  <img
+                    alt="Logo atual"
+                    className="max-h-full max-w-full object-contain"
+                    src={currentLogoUrl}
+                  />
+                </div>
+              ) : (
+                <div
+                  aria-hidden="true"
+                  className="mb-2 flex size-11 shrink-0 items-center justify-center bg-transparent"
+                >
+                  <CloudUploadIcon className="size-8 opacity-60" />
+                </div>
+              )}
               <p className="mb-1.5 text-sm font-medium">
                 Arraste uma imagem ou clique para selecionar
               </p>
