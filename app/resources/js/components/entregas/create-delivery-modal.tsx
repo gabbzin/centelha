@@ -123,15 +123,23 @@ export function CreateDeliveryModal({
         headers: { Accept: 'application/json' },
       })
         .then((res) => (res.ok ? res.json() : []))
-        .then((data: Array<{ id: number; responsible_name: string; responsible_cpf?: string | null }>) => {
-          setBeneficiaries(
-            data.map((family) => ({
-              value: String(family.id),
-              label: family.responsible_name,
-              cpf: family.responsible_cpf,
-            })),
-          )
-        })
+        .then(
+          (
+            data: Array<{
+              id: number
+              responsible_name: string
+              responsible_cpf?: string | null
+            }>,
+          ) => {
+            setBeneficiaries(
+              data.map((family) => ({
+                value: String(family.id),
+                label: family.responsible_name,
+                cpf: family.responsible_cpf,
+              })),
+            )
+          },
+        )
         .catch(() => setBeneficiaries([]))
         .finally(() => setLoadingBeneficiaries(false))
     }, 300)
@@ -178,11 +186,7 @@ export function CreateDeliveryModal({
     if (!selectedBeneficiaryId)
       nextErrors.beneficiary = 'Selecione um beneficiário'
     if (!benefitId) nextErrors.benefitType = 'Selecione um tipo de benefício'
-    if (
-      benefitId &&
-      selectedBenefit &&
-      quantity > selectedBenefit.stock
-    ) {
+    if (benefitId && selectedBenefit && quantity > selectedBenefit.stock) {
       nextErrors.quantity = `Quantidade excede o estoque disponível (${selectedBenefit.stock}).`
     }
     if (!deliveryDate) {
@@ -244,10 +248,7 @@ export function CreateDeliveryModal({
 
   return (
     <Dialog onOpenChange={handleOpenChange} open={open}>
-      <DialogContent
-        className="gap-0 p-0 md:max-w-2xl"
-        showCloseButton={false}
-      >
+      <DialogContent className="gap-0 p-0 md:max-w-2xl" showCloseButton={false}>
         <form className="flex max-h-[90vh] flex-col" onSubmit={handleSubmit}>
           <div className="overflow-y-auto px-8 py-6">
             <DialogTitle className="text-center text-2xl font-bold uppercase tracking-tight">
@@ -313,8 +314,8 @@ export function CreateDeliveryModal({
                             key={b.value}
                             className="hover:bg-accent hover:text-accent-foreground w-full rounded-sm px-2 py-2 text-left text-sm"
                             onClick={() => {
-                                setSelectedBeneficiary(b)
-                                setBeneficiarySearch(b.label)
+                              setSelectedBeneficiary(b)
+                              setBeneficiarySearch(b.label)
                               setShowBeneficiaryList(false)
                             }}
                             type="button"
@@ -343,9 +344,8 @@ export function CreateDeliveryModal({
                     <SelectTrigger className="border-border w-full border">
                       <SelectValue placeholder="Selecione um tipo...">
                         {benefitId
-                          ? (benefits.find(
-                              (b) => String(b.id) === benefitId,
-                            )?.name ?? null)
+                          ? (benefits.find((b) => String(b.id) === benefitId)
+                              ?.name ?? null)
                           : null}
                       </SelectValue>
                     </SelectTrigger>
@@ -366,7 +366,11 @@ export function CreateDeliveryModal({
                   </Select>
                 </FormField>
 
-                <FormField error={mergedErrors.quantity} label="Quantidade" required>
+                <FormField
+                  error={mergedErrors.quantity}
+                  label="Quantidade"
+                  required
+                >
                   <div className="border-input flex h-9 items-stretch rounded-md border shadow-xs">
                     <button
                       aria-label="Diminuir quantidade"
@@ -381,10 +385,10 @@ export function CreateDeliveryModal({
                       {quantity}
                     </div>
                     <button
-                    aria-label="Aumentar quantidade"
-                    className="text-foreground/70 hover:bg-muted flex w-10 items-center justify-center transition-colors disabled:cursor-not-allowed disabled:opacity-40"
-                    disabled={quantity >= maxQuantity}
-                    onClick={increment}
+                      aria-label="Aumentar quantidade"
+                      className="text-foreground/70 hover:bg-muted flex w-10 items-center justify-center transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+                      disabled={quantity >= maxQuantity}
+                      onClick={increment}
                       type="button"
                     >
                       <Plus className="size-4" />

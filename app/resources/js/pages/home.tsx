@@ -63,62 +63,96 @@ const footerColumns = [
     title: 'Legal',
     links: ['Termos de Uso', 'Politica de Privacidade', 'Segurança de Dados'],
   },
-];
-export default function Home({ previewSettings }: { previewSettings?: Record<string, unknown> }) {
-  const { communityCenter, pageSettings: sharedSettings } = usePage<SharedData>().props;
-  const pageSettings = previewSettings ?? sharedSettings;
-  const texts = (pageSettings?.texts as Record<string, string>) ?? {};
-  const t = (key: string, fallback: string) => texts[key] ?? fallback;
+]
+export default function Home({
+  previewSettings,
+}: {
+  previewSettings?: Record<string, unknown>
+}) {
+  const { communityCenter, pageSettings: sharedSettings } =
+    usePage<SharedData>().props
+  const pageSettings = previewSettings ?? sharedSettings
+  const texts = (pageSettings?.texts as Record<string, string>) ?? {}
+  const t = (key: string, fallback: string) => texts[key] ?? fallback
 
-  const inicioRef = useRef<HTMLElement>(null);
-  const beneficiosRef = useRef<HTMLElement>(null);
-  const comoFuncionaRef = useRef<HTMLElement>(null);
+  const inicioRef = useRef<HTMLElement>(null)
+  const beneficiosRef = useRef<HTMLElement>(null)
+  const comoFuncionaRef = useRef<HTMLElement>(null)
 
   const scrollTo = (ref: React.RefObject<HTMLElement | null>) => {
-    ref.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+    ref.current?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   const navItems = [
     { name: t('nav_inicio', 'Início'), ref: inicioRef },
     { name: t('nav_beneficios', 'Benefícios'), ref: beneficiosRef },
     { name: t('nav_como_funciona', 'Como funciona'), ref: comoFuncionaRef },
-  ];
+  ]
 
   const steps = [
-    { step: '1', title: t('step_1_title', 'Cadastre sua comunidade em minutos.') },
+    {
+      step: '1',
+      title: t('step_1_title', 'Cadastre sua comunidade em minutos.'),
+    },
     { step: '2', title: t('step_2_title', 'Organize seus fluxos e doacoes.') },
     { step: '3', title: t('step_3_title', 'Engaje voluntarios e familias.') },
-    { step: '4', title: t('step_4_title', 'Acompanhe o impacto com dados reais.') },
-  ];
+    {
+      step: '4',
+      title: t('step_4_title', 'Acompanhe o impacto com dados reais.'),
+    },
+  ]
   const features = [
     {
       title: t('feature_1_title', 'Gestao de Eventos Sem Caos'),
-      description: t('feature_1_desc', 'Organize assembleias, cursos e distribuicoes com calendarios inteligentes que mantem todos em sincronia.'),
+      description: t(
+        'feature_1_desc',
+        'Organize assembleias, cursos e distribuicoes com calendarios inteligentes que mantem todos em sincronia.',
+      ),
       Icon: CalendarClock,
     },
     {
       title: t('feature_2_title', 'Beneficios com Transparencia Total'),
-      description: t('feature_2_desc', 'Controle a entrega de cestas e vouchers com rastreabilidade absoluta e sem duplicidade.'),
+      description: t(
+        'feature_2_desc',
+        'Controle a entrega de cestas e vouchers com rastreabilidade absoluta e sem duplicidade.',
+      ),
       Icon: HandCoins,
     },
     {
       title: t('feature_3_title', 'Nenhuma Familia Esquecida'),
-      description: t('feature_3_desc', 'Receba alertas automaticos de familias desassistidas e garanta um atendimento justo e humanizado.'),
+      description: t(
+        'feature_3_desc',
+        'Receba alertas automaticos de familias desassistidas e garanta um atendimento justo e humanizado.',
+      ),
       Icon: HeartHandshake,
     },
-  ];
+  ]
   const footerColumns = [
     {
       title: t('footer_product', 'Produto'),
-      links: [t('footer_product_1', 'Funcionalidades'), t('footer_product_2', 'Demonstração'), t('footer_product_3', 'Preços'), t('footer_product_4', 'Atualizações')],
+      links: [
+        t('footer_product_1', 'Funcionalidades'),
+        t('footer_product_2', 'Demonstração'),
+        t('footer_product_3', 'Preços'),
+        t('footer_product_4', 'Atualizações'),
+      ],
     },
     {
       title: t('footer_company', 'Empresa'),
-      links: [t('footer_company_1', 'Sobre Nós'), t('footer_company_2', 'Impacto Social'), t('footer_company_3', 'Contato'), t('footer_company_4', 'Blog')],
+      links: [
+        t('footer_company_1', 'Sobre Nós'),
+        t('footer_company_2', 'Impacto Social'),
+        t('footer_company_3', 'Contato'),
+        t('footer_company_4', 'Blog'),
+      ],
     },
     {
       title: t('footer_legal', 'Legal'),
-      links: [t('footer_legal_1', 'Termos de Uso'), t('footer_legal_2', 'Política de Privacidade'), t('footer_legal_3', 'Segurança de Dados')],
+      links: [
+        t('footer_legal_1', 'Termos de Uso'),
+        t('footer_legal_2', 'Política de Privacidade'),
+        t('footer_legal_3', 'Segurança de Dados'),
+      ],
     },
   ]
   return (
@@ -191,7 +225,11 @@ export default function Home({ previewSettings }: { previewSettings?: Record<str
                 </p>
               </div>
               <p className="max-w-xs text-sm text-white/70">
-                {t('slogan', communityCenter?.slogan ?? 'Tecnologia simples e poderosa para potencializar ações sociais e transformar comunidades.')}
+                {t(
+                  'slogan',
+                  communityCenter?.slogan ??
+                    'Tecnologia simples e poderosa para potencializar ações sociais e transformar comunidades.',
+                )}
               </p>
             </div>
 
@@ -218,7 +256,9 @@ export default function Home({ previewSettings }: { previewSettings?: Record<str
           <div className="border-t border-white/10">
             <div className="mx-auto flex w-full max-w-7xl flex-col gap-2 px-6 py-6 text-sm text-white/50 lg:flex-row lg:items-center lg:justify-between lg:px-10">
               <p>
-                © {new Date().getFullYear()} {communityCenter?.name ?? 'Centelha'}. {t('footer_rights', 'Todos os direitos reservados.')}
+                © {new Date().getFullYear()}{' '}
+                {communityCenter?.name ?? 'Centelha'}.{' '}
+                {t('footer_rights', 'Todos os direitos reservados.')}
               </p>
               <div>
                 {communityCenter?.social_links?.map((link) => (
@@ -235,7 +275,8 @@ export default function Home({ previewSettings }: { previewSettings?: Record<str
                 ))}
               </div>
               <p>
-                {t('footer_credit', 'Desenvolvido com 💙 pela equipe')} {communityCenter?.name ?? 'Centelha'}
+                {t('footer_credit', 'Desenvolvido com 💙 pela equipe')}{' '}
+                {communityCenter?.name ?? 'Centelha'}
               </p>
             </div>
           </div>

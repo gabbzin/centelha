@@ -9,7 +9,7 @@ export function FlashListener() {
 
   useEffect(() => {
     if (flash.msg) {
-      const entry = Object.values(MESSAGES).find(m => m.text === flash.msg)
+      const entry = Object.values(MESSAGES).find((m) => m.text === flash.msg)
 
       if (entry) {
         switch (entry.type) {

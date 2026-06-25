@@ -20,26 +20,31 @@ import type { Family, PaginatedData, SharedData } from '@/types'
 import { FamilyCard } from './components/family-card'
 
 interface FamilyProps {
-  families: PaginatedData<Family>;
-  previewSettings?: Record<string, unknown>;
-  hideHeader?: boolean;
+  families: PaginatedData<Family>
+  previewSettings?: Record<string, unknown>
+  hideHeader?: boolean
 }
-export default function Family({ families, previewSettings, hideHeader }: FamilyProps) {
-  const { communityCenter, pageSettings: sharedSettings } = usePage<SharedData>().props;
-  const pageSettings = previewSettings ?? sharedSettings;
-  const texts = (pageSettings?.texts as Record<string, string>) ?? {};
-  const t = (key: string, fallback: string) => texts[key] ?? fallback;
-  const [onlyLastName, setOnlyLastName] = useState(false);
+export default function Family({
+  families,
+  previewSettings,
+  hideHeader,
+}: FamilyProps) {
+  const { communityCenter, pageSettings: sharedSettings } =
+    usePage<SharedData>().props
+  const pageSettings = previewSettings ?? sharedSettings
+  const texts = (pageSettings?.texts as Record<string, string>) ?? {}
+  const t = (key: string, fallback: string) => texts[key] ?? fallback
+  const [onlyLastName, setOnlyLastName] = useState(false)
   const [search, setSearch] = useState(
     () => new URL(window.location.href).searchParams.get('search') || '',
   )
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.get('/family', { search }, { preserveState: true, replace: true });
-    }, 400);
-    return () => clearTimeout(timer);
-  }, [search]);
+      router.get('/family', { search }, { preserveState: true, replace: true })
+    }, 400)
+    return () => clearTimeout(timer)
+  }, [search])
 
   return (
     <>
@@ -94,8 +99,8 @@ export default function Family({ families, previewSettings, hideHeader }: Family
               const parts = name.trim().split(' ')
               return parts.length > 1
                 ? parts[parts.length - 2] + ' ' + parts[parts.length - 1]
-                : name;
-            };
+                : name
+            }
             const sobrenome = onlyLastName
               ? getSobrenome(family.responsible_name)
               : family.responsible_name

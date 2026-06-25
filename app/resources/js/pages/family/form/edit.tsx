@@ -1,25 +1,21 @@
-import { Header } from '@/components/layout/header';
-import { Head, usePage } from '@inertiajs/react';
-import {
-  CircleDollarSignIcon,
-  IdCardIcon,
-  MapPinHouseIcon,
-} from 'lucide-react';
-import { useState } from 'react';
-import { FamilyForm } from './family-form';
-import type { Family, SharedData } from '@/types';
+import { Header } from '@/components/layout/header'
+import { Head, usePage } from '@inertiajs/react'
+import { CircleDollarSignIcon, IdCardIcon, MapPinHouseIcon } from 'lucide-react'
+import { useState } from 'react'
+import { FamilyForm } from './family-form'
+import type { Family, SharedData } from '@/types'
 const STEPS = [
   { icon: IdCardIcon, title: '01 Identificação e Familia' },
   { icon: MapPinHouseIcon, title: '02 Endereço' },
   { icon: CircleDollarSignIcon, title: '03 Renda' },
-];
+]
 interface EditFamilyPageProps {
-  family: Family;
+  family: Family
 }
 export default function EditFamilyPage({ family }: EditFamilyPageProps) {
-  const { pageSettings } = usePage<SharedData>().props;
-  const texts = (pageSettings?.texts as Record<string, string>) ?? {};
-  const [currentStep, setCurrentStep] = useState(0);
+  const { pageSettings } = usePage<SharedData>().props
+  const texts = (pageSettings?.texts as Record<string, string>) ?? {}
+  const [currentStep, setCurrentStep] = useState(0)
   return (
     <>
       <Head title={texts.edit_title ?? 'Editar Família'} />
@@ -54,5 +50,5 @@ export default function EditFamilyPage({ family }: EditFamilyPageProps) {
         </div>
       </div>
     </>
-  );
+  )
 }

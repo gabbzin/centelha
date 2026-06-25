@@ -1,18 +1,21 @@
-import { StockControlSection } from '@/components/beneficios/stock-control-section';
-import { Header } from '@/components/layout/header';
-import { Head, usePage } from '@inertiajs/react';
-import type { PaginatedBenefits } from '@/components/beneficios/types';
-import type { SharedData } from '@/types';
+import { StockControlSection } from '@/components/beneficios/stock-control-section'
+import { Header } from '@/components/layout/header'
+import { Head, usePage } from '@inertiajs/react'
+import type { PaginatedBenefits } from '@/components/beneficios/types'
+import type { SharedData } from '@/types'
 
 interface BeneficiosPageProps {
-  benefits: PaginatedBenefits;
-  previewSettings?: Record<string, unknown>;
+  benefits: PaginatedBenefits
+  previewSettings?: Record<string, unknown>
 }
 
-export default function Beneficios({ benefits, previewSettings }: BeneficiosPageProps) {
-  const { pageSettings: sharedSettings } = usePage<SharedData>().props;
-  const pageSettings = previewSettings ?? sharedSettings;
-  const texts = (pageSettings?.texts as Record<string, string>) ?? {};
+export default function Beneficios({
+  benefits,
+  previewSettings,
+}: BeneficiosPageProps) {
+  const { pageSettings: sharedSettings } = usePage<SharedData>().props
+  const pageSettings = previewSettings ?? sharedSettings
+  const texts = (pageSettings?.texts as Record<string, string>) ?? {}
 
   return (
     <>

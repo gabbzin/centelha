@@ -144,7 +144,8 @@ export function DeliveryDetailsModal({
                     <Badge variant="success_basic">{delivery.status}</Badge>
                   </div>
                   <p className="text-foreground/70 mt-3 text-sm">
-                    Responsável: <span className="font-medium">{delivery.deliveredBy}</span>
+                    Responsável:{' '}
+                    <span className="font-medium">{delivery.deliveredBy}</span>
                   </p>
                 </div>
               </div>
