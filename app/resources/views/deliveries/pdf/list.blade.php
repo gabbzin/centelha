@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relatório de Entregas</title>
     <style>
+        @page { margin: 12mm 14mm; }
         * {
             margin: 0;
             padding: 0;
@@ -18,7 +19,6 @@
         }
         .container {
             width: 100%;
-            padding: 20px;
         }
         .header {
             border-bottom: 2px solid {{ $primaryColor }};
@@ -33,7 +33,9 @@
             display: table-cell;
             vertical-align: middle;
         }
+        .header-left { width: 60%; }
         .header-right {
+            width: 40%;
             text-align: right;
         }
         .logo {
@@ -66,11 +68,18 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 8px;
+            table-layout: fixed;
         }
         th, td {
             border: 1px solid #ddd;
             padding: 6px;
             text-align: left;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        .org-name {
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
         th {
             background-color: {{ $primaryColor }};
@@ -116,6 +125,15 @@
         </div>
 
         <table>
+            <colgroup>
+                <col style="width: 9%;">
+                <col style="width: 13%;">
+                <col style="width: 26%;">
+                <col style="width: 7%;">
+                <col style="width: 18%;">
+                <col style="width: 12%;">
+                <col style="width: 15%;">
+            </colgroup>
             <thead>
                 <tr>
                     <th>Nº Entrega</th>

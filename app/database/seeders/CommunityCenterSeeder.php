@@ -18,6 +18,21 @@ class CommunityCenterSeeder extends Seeder
             'favicon_path' => './logo.png',
             'fontFamily' => 'Inter',
             'settings' => [],
+            'colors' => [
+                'primary' => '#1558D6',
+                'background' => '#FFFFFF',
+                'surface' => '#F8F9FA',
+                'text_primary' => '#191C1E',
+                'text_secondary' => '#959598',
+                'text_disabled' => '#C5C6C7',
+                'hover' => '#EFF6FF',
+                'active' => '#1A5090',
+                'success' => '#4ADE80',
+                'error' => '#EF4444',
+                'warning' => '#F59E0B',
+                'info' => '#3B82F6',
+                'button' => '#094785',
+            ],
         ]);
     }
 }
