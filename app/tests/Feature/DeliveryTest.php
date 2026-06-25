@@ -78,6 +78,7 @@ class DeliveryTest extends TestCase
 
         $response = $this->withSession(['_token' => 'test-token'])
             ->actingAs($user)
+            ->from('/entregas')
             ->post('/entregas', [
                 '_token' => 'test-token',
             'family_id' => $family->id,
@@ -85,7 +86,7 @@ class DeliveryTest extends TestCase
             'quantity' => 5,
             'delivery_date' => now()->format('Y-m-d'),
             'location' => 'Centro Comunitário A',
-        ]);
+            ]);
 
         $response->assertRedirect('/entregas');
         $response->assertSessionHasErrors(['quantity' => 'Estoque insuficiente para este benefício.']);
