@@ -234,7 +234,7 @@ export function CreateDeliveryModal({
   return (
     <Dialog onOpenChange={handleOpenChange} open={open}>
       <DialogContent
-        className="max-w-2xl gap-0 p-0 sm:max-w-2xl"
+        className="gap-0 p-0 md:max-w-2xl"
         showCloseButton={false}
       >
         <form className="flex max-h-[90vh] flex-col" onSubmit={handleSubmit}>
