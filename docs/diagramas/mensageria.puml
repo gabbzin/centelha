@@ -1,0 +1,86 @@
+@startuml
+' Centelha - Diagrama de Sequência da Mensageria
+
+skinparam participantPadding 20
+skinparam boxPadding 10
+
+actor "Usuário" as User
+participant "React\n(Componente)" as React
+participant "toaster.ts\n(Singleton)" as Toaster
+participant "messages.ts\n(Centralizado)" as Messages
+participant "Laravel\n(Controller)" as Backend
+participant "session\n(Flash)" as Session
+
+== Fluxo de Exibição de Mensagem (Backend → Frontend) ==
+
+User -> React: Executa ação (ex: salvar família)
+React -> Backend: POST /family (via Inertia)
+Backend -> Backend: Processa requisição
+
+alt Sucesso
+  Backend -> Session: flash('msg', MSG_14)
+  Backend --> React: Redirect + Inertia response
+  React -> Messages: messages.MSG_14
+  Messages --> React: "Informações da família atualizadas com sucesso"
+  React -> Toaster: createSuccess("Sucesso!", texto)
+  Toaster --> User: Toast verde (SweetAlert2)
+else Erro de validação
+  Backend --> React: Retorna erros de validação
+  React -> Messages: messages.MSG_15
+  Messages --> React: "Campo inválido"
+  React -> Toaster: createError("Erro de validação!", texto)
+  Toaster --> User: Toast vermelho (SweetAlert2)
+end
+
+== Fluxo de Mensagem Local (Frontend) ==
+
+User -> React: Preenche formulário (ex: senhas diferentes)
+React -> Messages: messages.MSG_07
+Messages --> React: "Senhas não coincidem"
+React -> Toaster: createError("Erro!", texto)
+Toaster --> User: Toast vermelho
+
+User -> React: Ação confirmada (ex: desativar família)
+React -> Backend: PATCH /family/{id}/deactivate
+Backend -> Session: flash('msg', MSG_19)
+Backend --> React: Redirect
+React -> Messages: messages.MSG_19
+Messages --> React: "Família desativada com sucesso"
+React -> Toaster: createSuccess("Sucesso!", texto)
+Toaster --> User: Toast verde
+
+== Fluxo de Erro de Rede ==
+
+React -> Backend: Requisição AJAX
+Backend --> React: (sem resposta — timeout)
+
+React -> Messages: messages.MSG_08
+Messages --> React: "Verifique sua conexão de Internet"
+React -> Toaster: createError("Erro de conexão!", texto)
+Toaster --> User: Toast vermelho
+
+== Estrutura do Arquivo de Mensagens ==
+
+rectangle "messages.ts" {
+  (MSG_01) as m1
+  (MSG_02) as m2
+  (MSG_03) as m3
+  (MSG_04) as m4
+  (MSG_05) as m5
+  (MSG_06) as m6
+  (MSG_07) as m7
+  (MSG_08) as m8
+  (MSG_09) as m9
+  (MSG_10) as m10
+  (MSG_11) as m11
+  (MSG_12) as m12
+  (MSG_13) as m13
+  (MSG_14) as m14
+  (MSG_15) as m15
+  (MSG_16) as m16
+  (MSG_17) as m17
+  (MSG_18) as m18
+  (MSG_19) as m19
+}
+
+@enduml

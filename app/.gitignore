@@ -10,6 +10,7 @@
 /.phpunit.cache
 /.vscode
 /.zed
+.vite
 /bootstrap/ssr
 /node_modules
 /public/build

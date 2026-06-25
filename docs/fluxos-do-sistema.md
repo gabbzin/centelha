@@ -103,11 +103,6 @@
 5. Sistema atualiza a listagem com os resultados
 6. Sistema preserva o termo de busca na URL
 
-**Fluxo Alternativo — Alternar exibição de sobrenome**
-1. Usuário clica no botão de alternância
-2. Sistema passa a exibir apenas os dois últimos nomes do responsável
-3. Novo clique reverte para o nome completo
-
 **Fluxo de Exceção — Nenhuma família encontrada**
 1. A busca não retorna resultados
 2. Sistema exibe listagem vazia
@@ -152,29 +147,11 @@
 
 **Fluxo Principal — Preenchimento e avanço**
 1. Sistema exibe campos: CEP, Logradouro, Número, Cidade, UF, Bairro
-2. Usuário informa o CEP
-3. Sistema consulta ViaCEP automaticamente ao atingir 8 dígitos
-4. Se CEP encontrado, sistema preenche automaticamente Logradouro, Bairro, Cidade e UF e desabilita edição
-5. Usuário informa Número
-6. Usuário seleciona Condição de Moradia (radio: Própria/Alugada/Cedida — opcional)
-7. Usuário clica em "Próximo Passo"
-8. Sistema valida campos obrigatórios (CEP, Logradouro, Número, Bairro, Cidade, UF)
-9. Se válido, sistema avança para Etapa 3
-
-**Fluxo Alternativo — CEP não encontrado**
-1. No passo 3, ViaCEP retorna erro (CEP inexistente)
-2. Sistema exibe erro no campo CEP: "CEP não encontrado"
-3. Sistema habilita edição manual de Logradouro, Bairro, Cidade e UF
-4. Usuário preenche manualmente
-
-**Fluxo Alternativo — CEP inválido**
-1. No passo 3, ocorre erro de conexão com ViaCEP
-2. Sistema exibe erro no campo CEP: "Erro ao buscar CEP. Preencha manualmente"
-3. Sistema habilita edição manual dos campos
-4. Usuário preenche manualmente
-
-**Fluxo Alternativo — Logradouro manual**
-1. Se CEP não é informado ou é inválido, usuário pode digitar Logradouro, Bairro, Cidade e UF manualmente (campos ficam habilitados)
+2. Usuário preenche todos os campos de endereço manualmente
+3. Usuário seleciona Condição de Moradia (radio: Própria/Alugada/Cedida — opcional)
+4. Usuário clica em "Próximo Passo"
+5. Sistema valida campos obrigatórios (CEP, Logradouro, Número, Bairro, Cidade, UF)
+6. Se válido, sistema avança para Etapa 3
 
 **Fluxo de Exceção — Validação falhou**
 1. Campo obrigatório não preenchido
@@ -195,7 +172,7 @@
 #### Etapa 3 — Renda e Situação Econômica
 
 **Fluxo Principal — Preenchimento e finalização**
-1. Sistema exibe campos: Fonte de Renda Principal (radio), Renda Familiar (com máscara monetária), Categorias de Benefícios (combobox múltipla), Recebe Auxílio? (sim/não)
+1. Sistema exibe campos: Fonte de Renda Principal (radio), Renda Familiar (com máscara monetária), Recebe Auxílio? (sim/não)
 2. Usuário preenche a fonte de renda (emprego formal, emprego informal, benefícios sociais, outra fonte, sem renda)
 3. Usuário informa a renda familiar total (máximo R$ 3.500,00)
 4. Usuário seleciona se recebe auxílio
@@ -347,7 +324,7 @@
 6. Sistema envia POST para `/beneficios`
 7. Backend persiste o benefício com status "Ativo" e `created_by = usuário logado`
 8. Backend gera código no formato `BNF-XXX` (ex: `BNF-001`)
-9. Se informou imagem, sistema armazena em `storage/app/public/benefits/`
+9. Se informou imagem, sistema armazena no storage S3-compatível (MinIO)
 10. Sistema exibe toast de sucesso
 11. Sistema redireciona para listagem
 
@@ -387,6 +364,104 @@
 
 ---
 
+### 3.5 Entregas de Benefícios
+
+#### 3.5.1 Histórico de Entregas
+
+**Fluxo Principal — Visualizar histórico**
+1. Usuário autenticado acessa `/entregas`
+2. Sistema carrega entregas com dados da família, benefício e responsável
+3. Sistema exibe tabela com colunas: Nº Entrega, Data, Benefício, Quantidade, Local de Retirada, Status, Entregue Por
+4. Sistema exibe campo de busca textual
+5. Sistema exibe filtro de período com dois date pickers: "De" / "Até"
+6. Sistema exibe botão "Exportar PDF" com opções "Mês Atual" e "Período Selecionado"
+7. Sistema exibe paginação no rodapé (8 registros por página)
+
+**Fluxo Alternativo — Buscar entrega por texto**
+1. Usuário digita no campo de busca
+2. Sistema filtra entregas por código, local, nome da família, CPF ou nome do benefício
+3. Sistema atualiza a listagem com os resultados
+
+**Fluxo Alternativo — Filtrar por período**
+1. Usuário seleciona datas nos campos "De" e "Até"
+2. Sistema filtra entregas pelo intervalo de datas informado
+3. Sistema atualiza a listagem com os resultados
+
+**Fluxo Alternativo — Exportar PDF da listagem**
+1. Usuário clica no botão "Exportar PDF"
+2. Sistema exibe dropdown com opções "Mês Atual" e "Período Selecionado"
+3. Usuário seleciona uma das opções
+4. Sistema gera arquivo PDF com os dados filtrados e identidade visual do centro comunitário
+5. Sistema realiza download do arquivo
+
+---
+
+#### 3.5.2 Registrar Nova Entrega
+
+**Fluxo Principal — Registrar entrega**
+1. Usuário clica em "Nova Entrega"
+2. Sistema exibe modal com formulário de cadastro
+3. Usuário busca o beneficiário por CPF ou Nome (autocomplete)
+4. Sistema exibe resultados da busca
+5. Usuário seleciona o beneficiário desejado
+6. Usuário seleciona o "Tipo de Benefício" no campo select
+7. Usuário informa a "Quantidade" (padrão: 1)
+8. Usuário informa a "Data da Entrega"
+9. Usuário informa o "Local de Retirada" (texto livre, obrigatório)
+10. Sistema preenche automaticamente o "Responsável pela Entrega" com o usuário logado
+11. Usuário pode preencher "Observações" (opcional)
+12. Usuário pode anexar comprovante (PNG, JPG ou PDF, máx. 5MB)
+13. Usuário clica em "Confirmar Entrega"
+14. Sistema valida todos os campos obrigatórios
+15. Sistema verifica disponibilidade em estoque
+16. Sistema verifica se já existe entrega do mesmo benefício para a mesma família nos últimos 7 dias
+17. Sistema persiste a entrega no banco de dados
+18. Sistema decrementa o estoque e registra movimentação
+19. Sistema exibe toast de sucesso
+20. Sistema atualiza a listagem
+
+**Fluxo Alternativo — Beneficiário não encontrado**
+1. A busca não retorna nenhum resultado
+2. Sistema exibe mensagem: "Nenhum beneficiário encontrado"
+3. Usuário refina a busca ou cancela
+
+**Fluxo Alternativo — Estoque insuficiente**
+1. Sistema detecta que a quantidade solicitada excede o estoque disponível
+2. Sistema exibe mensagem de erro
+3. Sistema permanece no modal
+
+**Fluxo de Exceção — Entrega duplicada**
+1. Sistema detecta que o mesmo benefício já foi entregue à mesma família nos últimos 7 dias
+2. Sistema exibe mensagem de erro
+3. Sistema permanece no modal
+
+**Fluxo de Exceção — Arquivo inválido**
+1. Usuário anexa arquivo em formato não permitido ou acima do tamanho
+2. Sistema exibe erro de validação
+3. Sistema permanece no modal
+
+---
+
+#### 3.5.3 Visualizar Detalhes da Entrega
+
+**Fluxo Principal — Exibir detalhes**
+1. Usuário clica em uma linha da listagem
+2. Sistema exibe modal de detalhes da entrega
+3. Sistema exibe número da entrega (#ENT-XXXX), data e hora
+4. Sistema exibe dados da família beneficiária
+5. Sistema exibe status e responsável pela entrega
+6. Sistema exibe itens: código, descrição, quantidade, local
+7. Sistema exibe observações
+8. Sistema exibe botão "Imprimir PDF"
+9. Sistema exibe botão "Fechar"
+
+**Fluxo Alternativo — Exportar PDF individual**
+1. Usuário clica em "Imprimir PDF"
+2. Sistema gera PDF com dados completos da entrega
+3. Sistema realiza download
+
+---
+
 ## 4. Configurações do Sistema
 
 ### 4.1 Configurações Gerais
@@ -396,7 +471,7 @@
 2. Sistema exibe formulário com campos: Nome, Slogan, Texto do Rodapé, Fonte, Logotipo, Favicon, Links Sociais, Modo de Manutenção
 3. Usuário altera campos desejados
 4. Se novo logotipo/favicon, sistema valida formato e tamanho
-5. Usuário informa links sociais em formato JSON
+5. Usuário informa os links das redes sociais (campos individuais de URL)
 6. Usuário salva
 7. Sistema persiste alterações
 8. Sistema substitui links sociais (deleta todos + recria)
@@ -432,6 +507,39 @@
 
 ---
 
+### 4.3 Customização de Tela
+
+**Fluxo Principal — Acessar painel de customização**
+1. Usuário Gestor acessa `/gestao-sistema`
+2. Sistema exibe cards das telas disponíveis: Dashboard, Página Inicial, Login, Gestão de Famílias, Controle de Estoque
+3. Cada card exibe label, descrição e botão "Personalizar"
+4. Usuário clica em "Personalizar" em uma das telas
+
+**Fluxo Principal — Personalizar tela**
+1. Sistema redireciona para `/gestao-sistema/customizacao-tela/{pageKey}`
+2. Sistema carrega o schema da tela (define campos, tipos, limites)
+3. Sistema carrega as configurações salvas (se houver) e faz merge com os valores padrão
+4. Sistema exibe layout de duas colunas: formulário à esquerda e preview ao vivo à direita
+5. Formulário exibe seções com campos conforme o schema (toggle para boolean, input para texto, textarea, número)
+6. Usuário altera os campos desejados
+7. Sistema atualiza o preview em tempo real a cada alteração
+8. Usuário clica em "Publicar"
+9. Sistema valida os campos conforme regras do schema
+10. Sistema envia dados para `PUT /gestao-sistema/customizacao-tela/{pageKey}`
+11. Backend persiste as configurações no JSON do centro comunitário e limpa o cache
+12. Sistema exibe toast de sucesso
+
+**Fluxo Alternativo — Página não encontrada**
+1. `pageKey` não corresponde a nenhuma tela válida
+2. Sistema retorna erro 404
+
+**Fluxo de Exceção — Erro de validação**
+1. Um ou mais campos não passam na validação
+2. Sistema exibe toast de erro
+3. Sistema permanece na página
+
+---
+
 ## 5. Dashboard
 
 ### 5.1 Visualização de Indicadores
@@ -443,13 +551,59 @@
 4. Sistema exibe alertas de estoque baixo (níveis: atenção, crítico)
 5. Sistema exibe gráfico comparativo de distribuição por tipo de benefício
 
-**Nota:** Atualmente todos os dados do dashboard são mockados (estáticos).
+**Nota:** Atualmente os dados dos indicadores e gráficos do dashboard são estáticos (mockados). A integração com dados reais das entregas está pendente.
 
 ---
 
-## 6. Regras Transversais
+## 6. Configurações do Usuário
 
-### 6.1 Exclusão em Cascata
+### 6.1 Editar Perfil
+
+**Fluxo Principal — Editar perfil**
+1. Usuário autenticado acessa `/settings/profile`
+2. Sistema exibe formulário com campos: Nome, E-mail
+3. Usuário altera os campos desejados
+4. Usuário salva
+5. Sistema persiste as alterações
+6. Sistema exibe toast de sucesso
+
+### 6.2 Alterar Senha
+
+**Fluxo Principal — Alterar senha**
+1. Usuário autenticado acessa `/settings/password`
+2. Sistema exibe formulário com campos: Senha Atual, Nova Senha, Confirmar Nova Senha
+3. Usuário preenche os campos
+4. Sistema valida a senha atual
+5. Sistema atualiza a senha de forma criptografada
+6. Sistema exibe toast de sucesso
+
+### 6.3 Excluir Conta
+
+**Fluxo Principal — Excluir conta**
+1. Usuário autenticado acessa `/settings/profile`
+2. Usuário clica em "Excluir Conta"
+3. Sistema exibe diálogo de confirmação solicitando a senha atual
+4. Usuário informa a senha e confirma
+5. Sistema valida a senha
+6. Sistema exclui o usuário e todos os seus dados
+7. Sistema redireciona para a página inicial
+
+---
+
+## 7. Alternador de Tema
+
+**Fluxo Principal — Alternar tema**
+1. Usuário autenticado clica no seletor de tema
+2. Sistema exibe opções: Claro, Escuro, Sistema
+3. Usuário seleciona uma opção
+4. Sistema aplica o tema imediatamente na interface
+5. Sistema persiste a preferência no navegador (localStorage)
+
+---
+
+## 8. Regras Transversais
+
+### 8.1 Exclusão em Cascata
 
 | Entidade | Impacto |
 |---|---|
@@ -457,14 +611,14 @@
 | Exclusão de Benefício | Remove imagem do disco e registro |
 | Exclusão de Centro Comunitário | Remove links sociais |
 
-### 6.2 Transações
+### 8.2 Transações
 
 As operações de criação e atualização de famílias são executadas dentro de transações do banco de dados. Se qualquer etapa falhar (família, endereço ou membros), todas as alterações são revertidas.
 
-### 6.3 Mascaramento de CPF
+### 8.3 Mascaramento de CPF
 
 O CPF é armazenado com 11 dígitos, mas exibido com máscara `***.XXX.XXX-**` em todas as telas de listagem e detalhes. A exibição completa ocorre apenas nos formulários de edição.
 
-### 6.4 Conversão de Renda
+### 8.4 Conversão de Renda
 
 A renda informada no formulário (em reais, ex: R$ 1.250,00) é convertida para centavos no backend (125000) e armazenada como inteiro. Na exibição e edição, o valor é convertido de volta para reais.

@@ -1,4 +1,5 @@
 import AppLayoutTemplate from '@/layouts/app/app-sidebar-layout'
+import { FlashListener } from '@/components/toasters/flash-listener'
 import type { BreadcrumbItem } from '@/types'
 
 interface AppLayoutProps {
@@ -7,6 +8,7 @@ interface AppLayoutProps {
 }
 export default ({ children, breadcrumbs, ...props }: AppLayoutProps) => (
   <AppLayoutTemplate breadcrumbs={breadcrumbs} {...props}>
+    <FlashListener />
     {children}
   </AppLayoutTemplate>
 )

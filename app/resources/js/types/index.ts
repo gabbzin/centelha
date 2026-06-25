@@ -97,6 +97,8 @@ export interface SharedData {
   flash: {
     success: string | null
     error: string | null
+    msg: string | null
+    msgType: string | null
   }
   [key: string]: unknown
 }

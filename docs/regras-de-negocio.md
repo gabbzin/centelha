@@ -82,7 +82,7 @@
 
 **RN36.** O CEP deve conter exatamente 8 dígitos numéricos após higienização.
 
-**RN37.** O CEP informado deve ser válido. Ao informar um CEP válido, o sistema consulta automaticamente a base ViaCEP para preencher logradouro, bairro, cidade e UF, permitindo edição manual quando necessário.
+**RN37.** O CEP informado deve conter exatamente 8 dígitos numéricos. O endereço é preenchido manualmente pelo usuário.
 
 **RN38.** A condição de moradia é opcional e restrita aos valores: "própria", "alugada" ou "cedida".
 
@@ -138,7 +138,7 @@
 
 **RN60.** Toda alteração de estoque deve gerar registro de auditoria.
 
-**RN61.** O sistema deve impedir entregas duplicadas do mesmo benefício para a mesma família dentro de um período configurável pelo gestor.
+**RN61.** O sistema deve impedir entregas duplicadas do mesmo benefício para a mesma família dentro de um período de 7 dias.
 
 ---
 
@@ -146,7 +146,7 @@
 
 **RN62.** Todos os dados relevantes devem ser armazenados de forma persistente em banco de dados relacional.
 
-**RN63.** Não é permitido excluir registros que estejam vinculados a outros (sem tratamento adequado). A deleção em cascata é aplicada automaticamente nas relações: endereço, membros familiares e necessidades específicas são excluídos quando a família é removida.
+**RN63.** Não é permitido excluir registros que estejam vinculados a outros (sem tratamento adequado). Endereço, membros familiares e necessidades específicas são excluídos juntamente com a família via código da aplicação.
 
 **RN64.** O sistema deve registrar logs de autenticação para auditoria e segurança.
 
@@ -204,7 +204,7 @@
 
 **RN83.** As alterações realizadas no formulário de customização devem refletir imediatamente no preview ao lado, sem necessidade de salvar para visualizar.
 
-**RN84.** As configurações de customização só são efetivadas após o clique em "Publicar". Enquanto não publicadas, as alterações não persistem nem afetam os usuários.
+**RN84.** As configurações de customização são salvas e efetivadas imediatamente ao clicar em "Publicar". Não há estado de rascunho.
 
 **RN85.** Caso uma chave de configuração não exista nas configurações salvas, o sistema deve utilizar o valor padrão definido no arquivo de configuração.
 
@@ -222,7 +222,9 @@
 
 ---
 
-## 12. Usuários e Tags de Benefício
+## 12. Usuários e Tags de Benefício (PENDENTE)
+
+> **Atenção:** Este módulo ainda não foi implementado. As RNs abaixo estão documentadas como especificação futura.
 
 **RN90.** A gestão de usuários e tags de benefício deve estar em uma única tela, dividida em duas seções independentes.
 
@@ -235,3 +237,45 @@
 **RN94.** Cada tag de benefício deve possuir uma cor selecionável a partir de uma paleta predefinida de 8 cores.
 
 **RN95.** Cada tag de benefício pode possuir um ícone representativo selecionado a partir de uma lista de ícones disponíveis.
+
+---
+
+## 13. Configurações de Usuário (Perfil)
+
+**RN96.** O sistema deve permitir que o usuário edite seu próprio nome e e-mail na página de configurações de perfil.
+
+**RN97.** O sistema deve permitir que o usuário altere sua própria senha mediante confirmação da senha atual.
+
+**RN98.** O sistema deve permitir que o usuário exclua sua própria conta após confirmar a senha.
+
+---
+
+## 14. Aparência e Tema
+
+**RN99.** O sistema deve oferecer alternância entre os temas claro, escuro e automático (segue o sistema operacional), armazenando a preferência no navegador.
+
+---
+
+## 15. Infraestrutura e Armazenamento
+
+**RN100.** O sistema deve utilizar cache de dados com mecanismo de invalidação por versão, incrementada a cada alteração nos dados cacheados.
+
+**RN101.** O sistema deve armazenar arquivos (imagens de benefícios, comprovantes de entrega) em storage S3-compatível (MinIO), com fallback para disco local quando indisponível.
+
+---
+
+## 16. APIs e Integrações
+
+**RN102.** O sistema deve expor um endpoint JSON para busca de famílias por nome ou CPF para autocomplete, limitado a 20 resultados e apenas famílias ativas.
+
+---
+
+## 17. Relatórios e Exportação
+
+**RN103.** Os PDFs gerados pelo sistema (comprovantes de entrega, relatórios) devem aplicar a identidade visual do centro comunitário (logotipo, cores, fontes).
+
+---
+
+## 18. Auditoria
+
+**RN104.** O sistema deve registrar movimentações de estoque com referência polimórfica (tipo e ID do registro originador) e motivo da movimentação.

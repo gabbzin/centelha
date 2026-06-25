@@ -1,0 +1,248 @@
+@startuml
+' Centelha - Diagrama de Sequência Geral
+
+skinparam participantPadding 20
+skinparam boxPadding 10
+
+actor "Usuário\n(Gestor/Operador)" as User
+participant "Navegador\n(React + Inertia)" as Browser
+participant "Laravel\n(Backend)" as Backend
+database "PostgreSQL" as DB
+collections "MinIO\n(Storage)" as Storage
+
+== Autenticação (Login) ==
+
+User -> Browser: Acessa /login
+Browser -> Backend: GET /login
+Backend --> Browser: Renderiza página de login
+User -> Browser: Preenche e-mail + senha + submit
+Browser -> Backend: POST /login
+
+alt Credenciais inválidas
+  Backend -> DB: Verifica rate limiter (5 tentativas)
+  Backend --> Browser: MSG-04 "E-mail ou senha incorretos."
+else Conta desativada
+  Backend --> Browser: MSG-09 "Conta Desativada."
+else Excedeu tentativas
+  Backend --> Browser: MSG-10 "Aguarde 30 segundos e tente novamente."
+else Sucesso
+  Backend -> DB: Auth::attempt() - verifica credenciais
+  Backend -> DB: Regenera sessão
+  Backend --> Browser: MSG-01 "Login realizado com sucesso!" (flash)
+  alt Role = admin
+    Backend --> Browser: Redireciona para /gestao-sistema
+  else Role = operador
+    Backend --> Browser: Redireciona para /dashboard
+  end
+end
+
+== Recuperação de Senha ==
+
+User -> Browser: Clica "Esqueceu sua senha?"
+Browser -> Backend: GET /forgot-password
+Backend --> Browser: Renderiza formulário
+User -> Browser: Informa e-mail
+Browser -> Backend: POST /forgot-password
+Backend -> DB: Gera token + salva no DB
+Backend -> Backend: Envia e-mail com link de reset
+Backend --> Browser: MSG-02 "E-mail de recuperação enviado!"
+note right: MSG-11 também exibido por segurança\n"Um link de redefinição será enviado\npara o e-mail informado."
+User -> Browser: Acessa link /reset-password/{token}
+Browser -> Backend: GET /reset-password/{token}
+
+alt Token válido
+  Backend --> Browser: Renderiza formulário de nova senha
+  User -> Browser: Preenche nova senha
+  Browser -> Backend: POST /reset-password
+  Backend -> DB: Valida token + atualiza senha
+  Backend --> Browser: MSG-03 "Senha alterada com sucesso!"
+  Backend --> Browser: Redireciona para /login
+else Token expirado
+  Backend --> Browser: MSG-12 "Token Expirado."
+else Token inválido
+  Backend --> Browser: MSG-13 "Token Inválido."
+end
+
+== Cadastro de Família (3 etapas) ==
+
+User -> Browser: Acessa /family/register
+Browser -> Backend: GET /family/register
+Backend --> Browser: Renderiza formulário em 3 etapas
+
+note right of Browser
+  Etapa 1: Dados do responsável + membros
+  Etapa 2: Endereço
+  Etapa 3: Dados socioeconômicos
+end note
+
+User -> Browser: Preenche etapa 1 (validação react-hook-form + zod)
+User -> Browser: Preenche etapa 2
+User -> Browser: Preenche etapa 3 + submit
+Browser -> Backend: POST /family (dados completos)
+
+group Validações
+  Backend -> DB: Verifica CPF único (se duplicado → MSG-17)
+  Backend -> DB: Verifica responsável >= 18 anos
+  Backend -> Backend: Valida campos obrigatórios (se inválido → MSG-15)
+end
+
+group Transação DB
+  Backend -> Backend: StoreFamilyRequest valida
+  Backend -> DB: INSERT family
+  Backend -> DB: INSERT address
+  loop Para cada membro
+    Backend -> DB: INSERT family_member
+  end
+  Backend -> DB: INSERT family_specific_need (se houver)
+end
+
+Backend --> Browser: MSG-16 "Cadastro realizado com sucesso!" (flash)
+Backend --> Browser: Redireciona para /family
+
+== Edição de Família ==
+
+User -> Browser: Acessa /family/{id}/edit
+Browser -> Backend: GET /family/{family}/edit
+Backend -> DB: SELECT family + address + members
+Backend --> Browser: Renderiza formulário preenchido
+User -> Browser: Altera dados + submit
+Browser -> Backend: PUT /family/{family}
+
+group Transação DB
+  Backend -> DB: UPDATE family
+  Backend -> DB: UPDATE address
+  Backend -> DB: DELETE old family_members
+  loop Para cada membro
+    Backend -> DB: INSERT new family_member
+  end
+end
+
+Backend --> Browser: MSG-14 "Informações da família atualizadas com sucesso." (flash)
+Backend --> Browser: Redireciona para /family
+
+== Ativar/Desativar Família ==
+
+User -> Browser: Clica desativar família
+Browser -> Backend: PATCH /family/{family}/deactivate
+Backend -> DB: UPDATE families SET is_active = false
+Backend --> Browser: MSG-19 "Família desativada com sucesso." (flash)
+Backend --> Browser: Redireciona para /family
+
+== Cadastro de Benefício ==
+
+User -> Browser: Acessa /beneficios
+Browser -> Backend: GET /beneficios
+Backend -> DB: SELECT benefits (paginado, ordenado)
+Backend --> Browser: Renderiza lista de benefícios
+User -> Browser: "Novo Benefício" + preenche dados
+Browser -> Backend: POST /beneficios
+
+group Transação DB
+  Backend -> Backend: Gera código BNF-{sequencial}
+  Backend -> DB: INSERT benefit
+  alt Possui imagem
+    Backend -> Storage: Upload image (MinIO)
+  end
+end
+
+Backend --> Browser: Redireciona para /beneficios
+
+== Edição/Exclusão de Benefício ==
+
+Browser -> Backend: PUT /beneficios/{benefit}
+Backend -> DB: UPDATE benefit
+Backend --> Browser: Redireciona
+
+Browser -> Backend: DELETE /beneficios/{benefit}
+Backend -> DB: DELETE benefit
+Backend --> Browser: Redireciona
+
+== Entrega de Benefício ==
+
+User -> Browser: Acessa /entregas
+Browser -> Backend: GET /entregas
+Backend -> DB: SELECT deliveries (paginado)
+Backend --> Browser: Renderiza histórico de entregas
+User -> Browser: Clica "Nova Entrega"
+User -> Browser: Seleciona família (autocomplete)
+Browser -> Backend: GET /family/search?q={termo}
+Backend -> DB: SELECT families WHERE name|cpf LIKE ?
+Backend --> Browser: JSON com resultados
+User -> Browser: Seleciona benefício + quantidade + local + data + anexo
+Browser -> Backend: POST /entregas
+
+group Validações
+  Backend -> DB: Verifica estoque (se insuficiente → MSG-15 "Estoque insuficiente")
+  Backend -> DB: Verifica duplicata (mesmo benefício/família nos últimos 7 dias)
+end
+
+group Transação DB
+  Backend -> Backend: Gera código ENT-{sequencial}
+  alt Possui comprovante
+    Backend -> Storage: Upload comprovante (MinIO)
+  end
+  Backend -> DB: INSERT delivery
+  Backend -> DB: UPDATE benefits SET stock = stock - quantity
+  Backend -> DB: INSERT stock_movement (quantidade negativa, motivo)
+  Backend -> Backend: Invalida cache (incrementa versão)
+end
+
+Backend --> Browser: Redireciona para /entregas com flash success
+
+== Exportação PDF ==
+
+User -> Browser: Clica "Exportar PDF" (relatório)
+Browser -> Backend: GET /entregas/export/pdf
+Backend -> DB: SELECT deliveries (filtrado por período)
+Backend -> Backend: Gera PDF via DOMPDF (com identidade visual)
+Backend --> Browser: Download do PDF
+
+User -> Browser: Clica "Imprimir Comprovante" (entrega individual)
+Browser -> Backend: GET /entregas/{delivery}/pdf
+Backend -> DB: SELECT delivery + family + benefit + community_center
+Backend -> Backend: Gera PDF via DOMPDF
+Backend --> Browser: Download do PDF
+
+== Dashboard ==
+
+User -> Browser: Acessa /dashboard
+Browser -> Backend: GET /dashboard
+Backend -> Backend: DashboardController@index
+
+group Consultas Dashboard
+  Backend -> DB: COUNT deliveries (mês atual vs anterior)
+  Backend -> DB: COUNT DISTINCT families entregues (mês atual vs anterior)
+  Backend -> DB: COUNT families novas (mês atual vs anterior)
+  Backend -> DB: SELECT entregas por categoria (JOIN benefits) - gráfico
+  Backend -> DB: SELECT top 5 benefícios mais entregues
+  Backend -> DB: SELECT benefícios com estoque baixo (<= low_stock_limit)
+end
+
+Backend --> Browser: Renderiza dashboard com dados
+note right of Browser
+  Stats Cards: entregas, famílias, cadastros
+  Gráfico: entregas por categoria (Recharts)
+  Mapa: distribuição geográfica (Leaflet)
+  Alertas: estoque baixo
+  Ranking: top 5 benefícios
+end note
+
+== Customização de Tela (Admin) ==
+
+User -> Browser: Acessa /gestao-sistema/customizacao-tela
+Browser -> Backend: GET /gestao-sistema/customizacao-tela
+Backend -> DB: SELECT community_center.settings
+Backend --> Browser: Renderiza lista de páginas customizáveis
+User -> Browser: Seleciona página + altera textos/visibilidade
+Browser -> Backend: PUT /gestao-sistema/customizacao-tela/{pageKey}
+Backend -> DB: UPDATE community_center.settings (JSON)
+Backend --> Browser: Preview atualizado em tempo real
+
+== Logout ==
+
+User -> Browser: Clica "Sair"
+Browser -> Backend: POST /logout
+Backend -> DB: Invalida sessão + regenera token
+Backend --> Browser: Redireciona para /
+
+@enduml
