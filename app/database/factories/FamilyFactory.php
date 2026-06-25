@@ -9,6 +9,7 @@ class FamilyFactory extends Factory
     public function definition(): array
     {
         $aid = fake()->boolean(60);
+
         return [
             'responsible_name' => fake()->name(),
             'responsible_cpf' => fake()->unique()->numerify('###.###.###-##'),

@@ -44,13 +44,13 @@ class DeliveryTest extends TestCase
             ->actingAs($user)
             ->post('/entregas', [
                 '_token' => 'test-token',
-            'family_id' => $family->id,
-            'benefit_id' => $benefit->id,
-            'quantity' => 3,
-            'delivery_date' => now()->format('Y-m-d'),
-            'location' => 'Centro Comunitário A',
-            'notes' => 'Observação de teste',
-        ]);
+                'family_id' => $family->id,
+                'benefit_id' => $benefit->id,
+                'quantity' => 3,
+                'delivery_date' => now()->format('Y-m-d'),
+                'location' => 'Centro Comunitário A',
+                'notes' => 'Observação de teste',
+            ]);
 
         $response->assertRedirect('/entregas');
 
@@ -81,11 +81,11 @@ class DeliveryTest extends TestCase
             ->from('/entregas')
             ->post('/entregas', [
                 '_token' => 'test-token',
-            'family_id' => $family->id,
-            'benefit_id' => $benefit->id,
-            'quantity' => 5,
-            'delivery_date' => now()->format('Y-m-d'),
-            'location' => 'Centro Comunitário A',
+                'family_id' => $family->id,
+                'benefit_id' => $benefit->id,
+                'quantity' => 5,
+                'delivery_date' => now()->format('Y-m-d'),
+                'location' => 'Centro Comunitário A',
             ]);
 
         $response->assertRedirect('/entregas');
@@ -132,13 +132,13 @@ class DeliveryTest extends TestCase
             ->actingAs($user)
             ->post('/entregas', [
                 '_token' => 'test-token',
-            'family_id' => $family->id,
-            'benefit_id' => $benefit->id,
-            'quantity' => 1,
-            'delivery_date' => now()->format('Y-m-d'),
-            'location' => 'Centro Comunitário A',
-            'receipt' => UploadedFile::fake()->create('comprovante.exe', 100, 'application/x-msdownload'),
-        ]);
+                'family_id' => $family->id,
+                'benefit_id' => $benefit->id,
+                'quantity' => 1,
+                'delivery_date' => now()->format('Y-m-d'),
+                'location' => 'Centro Comunitário A',
+                'receipt' => UploadedFile::fake()->create('comprovante.exe', 100, 'application/x-msdownload'),
+            ]);
 
         $response->assertSessionHasErrors(['receipt']);
         $this->assertDatabaseCount('deliveries', 0);
