@@ -1,17 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\Benefit;
+use App\Models\CommunityCenter;
 use App\Models\Delivery;
 use App\Models\Family;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class DashboardController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $selectedMonth = (int) $request->input('month', now()->month);
         $selectedYear = (int) $request->input('year', now()->year);
@@ -38,7 +42,7 @@ class DashboardController extends Controller
         $chartData = $this->getChartData($currentStart, $currentEnd, $previousStart, $previousEnd);
         $topItems = $this->getTopItems($currentStart, $currentEnd);
 
-        $communityCenter = \App\Models\CommunityCenter::first();
+        $communityCenter = CommunityCenter::first();
         $lowStockLimit = $communityCenter?->settings['rules']['low_stock_limit'] ?? 50;
 
         $alerts = $this->getStockAlerts($lowStockLimit);
@@ -142,12 +146,14 @@ class DashboardController extends Controller
 
     private function getAvailablePeriods(): array
     {
-        $dates = Delivery::selectRaw('EXTRACT(YEAR FROM delivery_date) as year, EXTRACT(MONTH FROM delivery_date) as month')
+        $dates = Delivery::query()
+            ->select('delivery_date')
             ->distinct()
-            ->orderByDesc('year')
-            ->orderByDesc('month')
-            ->get()
-            ->map(fn ($d) => ['year' => (int) $d->year, 'month' => (int) $d->month])
+            ->orderByDesc('delivery_date')
+            ->pluck('delivery_date')
+            ->map(fn ($date) => ['year' => (int) Carbon::parse($date)->year, 'month' => (int) Carbon::parse($date)->month])
+            ->unique(fn (array $period) => "{$period['year']}-{$period['month']}")
+            ->values()
             ->toArray();
 
         $currentMonth = ['year' => (int) now()->year, 'month' => (int) now()->month];

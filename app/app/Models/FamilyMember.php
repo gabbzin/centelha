@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,7 +11,13 @@ class FamilyMember extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'family_id',
+        'name',
+        'birth_date',
+        'relationship',
+        'cpf',
+    ];
 
     protected $casts = [
         'birth_date' => 'date',

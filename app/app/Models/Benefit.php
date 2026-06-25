@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Services\StorageService;
@@ -10,7 +12,18 @@ class Benefit extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'code',
+        'name',
+        'category',
+        'stock',
+        'status',
+        'donor',
+        'validity',
+        'notes',
+        'image_path',
+        'created_by',
+    ];
 
     protected $casts = [
         'stock' => 'integer',

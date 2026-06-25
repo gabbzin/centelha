@@ -1,13 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBenefitRequest;
 use App\Http\Requests\UpdateBenefitRequest;
 use App\Models\Benefit;
 use App\Services\StorageService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class BenefitController extends Controller
 {
@@ -17,7 +21,7 @@ class BenefitController extends Controller
 
     public function __construct(private readonly StorageService $storage) {}
 
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $query = Benefit::with('creator');
 
@@ -41,7 +45,7 @@ class BenefitController extends Controller
         ]);
     }
 
-    public function store(StoreBenefitRequest $request)
+    public function store(StoreBenefitRequest $request): RedirectResponse
     {
         $data = $request->validated();
 
@@ -67,7 +71,7 @@ class BenefitController extends Controller
         return redirect()->route('beneficios');
     }
 
-    public function update(UpdateBenefitRequest $request, Benefit $benefit)
+    public function update(UpdateBenefitRequest $request, Benefit $benefit): RedirectResponse
     {
         $data = $request->validated();
 
@@ -106,7 +110,7 @@ class BenefitController extends Controller
         return redirect()->route('beneficios');
     }
 
-    public function destroy(Benefit $benefit)
+    public function destroy(Benefit $benefit): RedirectResponse
     {
         $this->storage->delete(self::IMAGE_DISK, $benefit->image_path);
 

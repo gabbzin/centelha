@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,7 +11,15 @@ class Address extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'family_id',
+        'zipcode',
+        'street',
+        'number',
+        'neighborhood',
+        'city',
+        'state',
+    ];
 
     public function family()
     {
