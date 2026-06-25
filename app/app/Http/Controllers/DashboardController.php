@@ -144,12 +144,14 @@ class DashboardController extends Controller
 
     private function getAvailablePeriods(): array
     {
-        $dates = Delivery::selectRaw('EXTRACT(YEAR FROM delivery_date) as year, EXTRACT(MONTH FROM delivery_date) as month')
+        $dates = Delivery::query()
+            ->select('delivery_date')
             ->distinct()
-            ->orderByDesc('year')
-            ->orderByDesc('month')
-            ->get()
-            ->map(fn ($d) => ['year' => (int) $d->year, 'month' => (int) $d->month])
+            ->orderByDesc('delivery_date')
+            ->pluck('delivery_date')
+            ->map(fn ($date) => ['year' => (int) Carbon::parse($date)->year, 'month' => (int) Carbon::parse($date)->month])
+            ->unique(fn (array $period) => "{$period['year']}-{$period['month']}")
+            ->values()
             ->toArray();
 
         $currentMonth = ['year' => (int) now()->year, 'month' => (int) now()->month];
