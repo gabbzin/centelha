@@ -1,5 +1,11 @@
-import { Header } from './header';
-export function Main({ children, hideHeader = false }: { children: React.ReactNode; hideHeader?: boolean }) {
+import { Header } from './header'
+export function Main({
+  children,
+  hideHeader = false,
+}: {
+  children: React.ReactNode
+  hideHeader?: boolean
+}) {
   return (
     <div className="bg-surface dark:bg-surface min-h-screen">
       {!hideHeader && <Header />}

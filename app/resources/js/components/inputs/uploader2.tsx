@@ -16,7 +16,10 @@ interface Uploader2Props {
   onFilesChange?: (files: FileWithPreview[]) => void
   currentLogoUrl?: string
 }
-export default function Uploader2({ onFilesChange, currentLogoUrl }: Uploader2Props) {
+export default function Uploader2({
+  onFilesChange,
+  currentLogoUrl,
+}: Uploader2Props) {
   const maxSize = convertMB(2)
   const [
     { files, isDragging, errors },

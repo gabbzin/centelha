@@ -15,14 +15,14 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { LayoutBase } from '@/layouts/layout';
-import { DashboardMap as Map } from '@/components/dashboard/map';
-import { AlertCard } from '@/components/dashboard/cards/alert-card';
-import { TopItensCard } from '@/components/dashboard/cards/top-itens-card';
-import SimpleBarChart from '@/components/dashboard/simple-bar-chart';
-import { usePage } from '@inertiajs/react';
-import type { SharedData } from '@/types';
+} from '@/components/ui/select'
+import { LayoutBase } from '@/layouts/layout'
+import { DashboardMap as Map } from '@/components/dashboard/map'
+import { AlertCard } from '@/components/dashboard/cards/alert-card'
+import { TopItensCard } from '@/components/dashboard/cards/top-itens-card'
+import SimpleBarChart from '@/components/dashboard/simple-bar-chart'
+import { usePage } from '@inertiajs/react'
+import type { SharedData } from '@/types'
 interface StatsCardData {
   value: number
   percentageChange: number
@@ -44,15 +44,15 @@ interface ChartDataItem {
 }
 interface DashboardProps {
   statsCards: {
-    benefitsDelivered: StatsCardData;
-    familiesServed: StatsCardData;
-    newRegistrations: StatsCardData;
-  };
-  alerts: AlertInfo[];
-  topItems: TopItem[];
-  chartData: ChartDataItem[];
-  previewSettings?: Record<string, unknown>;
-  hideHeader?: boolean;
+    benefitsDelivered: StatsCardData
+    familiesServed: StatsCardData
+    newRegistrations: StatsCardData
+  }
+  alerts: AlertInfo[]
+  topItems: TopItem[]
+  chartData: ChartDataItem[]
+  previewSettings?: Record<string, unknown>
+  hideHeader?: boolean
 }
 export default function Dashboard({
   statsCards,
@@ -62,13 +62,13 @@ export default function Dashboard({
   previewSettings,
   hideHeader,
 }: DashboardProps) {
-  const { pageSettings: sharedSettings } = usePage<SharedData>().props;
-  const pageSettings = previewSettings ?? sharedSettings;
+  const { pageSettings: sharedSettings } = usePage<SharedData>().props
+  const pageSettings = previewSettings ?? sharedSettings
   const { widgets, texts, rules } =
-    (pageSettings as unknown as typeof defaultConfigs) ?? defaultConfigs;
+    (pageSettings as unknown as typeof defaultConfigs) ?? defaultConfigs
 
   // Verificamos se há algo para exibir na coluna da direita
-  const hasSidebar = widgets.stock_alerts || topItems.length > 0;
+  const hasSidebar = widgets.stock_alerts || topItems.length > 0
   return (
     <LayoutBase
       descriptionPage={texts.subtitle}
@@ -195,4 +195,4 @@ const defaultConfigs = {
   rules: {
     low_stock_limit: 50,
   },
-};
+}

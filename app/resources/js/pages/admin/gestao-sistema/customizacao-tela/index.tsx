@@ -1,17 +1,17 @@
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { LayoutBase } from '@/layouts/layout';
-import { router } from '@inertiajs/react';
-import { Settings } from 'lucide-react';
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { LayoutBase } from '@/layouts/layout'
+import { router } from '@inertiajs/react'
+import { Settings } from 'lucide-react'
 
 interface AvailablePage {
-  key: string;
-  label: string;
-  description: string;
+  key: string
+  label: string
+  description: string
 }
 
 interface IndexProps {
-  availablePages: AvailablePage[];
+  availablePages: AvailablePage[]
 }
 
 export default function CustomizacaoTelaIndex({ availablePages }: IndexProps) {
@@ -36,9 +36,7 @@ export default function CustomizacaoTelaIndex({ availablePages }: IndexProps) {
               </p>
               <Button
                 onClick={() =>
-                  router.visit(
-                    `/gestao-sistema/customizacao-tela/${page.key}`,
-                  )
+                  router.visit(`/gestao-sistema/customizacao-tela/${page.key}`)
                 }
                 variant="primary"
               >
@@ -49,5 +47,5 @@ export default function CustomizacaoTelaIndex({ availablePages }: IndexProps) {
         ))}
       </section>
     </LayoutBase>
-  );
+  )
 }

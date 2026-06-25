@@ -1,22 +1,18 @@
-import { Header } from '@/components/layout/header';
-import { Head, usePage } from '@inertiajs/react';
-import {
-  CircleDollarSignIcon,
-  IdCardIcon,
-  MapPinHouseIcon,
-} from 'lucide-react';
-import { useState } from 'react';
-import { FamilyForm } from './family-form';
-import type { SharedData } from '@/types';
+import { Header } from '@/components/layout/header'
+import { Head, usePage } from '@inertiajs/react'
+import { CircleDollarSignIcon, IdCardIcon, MapPinHouseIcon } from 'lucide-react'
+import { useState } from 'react'
+import { FamilyForm } from './family-form'
+import type { SharedData } from '@/types'
 const STEPS = [
   { icon: IdCardIcon, title: '01 Identificação e Familia' },
   { icon: MapPinHouseIcon, title: '02 Endereço' },
   { icon: CircleDollarSignIcon, title: '03 Renda' },
-];
+]
 export default function RegisterFamilyPage() {
-  const { pageSettings } = usePage<SharedData>().props;
-  const texts = (pageSettings?.texts as Record<string, string>) ?? {};
-  const [currentStep, setCurrentStep] = useState(0);
+  const { pageSettings } = usePage<SharedData>().props
+  const texts = (pageSettings?.texts as Record<string, string>) ?? {}
+  const [currentStep, setCurrentStep] = useState(0)
   return (
     <>
       <Head title={texts.register_title ?? 'Formulário'} />

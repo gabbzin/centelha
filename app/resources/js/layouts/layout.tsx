@@ -3,13 +3,13 @@ import Heading from '@/components/layout/heading'
 import { Main } from '@/components/layout/main'
 
 interface LayoutBaseProps {
-  children: React.ReactNode;
-  descriptionPage?: string | React.ReactNode;
-  titlePage: string;
-  tagTitle?: string;
-  description?: string | React.ReactNode;
-  rightComponent?: React.ReactNode;
-  hideHeader?: boolean;
+  children: React.ReactNode
+  descriptionPage?: string | React.ReactNode
+  titlePage: string
+  tagTitle?: string
+  description?: string | React.ReactNode
+  rightComponent?: React.ReactNode
+  hideHeader?: boolean
 }
 export function LayoutBase({
   children,

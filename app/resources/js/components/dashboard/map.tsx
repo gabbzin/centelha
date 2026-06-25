@@ -6,7 +6,7 @@ export function DashboardMap() {
       style={{
         height: '500px',
         width: '100%',
-        zIndex: 0
+        zIndex: 0,
       }}
       zoom={13}
     >
