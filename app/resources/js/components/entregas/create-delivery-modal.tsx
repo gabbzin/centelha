@@ -60,7 +60,8 @@ export function CreateDeliveryModal({
   }
 
   const [beneficiarySearch, setBeneficiarySearch] = useState('')
-  const [selectedBeneficiaryId, setSelectedBeneficiaryId] = useState('')
+  const [selectedBeneficiary, setSelectedBeneficiary] =
+    useState<BeneficiaryOption | null>(null)
   const [beneficiaries, setBeneficiaries] = useState<BeneficiaryOption[]>([])
   const [showBeneficiaryList, setShowBeneficiaryList] = useState(false)
   const [benefitId, setBenefitId] = useState('')
@@ -76,7 +77,7 @@ export function CreateDeliveryModal({
 
   const reset = useCallback(() => {
     setBeneficiarySearch('')
-    setSelectedBeneficiaryId('')
+    setSelectedBeneficiary(null)
     setBeneficiaries([])
     setShowBeneficiaryList(false)
     setBenefitId('')
@@ -111,7 +112,7 @@ export function CreateDeliveryModal({
   }, [])
 
   useEffect(() => {
-    if (selectedBeneficiaryId || beneficiarySearch.length < 2) {
+    if (selectedBeneficiary || beneficiarySearch.length < 2) {
       setBeneficiaries([])
       return
     }
@@ -136,10 +137,10 @@ export function CreateDeliveryModal({
     }, 300)
 
     return () => clearTimeout(timer)
-  }, [beneficiarySearch, selectedBeneficiaryId])
+  }, [beneficiarySearch, selectedBeneficiary])
 
-  const selectedBeneficiaryLabel =
-    beneficiaries.find((b) => b.value === selectedBeneficiaryId)?.label ?? ''
+  const selectedBeneficiaryId = selectedBeneficiary?.value ?? ''
+  const selectedBeneficiaryLabel = selectedBeneficiary?.label ?? ''
 
   const increment = () => setQuantity((q) => Math.min(999, q + 1))
   const decrement = () => setQuantity((q) => Math.max(1, q - 1))
@@ -256,7 +257,7 @@ export function CreateDeliveryModal({
                   <Input
                     className="pl-9"
                     onChange={(e) => {
-                      setSelectedBeneficiaryId('')
+                      setSelectedBeneficiary(null)
                       setBeneficiarySearch(e.target.value)
                       setShowBeneficiaryList(true)
                     }}
@@ -272,7 +273,7 @@ export function CreateDeliveryModal({
                     <button
                       className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2"
                       onClick={() => {
-                        setSelectedBeneficiaryId('')
+                        setSelectedBeneficiary(null)
                         setBeneficiarySearch('')
                       }}
                       type="button"
@@ -281,7 +282,7 @@ export function CreateDeliveryModal({
                     </button>
                   ) : null}
 
-                  {showBeneficiaryList && !selectedBeneficiaryId && (
+                  {showBeneficiaryList && !selectedBeneficiary && (
                     <div className="absolute z-50 mt-1 max-h-56 w-full overflow-auto rounded-md border border-border bg-popover p-1 shadow-md">
                       {beneficiarySearch.length < 2 ? (
                         <p className="text-muted-foreground px-2 py-3 text-center text-sm">
@@ -301,8 +302,8 @@ export function CreateDeliveryModal({
                             key={b.value}
                             className="hover:bg-accent hover:text-accent-foreground w-full rounded-sm px-2 py-2 text-left text-sm"
                             onClick={() => {
-                              setSelectedBeneficiaryId(b.value)
-                              setBeneficiarySearch(b.label)
+                                setSelectedBeneficiary(b)
+                                setBeneficiarySearch(b.label)
                               setShowBeneficiaryList(false)
                             }}
                             type="button"
@@ -329,7 +330,13 @@ export function CreateDeliveryModal({
                 >
                   <Select onValueChange={setBenefitId} value={benefitId}>
                     <SelectTrigger className="border-border w-full border">
-                      <SelectValue placeholder="Selecione um tipo..." />
+                      <SelectValue placeholder="Selecione um tipo...">
+                        {benefitId
+                          ? (benefits.find(
+                              (b) => String(b.id) === benefitId,
+                            )?.name ?? null)
+                          : null}
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                       {benefits.map((option) => (
