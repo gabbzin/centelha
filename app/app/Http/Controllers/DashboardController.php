@@ -5,15 +5,17 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Benefit;
+use App\Models\CommunityCenter;
 use App\Models\Delivery;
 use App\Models\Family;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class DashboardController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $selectedMonth = (int) $request->input('month', now()->month);
         $selectedYear = (int) $request->input('year', now()->year);
@@ -40,7 +42,7 @@ class DashboardController extends Controller
         $chartData = $this->getChartData($currentStart, $currentEnd, $previousStart, $previousEnd);
         $topItems = $this->getTopItems($currentStart, $currentEnd);
 
-        $communityCenter = \App\Models\CommunityCenter::first();
+        $communityCenter = CommunityCenter::first();
         $lowStockLimit = $communityCenter?->settings['rules']['low_stock_limit'] ?? 50;
 
         $alerts = $this->getStockAlerts($lowStockLimit);

@@ -12,11 +12,15 @@ use App\Models\StockMovement;
 use App\Services\StorageService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class DeliveryController extends Controller
 {
@@ -46,7 +50,7 @@ class DeliveryController extends Controller
         Cache::increment(self::CACHE_VERSION_KEY);
     }
 
-    public function index(Request $request)
+    public function index(Request $request): InertiaResponse
     {
         $search = $request->input('search');
         $startDate = $this->parseDate($request->input('startDate'));
@@ -111,7 +115,7 @@ class DeliveryController extends Controller
         ]);
     }
 
-    public function store(StoreDeliveryRequest $request)
+    public function store(StoreDeliveryRequest $request): RedirectResponse
     {
         $data = $request->validated();
 
@@ -169,7 +173,7 @@ class DeliveryController extends Controller
             ->with('success', 'Entrega confirmada com sucesso!');
     }
 
-    public function show(Delivery $delivery)
+    public function show(Delivery $delivery): JsonResponse
     {
         $cacheKey = $this->cacheKey("show.{$delivery->id}");
 
@@ -180,7 +184,7 @@ class DeliveryController extends Controller
         });
     }
 
-    public function pdf(Delivery $delivery)
+    public function pdf(Delivery $delivery): Response
     {
         $cacheKey = $this->cacheKey("pdf.{$delivery->id}");
 
@@ -198,7 +202,7 @@ class DeliveryController extends Controller
         ]);
     }
 
-    public function exportPdf(Request $request)
+    public function exportPdf(Request $request): Response
     {
         $type = $request->input('type', 'current_month');
 
