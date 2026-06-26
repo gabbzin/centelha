@@ -83,25 +83,8 @@ function CreateUserForm({
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [role, setRole] = useState<UserRole>('Operador')
-  const [status, setStatus] = useState<UserStatus>('Ativo')
-
-  const reset = useCallback(() => {
-    setName('')
-    setEmail('')
-    setRole('Operador')
-    setStatus('Ativo')
-  }, [])
-
-  useEffect(() => {
-    if (isEdit && userToEdit) {
-      setName(userToEdit.name)
-      setEmail(userToEdit.email)
-      setRole(userToEdit.role)
-      setStatus(userToEdit.status)
-    } else if (open) {
-      reset()
-    }
-  }, [isEdit, userToEdit, open, reset])
+  const [dataNascimento, setDataNascimento] = useState('')
+  const [adminPassword, setAdminPassword] = useState('')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -117,106 +100,66 @@ function CreateUserForm({
   }
 
   return (
-    <Dialog onOpenChange={onOpenChange} open={open}>
-      <DialogContent
-        className="max-w-lg gap-0 p-0 sm:max-w-lg"
-        showCloseButton={false}
-      >
-        <form className="flex max-h-[90vh] flex-col" onSubmit={handleSubmit}>
-          <div className="overflow-y-auto px-8 py-6">
-            <DialogTitle className="text-center text-2xl font-bold tracking-[-0.03em] uppercase">
-              {isEdit ? 'Editar usuário' : 'Novo usuário'}
-            </DialogTitle>
-            <DialogDescription className="sr-only">
-              {isEdit
-                ? 'Atualize os dados do usuário.'
-                : 'Preencha os campos abaixo para cadastrar um novo usuário.'}
-            </DialogDescription>
+    <form className="flex max-h-[90vh] flex-col" onSubmit={handleSubmit}>
+      <div className="overflow-y-auto px-8 py-6">
+        <DialogTitle className="text-center text-2xl font-bold tracking-[-0.03em] uppercase">
+          Novo usuário
+        </DialogTitle>
+        <DialogDescription className="sr-only">
+          Preencha os campos abaixo para cadastrar um novo usuário.
+        </DialogDescription>
 
-            <div className="mt-6 space-y-4">
-              <FormField label="Nome completo" required>
-                <Input
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Nome do usuário"
-                  required
-                  value={name}
-                />
-              </FormField>
+        <div className="mt-6 space-y-4">
+          <FormField label="Nome completo" required>
+            <Input
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Nome do usuário"
+              required
+              value={name}
+            />
+          </FormField>
 
-              <FormField label="E-mail" required>
-                <Input
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="usuario@centelha.org"
-                  required
-                  type="email"
-                  value={email}
-                />
-              </FormField>
-
-              <div
-                className={`grid grid-cols-1 gap-4 ${isEdit ? 'md:grid-cols-2' : ''}`}
-              >
-                <FormField label="Perfil" required>
-                  <Select
-                    onValueChange={(v) => setRole(v as UserRole)}
-                    value={role}
-                  >
-                    <SelectTrigger className="border-border w-full border">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {ROLE_OPTIONS_FORM.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormField>
-
-                {isEdit && (
-                  <FormField label="Status" required>
-                    <Select
-                      onValueChange={(v) => setStatus(v as UserStatus)}
-                      value={status}
-                    >
-                      <SelectTrigger className="border-border w-full border">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {STATUS_OPTIONS_FORM.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormField>
-                )}
-              </div>
-
-              {!isEdit && (
-                <p className="text-muted-foreground text-xs">
-                  Uma senha de acesso será enviada por e-mail para o usuário
-                  concluir o cadastro.
-                </p>
-              )}
-
-              <p className="text-destructive text-xs font-semibold tracking-wide uppercase">
-                Todos os campos com * são obrigatórios
-              </p>
-            </div>
-          </div>
-
-          <FormField label="E-mail do Usuário" required>
+          <FormField label="E-mail" required>
             <Input
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Digite o email do usuário que vai ser adicionado"
+              placeholder="usuario@centelha.org"
               required
               type="email"
               value={email}
             />
           </FormField>
+
+          <FormField label="Data de nascimento" required>
+            <Input
+              onChange={(e) => setDataNascimento(e.target.value)}
+              required
+              type="date"
+              value={dataNascimento}
+            />
+          </FormField>
+
+          <FormField label="Perfil" required>
+            <Select
+              onValueChange={(v) => setRole(v as UserRole)}
+              value={role}
+            >
+              <SelectTrigger className="border-border w-full border">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {ROLE_OPTIONS_FORM.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormField>
+
+          <p className="text-muted-foreground text-xs">
+            Uma senha de acesso será enviada por e-mail para o usuário
+            concluir o cadastro.
+          </p>
 
           <FormField label="Senha do administrador" required>
             <Input
@@ -230,7 +173,7 @@ function CreateUserForm({
           </FormField>
 
           <p className="text-destructive text-xs font-semibold tracking-wide uppercase">
-            Todos os campos que tem * são obrigatórios
+            Todos os campos com * são obrigatórios
           </p>
         </div>
       </div>
