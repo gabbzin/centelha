@@ -1,4 +1,4 @@
-import { usePage } from '@inertiajs/react'
+import { router, usePage } from '@inertiajs/react'
 import { AlertCard } from '@/components/dashboard/cards/alert-card'
 import { TopItensCard } from '@/components/dashboard/cards/top-itens-card'
 import { FamilyIcon } from '@/components/dashboard/icons/family-icon'
@@ -43,6 +43,10 @@ interface ChartDataItem {
   anterior: number
   atual: number
 }
+interface Period {
+  year: number
+  month: number
+}
 interface DashboardProps {
   statsCards: {
     benefitsDelivered: StatsCardData
@@ -52,6 +56,9 @@ interface DashboardProps {
   alerts: AlertInfo[]
   topItems: TopItem[]
   chartData: ChartDataItem[]
+  availablePeriods: Period[]
+  selectedMonth: number
+  selectedYear: number
   previewSettings?: Record<string, unknown>
   hideHeader?: boolean
 }
@@ -60,13 +67,35 @@ export default function Dashboard({
   alerts,
   topItems,
   chartData,
+  availablePeriods,
+  selectedMonth,
+  selectedYear,
   previewSettings,
   hideHeader,
 }: DashboardProps) {
   const { pageSettings: sharedSettings } = usePage<SharedData>().props
   const pageSettings = previewSettings ?? sharedSettings
-  const { widgets, texts, rules } =
+  const { widgets, texts } =
     (pageSettings as unknown as typeof defaultConfigs) ?? defaultConfigs
+
+  const selectedValue = `${selectedYear}-${selectedMonth}`
+
+  const handlePeriodChange = (value: string) => {
+    const [year, month] = value.split('-')
+    router.get(
+      route('dashboard'),
+      { year, month },
+      { preserveState: true, preserveScroll: true },
+    )
+  }
+
+  const formatPeriodLabel = (period: Period) => {
+    const date = new Date(period.year, period.month - 1)
+    return new Intl.DateTimeFormat('pt-BR', {
+      month: 'long',
+      year: 'numeric',
+    }).format(date)
+  }
 
   // Verificamos se há algo para exibir na coluna da direita
   const hasSidebar = widgets.stock_alerts || topItems.length > 0
@@ -76,13 +105,19 @@ export default function Dashboard({
       hideHeader={hideHeader}
       rightComponent={
         widgets.period_selector && (
-          <Select defaultValue="junho_2026">
+          <Select onValueChange={handlePeriodChange} value={selectedValue}>
             <SelectTrigger className="border-border border">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="maio_2026">Maio 2026</SelectItem>
-              <SelectItem value="junho_2026">Junho 2026</SelectItem>
+              {availablePeriods.map((period) => {
+                const value = `${period.year}-${period.month}`
+                return (
+                  <SelectItem key={value} value={value}>
+                    {formatPeriodLabel(period)}
+                  </SelectItem>
+                )
+              })}
             </SelectContent>
           </Select>
         )
