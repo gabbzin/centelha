@@ -10,7 +10,9 @@ const STEPS = [
   { icon: CircleDollarSignIcon, title: '03 Renda' },
 ]
 export default function RegisterFamilyPage() {
-  const { pageSettings } = usePage<SharedData>().props
+  const { pageSettings, availableTags } = usePage<
+    SharedData & { availableTags: Array<{ id: number; name: string; color: string; icon: string | null }> }
+  >().props
   const texts = (pageSettings?.texts as Record<string, string>) ?? {}
   const [currentStep, setCurrentStep] = useState(0)
   return (
@@ -37,6 +39,7 @@ export default function RegisterFamilyPage() {
 
           <main className="bg-surface flex h-full flex-col justify-between p-8">
             <FamilyForm
+              availableTags={availableTags}
               onNext={() => setCurrentStep((s) => s + 1)}
               onPrev={() => setCurrentStep((s) => s - 1)}
               step={currentStep}

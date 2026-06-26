@@ -1,16 +1,18 @@
 import { Head } from '@inertiajs/react'
 import { FlashListener } from '@/components/toasters/flash-listener'
-import { BenefitsCatalogSection } from '@/components/usuarios/benefits-catalog-section'
+import { TagsSection } from '@/components/usuarios/tags-section'
 import { UsersSection } from '@/components/usuarios/users-section'
-import type { PaginatedUsers } from '@/components/usuarios/types'
+import type { PaginatedTags, PaginatedUsers } from '@/components/usuarios/types'
 import { LayoutBase } from '@/layouts/layout'
 
 interface UsuariosBeneficiosProps {
   users: PaginatedUsers
+  tags: PaginatedTags
 }
 
 export default function UsuariosBeneficios({
   users,
+  tags,
 }: UsuariosBeneficiosProps) {
   return (
     <LayoutBase
@@ -22,7 +24,7 @@ export default function UsuariosBeneficios({
       <Head title="Usuários e Benefícios" />
       <div className="space-y-6">
         <UsersSection users={users} />
-        <BenefitsCatalogSection />
+        <TagsSection tags={tags} />
       </div>
     </LayoutBase>
   )

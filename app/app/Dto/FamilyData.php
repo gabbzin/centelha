@@ -10,6 +10,7 @@ final readonly class FamilyData
 {
     /**
      * @param  array<int, MemberData>  $members
+     * @param  array<int, int>  $tags
      */
     public function __construct(
         public readonly string $responsibleName,
@@ -25,6 +26,7 @@ final readonly class FamilyData
         public readonly ?string $generalObservations,
         public readonly AddressData $address,
         public readonly array $members,
+        public readonly array $tags = [],
     ) {}
 
     public static function fromRequest(FormRequest $request): self
@@ -32,34 +34,35 @@ final readonly class FamilyData
         $data = $request->validated();
 
         return new self(
-            responsibleName: $data['name'],
-            cpf: $data['cpf'],
-            birthDate: $data['data_nascimento'],
-            phone: $data['telefone'],
-            email: $data['email'] ?? null,
-            incomeSource: $data['fonte_renda'] ?? null,
-            totalIncome: isset($data['renda_familiar']) ? (int) ($data['renda_familiar'] * 100) : 0,
-            receivesGovernmentAid: ($data['recebe_auxilio'] ?? 'nao') === 'sim',
-            governmentAidDescription: $data['auxilios_recebidos'] ?? null,
-            housingCondition: $data['moradia'] ?? null,
-            generalObservations: $data['general_observations'] ?? null,
+            responsibleName: $data["name"],
+            cpf: $data["cpf"],
+            birthDate: $data["data_nascimento"],
+            phone: $data["telefone"],
+            email: $data["email"] ?? null,
+            incomeSource: $data["fonte_renda"] ?? null,
+            totalIncome: isset($data["renda_familiar"]) ? (int) ($data["renda_familiar"] * 100) : 0,
+            receivesGovernmentAid: ($data["recebe_auxilio"] ?? "nao") === "sim",
+            governmentAidDescription: $data["auxilios_recebidos"] ?? null,
+            housingCondition: $data["moradia"] ?? null,
+            generalObservations: $data["general_observations"] ?? null,
             address: new AddressData(
-                zipcode: $data['cep'],
-                street: $data['logradouro'],
-                number: $data['numero'],
-                neighborhood: $data['bairro'],
-                city: $data['cidade'],
-                state: $data['UF'],
+                zipcode: $data["cep"],
+                street: $data["logradouro"],
+                number: $data["numero"],
+                neighborhood: $data["bairro"],
+                city: $data["cidade"],
+                state: $data["UF"],
             ),
             members: array_map(
                 static fn (array $member): MemberData => new MemberData(
-                    name: $member['name'],
-                    cpf: $member['cpf'] ?? null,
-                    birthDate: $member['data_nascimento'] ?? null,
-                    relationship: $member['relacao_parentesco'] ?? null,
+                    name: $member["name"],
+                    cpf: $member["cpf"] ?? null,
+                    birthDate: $member["data_nascimento"] ?? null,
+                    relationship: $member["relacao_parentesco"] ?? null,
                 ),
-                $data['family_members'] ?? [],
+                $data["family_members"] ?? [],
             ),
+            tags: $data["tags"] ?? [],
         );
     }
 }

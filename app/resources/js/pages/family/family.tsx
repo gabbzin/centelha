@@ -113,6 +113,7 @@ export default function Family({
                 location={family.address?.neighborhood}
                 membersCount={family.total_members_count || 0}
                 status={family.is_active}
+                tags={family.tags}
               />
             )
           })}

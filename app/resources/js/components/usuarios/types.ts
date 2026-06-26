@@ -61,3 +61,21 @@ export const STATUS_OPTIONS_FORM: { value: UserStatus; label: string }[] = [
   { value: 'Ativo', label: 'Ativo' },
   { value: 'Inativo', label: 'Inativo' },
 ]
+
+export interface Tag {
+  id: number
+  name: string
+  color: string
+  icon: string | null
+  created_at: string
+}
+
+export interface PaginatedTags {
+  data: Tag[]
+  current_page: number
+  last_page: number
+  from: number | null
+  to: number | null
+  total: number
+  per_page: number
+}

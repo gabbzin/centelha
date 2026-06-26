@@ -137,9 +137,11 @@ export interface User {
   updated_at: string
   [key: string]: unknown // This allows for additional properties...
 }
-export interface SpecificNeed {
+export interface Tag {
   id: number
   name: string
+  color: string
+  icon: string | null
   created_at: string
   updated_at: string
 }
@@ -187,5 +189,5 @@ export interface Family {
   members?: FamilyMember[]
   members_count?: number
   total_members_count?: number // Campo adicionado no controller
-  specific_needs?: SpecificNeed[]
+  tags?: Tag[]
 }

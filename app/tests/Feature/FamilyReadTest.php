@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Models\Address;
 use App\Models\Family;
 use App\Models\FamilyMember;
-use App\Models\SpecificNeed;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -20,27 +20,27 @@ class FamilyReadTest extends TestCase
         Family::factory()->count(3)->create();
 
         $this->actingAs($user)
-            ->get('/family')
+            ->get("/family")
             ->assertOk()
             ->assertInertia(fn ($page) => $page
-                ->component('family/family')
-                ->has('families.data')
+                ->component("family/family")
+                ->has("families.data")
             );
     }
 
     public function test_index_filters_families_by_responsible_name(): void
     {
         $user = User::factory()->create();
-        $matching = Family::factory()->create(['responsible_name' => 'João Silva']);
-        Family::factory()->create(['responsible_name' => 'Maria Souza']);
+        $matching = Family::factory()->create(["responsible_name" => "João Silva"]);
+        Family::factory()->create(["responsible_name" => "Maria Souza"]);
 
-        $response = $this->actingAs($user)->get('/family?search=João');
+        $response = $this->actingAs($user)->get("/family?search=João");
 
         $response->assertOk();
         $response->assertInertia(fn ($page) => $page
-            ->component('family/family')
-            ->has('families.data', 1)
-            ->where('families.data.0.id', $matching->id)
+            ->component("family/family")
+            ->has("families.data", 1)
+            ->where("families.data.0.id", $matching->id)
         );
     }
 
@@ -50,20 +50,20 @@ class FamilyReadTest extends TestCase
         $family = Family::factory()->create();
         Address::factory()->for($family)->create();
         FamilyMember::factory()->for($family)->count(2)->create();
-        $needs = SpecificNeed::factory()->count(2)->create();
-        $family->specificNeeds()->attach($needs);
+        $needs = Tag::factory()->count(2)->create();
+        $family->tags()->attach($needs);
 
         $this->actingAs($user)
             ->get("/family/details/{$family->id}")
             ->assertOk()
             ->assertInertia(fn ($page) => $page
-                ->component('family/[id]/family-info')
-                ->has('id')
-                ->has('backUrl')
-                ->has('family')
-                ->has('family.address')
-                ->has('family.members', 2)
-                ->has('family.specific_needs', 2)
+                ->component("family/[id]/family-info")
+                ->has("id")
+                ->has("backUrl")
+                ->has("family")
+                ->has("family.address")
+                ->has("family.members", 2)
+                ->has("family.tags", 2)
             );
     }
 
@@ -72,7 +72,7 @@ class FamilyReadTest extends TestCase
         $user = User::factory()->create();
 
         $this->actingAs($user)
-            ->get('/family/details/9999')
+            ->get("/family/details/9999")
             ->assertNotFound();
     }
 
@@ -87,10 +87,10 @@ class FamilyReadTest extends TestCase
             ->get("/family/{$family->id}/edit")
             ->assertOk()
             ->assertInertia(fn ($page) => $page
-                ->component('family/form/edit')
-                ->has('family')
-                ->has('family.address')
-                ->has('family.members', 2)
+                ->component("family/form/edit")
+                ->has("family")
+                ->has("family.address")
+                ->has("family.members", 2)
             );
     }
 }
