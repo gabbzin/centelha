@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Notifications;
 
+use App\Models\CommunityCenter;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Notifications\Messages\MailMessage;
 
@@ -13,6 +14,13 @@ class ResetPasswordNotification extends ResetPassword
     {
         $url = $this->resetUrl($notifiable);
         $isActivation = is_null($notifiable->activated_at);
+        $logoUrl = CommunityCenter::instance()?->logo_url ?? asset('logo.svg');
+
+        $data = [
+            'url' => $url,
+            'user' => $notifiable,
+            'logoUrl' => $logoUrl,
+        ];
 
         if ($isActivation) {
             return (new MailMessage)
@@ -22,7 +30,7 @@ class ResetPasswordNotification extends ResetPassword
                 ->action('Ativar conta e definir senha', $url)
                 ->line('Esse link é válido por 60 minutos. Se você não solicitou essa conta, ignore este e-mail.')
                 ->salutation("Atenciosamente,\nEquipe ".config('app.name'))
-                ->markdown('emails.reset-password');
+                ->markdown('emails.reset-password', $data);
         }
 
         return (new MailMessage)
@@ -32,6 +40,6 @@ class ResetPasswordNotification extends ResetPassword
             ->action('Redefinir senha', $url)
             ->line('Esse link é válido por 60 minutos. Se você não solicitou a redefinição, nenhuma ação é necessária.')
             ->salutation("Atenciosamente,\nEquipe ".config('app.name'))
-            ->markdown('emails.reset-password');
+            ->markdown('emails.reset-password', $data);
     }
 }

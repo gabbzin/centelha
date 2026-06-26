@@ -1,7 +1,7 @@
 <x-mail::message>
 {{-- Header --}}
 <div style="text-align: center; margin-bottom: 24px;">
-    <h1 style="color: #183154; font-size: 24px; font-weight: 700; margin: 0;">{{ config('app.name') }}</h1>
+    <img alt="{{ config('app.name') }}" src="{{ $logoUrl }}" style="max-height: 64px; margin-bottom: 8px;">
     <p style="color: #6b7280; font-size: 14px; margin: 4px 0 0;">Sistema de Gestão Comunitária</p>
 </div>
 
