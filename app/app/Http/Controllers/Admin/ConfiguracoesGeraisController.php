@@ -28,7 +28,7 @@ class ConfiguracoesGeraisController extends Controller
             'maintenance_mode' => 'boolean',
         ]);
 
-        $center = CommunityCenter::firstOrCreate([]);
+        $center = CommunityCenter::instance();
 
         $data = [
             'name' => $validated['name'],
@@ -40,25 +40,25 @@ class ConfiguracoesGeraisController extends Controller
 
         if ($request->hasFile('logo')) {
             $data['logo_path'] = $this->storage->replace(
-                'public',
+                'minio',
                 'logos',
                 $request->file('logo'),
                 $center->logo_path,
             );
         } elseif ($request->boolean('remove_logo')) {
-            $this->storage->delete('public', $center->logo_path);
+            $this->storage->delete('minio', $center->logo_path);
             $data['logo_path'] = null;
         }
 
         if ($request->hasFile('favicon')) {
             $data['favicon_path'] = $this->storage->replace(
-                'public',
+                'minio',
                 'favicons',
                 $request->file('favicon'),
                 $center->favicon_path,
             );
         } elseif ($request->boolean('remove_favicon')) {
-            $this->storage->delete('public', $center->favicon_path);
+            $this->storage->delete('minio', $center->favicon_path);
             $data['favicon_path'] = null;
         }
 

@@ -15,10 +15,25 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import type { FileWithPreview } from '@/hooks/inputs/use-file-upload'
-import { FONT_SELECT_OPTIONS } from '@/settings/fonts'
 import { TtIcon } from '@/pages/admin/gestao-sistema/Tt-icon'
 import SettingsPanelCard from '../settings-panel-card'
 import { SocialInputRow } from '../social-input-row'
+
+// Opções
+const options = [
+  {
+    label: 'Poppins',
+    value: 'poppins',
+  },
+  {
+    label: 'Roboto',
+    value: 'roboto',
+  },
+  {
+    label: 'Open Sans',
+    value: 'open-sans',
+  },
+]
 interface ConfigsGeraisFormProps {
   onLogoChange?: (files: FileWithPreview[]) => void
   onFaviconChange?: (files: FileWithPreview[]) => void
@@ -80,7 +95,7 @@ export function ConfigsGeraisForm({
                   <InputSelect
                     control={control}
                     name="font"
-                    options={FONT_SELECT_OPTIONS}
+                    options={options}
                   />
                 </div>
               </div>

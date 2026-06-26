@@ -65,8 +65,8 @@ class PageCustomizationController extends Controller
         $schema = require $schemaPath;
         $defaults = require $configPath;
 
-        $center = CommunityCenter::first();
-        $saved = $center?->settings[$pageKey] ?? [];
+        $center = CommunityCenter::instance();
+        $saved = $center->settings[$pageKey] ?? [];
         $settings = array_replace_recursive($defaults, $saved);
 
         return Inertia::render('admin/gestao-sistema/customizacao-tela/edit', [
@@ -95,8 +95,7 @@ class PageCustomizationController extends Controller
 
         $nested = $this->flatToNested($schema, $validated);
 
-        $center = CommunityCenter::first();
-        abort_if(! $center, 503, 'Community center não configurado.');
+        $center = CommunityCenter::instance();
         $settings = $center->settings ?? [];
         $settings[$pageKey] = $nested;
         $center->settings = $settings;

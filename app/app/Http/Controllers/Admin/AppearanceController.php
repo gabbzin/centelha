@@ -30,7 +30,7 @@ class AppearanceController extends Controller
             'button' => 'required|string',
         ]);
 
-        $center = CommunityCenter::firstOrCreate([]);
+        $center = CommunityCenter::instance();
 
         $center->update([
             'colors' => $validated,
