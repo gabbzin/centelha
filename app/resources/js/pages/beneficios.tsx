@@ -1,7 +1,7 @@
-import { StockControlSection } from '@/components/beneficios/stock-control-section'
-import { Header } from '@/components/layout/header'
 import { Head, usePage } from '@inertiajs/react'
+import { StockControlSection } from '@/components/beneficios/stock-control-section'
 import type { PaginatedBenefits } from '@/components/beneficios/types'
+import { Header } from '@/components/layout/header'
 import type { SharedData } from '@/types'
 
 interface BeneficiosPageProps {

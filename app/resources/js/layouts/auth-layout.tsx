@@ -1,5 +1,5 @@
-import AuthLayoutTemplate from '@/layouts/auth/auth-simple-layout'
 import { FlashListener } from '@/components/toasters/flash-listener'
+import AuthLayoutTemplate from '@/layouts/auth/auth-simple-layout'
 export default function AuthLayout({
   children,
   title,

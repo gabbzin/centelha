@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
@@ -34,6 +35,14 @@ class PasswordResetLinkController extends Controller
         $request->validate([
             'email' => 'required|email',
         ]);
+
+        $user = User::where('email', $request->input('email'))->first();
+
+        if ($user && ! $user->ativo) {
+            throw ValidationException::withMessages([
+                'email' => 'Esta conta está inativa. Entre em contato com o administrador.',
+            ]);
+        }
 
         Password::sendResetLink(
             $request->only('email')

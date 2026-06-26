@@ -19,6 +19,9 @@ class FamilySeeder extends Seeder
 
         Family::factory()
             ->count(8)
+            ->state(fn () => [
+                'created_at' => fake()->dateTimeBetween(now()->subMonth()->startOfMonth(), now()),
+            ])
             ->has(
                 Address::factory()->state(function (array $attributes, Family $family) {
                     return ["family_id" => $family->id];

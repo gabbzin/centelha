@@ -14,6 +14,7 @@ interface UsersTableProps {
   onView: (user: User) => void
   onEdit: (user: User) => void
   onDelete: (user: User) => void
+  onResendActivation?: (user: User) => void
 }
 
 export function UsersTable({
@@ -27,6 +28,7 @@ export function UsersTable({
   onView,
   onEdit,
   onDelete,
+  onResendActivation,
 }: UsersTableProps) {
   return (
     <Card className="rounded-2xl">
@@ -59,6 +61,7 @@ export function UsersTable({
                     key={user.id}
                     onDelete={onDelete}
                     onEdit={onEdit}
+                    onResendActivation={onResendActivation}
                     onView={onView}
                     user={user}
                   />

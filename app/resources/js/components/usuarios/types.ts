@@ -1,6 +1,6 @@
 export type UserRole = 'admin' | 'operador'
 
-export type UserStatus = 'Ativo' | 'Inativo'
+export type UserStatus = 'Ativo' | 'Inativo' | 'Pendente'
 
 export const USER_ROLE_LABELS: Record<UserRole, string> = {
   admin: 'Administrador',

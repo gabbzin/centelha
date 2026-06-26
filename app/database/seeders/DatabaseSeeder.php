@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
             TagSeeder::class,
             FamilySeeder::class,
             BenefitSeeder::class,
+            DeliverySeeder::class,
         ]);
     }
 }

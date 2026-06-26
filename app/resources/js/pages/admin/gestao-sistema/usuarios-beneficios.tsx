@@ -1,8 +1,8 @@
 import { Head } from '@inertiajs/react'
 import { FlashListener } from '@/components/toasters/flash-listener'
-import { TagsSection } from '@/components/usuarios/tags-section'
+import { BenefitsCatalogSection } from '@/components/usuarios/benefits-catalog-section'
+import type { PaginatedUsers } from '@/components/usuarios/types'
 import { UsersSection } from '@/components/usuarios/users-section'
-import type { PaginatedTags, PaginatedUsers } from '@/components/usuarios/types'
 import { LayoutBase } from '@/layouts/layout'
 
 interface UsuariosBeneficiosProps {

@@ -73,9 +73,7 @@ export function getFontByValue(value: string | undefined | null): FontOption {
 }
 
 /** Retorna o stack CSS da fonte selecionada. */
-export function getFontFamilyByValue(
-  value: string | undefined | null,
-): string {
+export function getFontFamilyByValue(value: string | undefined | null): string {
   return getFontByValue(value).fontFamily
 }
 

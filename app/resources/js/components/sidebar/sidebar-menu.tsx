@@ -1,6 +1,7 @@
 import { Link, usePage } from '@inertiajs/react'
 import { MenuIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import type { SharedData } from '@/types'
 import { Button } from '../ui/button'
 import {
   Sheet,
@@ -24,35 +25,44 @@ const LINKS = [
     label: 'Dashboard',
     icon: DashboardIcon,
     href: '/dashboard',
+    roles: ['admin', 'operador'],
   },
   {
     id: 'familia',
     label: 'Familia',
     icon: FamilyIcon,
     href: '/family',
+    roles: ['admin', 'operador'],
   },
   {
     id: 'beneficios',
     label: 'Beneficios',
     icon: BenefityIcon,
     href: '/beneficios',
+    roles: ['admin', 'operador'],
   },
   {
     id: 'entregas',
     label: 'Entregas',
     icon: DeliveryIcon,
     href: '/entregas',
+    roles: ['admin', 'operador'],
   },
   {
     id: 'admin',
     label: 'Gestão',
     icon: ManagementIcon,
     href: '/gestao-sistema',
+    roles: ['admin'],
   },
 ]
 const activeColor = '#C5D9FF'
 export function SidebarMenu() {
-  const url = usePage().url
+  const { url, props } = usePage<SharedData>()
+  const userRole = props.auth.user?.role
+  const visibleLinks = LINKS.filter((link) =>
+    userRole ? link.roles.includes(userRole) : true,
+  )
   return (
     <Sheet>
       <SheetTrigger
@@ -73,7 +83,7 @@ export function SidebarMenu() {
           </SheetTitle>
         </SheetHeader>
         <div className="space-y-2 p-3">
-          {LINKS.map(({ id, label, icon: Icon, href }) => (
+          {visibleLinks.map(({ id, label, icon: Icon, href }) => (
             <Link
               key={id}
               className={cn(

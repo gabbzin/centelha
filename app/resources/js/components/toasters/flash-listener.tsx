@@ -1,7 +1,7 @@
-import { useEffect } from 'react'
 import { usePage } from '@inertiajs/react'
-import type { SharedData } from '@/types'
+import { useEffect } from 'react'
 import { MESSAGES, type MessageCode } from '@/lib/messages'
+import type { SharedData } from '@/types'
 import { toaster } from './toast-alert'
 
 export function FlashListener() {

@@ -27,9 +27,7 @@ export type CreateUserPayload = {
   mode: 'create'
   name: string
   email: string
-  data_nascimento: string
   role: UserRole
-  admin_password: string
 }
 
 export type EditUserPayload = {
@@ -89,9 +87,7 @@ function CreateUserForm({
 }) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [role, setRole] = useState<UserRole>('Operador')
-  const [dataNascimento, setDataNascimento] = useState('')
-  const [adminPassword, setAdminPassword] = useState('')
+  const [role, setRole] = useState<UserRole>('operador')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -100,9 +96,7 @@ function CreateUserForm({
       mode: 'create',
       name,
       email,
-      data_nascimento: dataNascimento,
       role,
-      admin_password: adminPassword,
     })
   }
 
@@ -136,15 +130,6 @@ function CreateUserForm({
             />
           </FormField>
 
-          <FormField label="Data de nascimento" required>
-            <Input
-              onChange={(e) => setDataNascimento(e.target.value)}
-              required
-              type="date"
-              value={dataNascimento}
-            />
-          </FormField>
-
           <FormField label="Perfil" required>
             <Select onValueChange={(v) => setRole(v as UserRole)} value={role}>
               <SelectTrigger className="border-border w-full border">
@@ -164,17 +149,6 @@ function CreateUserForm({
             Uma senha de acesso será enviada por e-mail para o usuário concluir
             o cadastro.
           </p>
-
-          <FormField label="Senha do administrador" required>
-            <Input
-              autoComplete="current-password"
-              onChange={(e) => setAdminPassword(e.target.value)}
-              placeholder="Digite sua senha, precisamos confirmar sua senha para poder adicionar o usuário"
-              required
-              type="password"
-              value={adminPassword}
-            />
-          </FormField>
 
           <p className="text-destructive text-xs font-semibold tracking-wide uppercase">
             Todos os campos com * são obrigatórios
@@ -248,43 +222,38 @@ function EditUserForm({
             />
           </FormField>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <FormField label="Perfil" required>
-              <Select
-                onValueChange={(v) => setRole(v as UserRole)}
-                value={role}
-              >
-                <SelectTrigger className="border-border w-full border">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {ROLE_OPTIONS_FORM.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </FormField>
+          <FormField label="Perfil" required>
+            <Select onValueChange={(v) => setRole(v as UserRole)} value={role}>
+              <SelectTrigger className="border-border w-full border">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {ROLE_OPTIONS_FORM.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormField>
 
-            <FormField label="Status" required>
-              <Select
-                onValueChange={(v) => setStatus(v as UserStatus)}
-                value={status}
-              >
-                <SelectTrigger className="border-border w-full border">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {STATUS_OPTIONS_FORM.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </FormField>
-          </div>
+          <FormField label="Status">
+            <Select
+              onValueChange={(v) => setStatus(v as UserStatus)}
+              value={status}
+            >
+              <SelectTrigger className="border-border w-full border">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {STATUS_OPTIONS_FORM.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormField>
 
           <p className="text-destructive text-xs font-semibold tracking-wide uppercase">
             Todos os campos com * são obrigatórios

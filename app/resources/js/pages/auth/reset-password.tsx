@@ -33,15 +33,15 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
   }
   return (
     <AuthLayout
-      description="Please enter your new password below"
-      title="Reset password"
+      description="Defina uma nova senha para acessar o sistema."
+      title="Definir senha"
     >
-      <Head title="Reset password" />
+      <Head title="Definir senha" />
 
       <form onSubmit={submit}>
         <div className="grid gap-6">
           <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">E-mail</Label>
             <Input
               autoComplete="email"
               className="mt-1 block w-full"
@@ -56,7 +56,7 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Nova senha</Label>
             <Input
               autoComplete="new-password"
               autoFocus
@@ -64,7 +64,7 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
               id="password"
               name="password"
               onChange={(e) => setData('password', e.target.value)}
-              placeholder="Password"
+              placeholder="Sua nova senha"
               type="password"
               value={data.password}
             />
@@ -72,14 +72,14 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="password_confirmation">Confirm password</Label>
+            <Label htmlFor="password_confirmation">Confirmar senha</Label>
             <Input
               autoComplete="new-password"
               className="mt-1 block w-full"
               id="password_confirmation"
               name="password_confirmation"
               onChange={(e) => setData('password_confirmation', e.target.value)}
-              placeholder="Confirm password"
+              placeholder="Confirme sua nova senha"
               type="password"
               value={data.password_confirmation}
             />
@@ -91,7 +91,7 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
 
           <Button className="mt-4 w-full" disabled={processing} type="submit">
             {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
-            Reset password
+            Salvar senha
           </Button>
         </div>
       </form>

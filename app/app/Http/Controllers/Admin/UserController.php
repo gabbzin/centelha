@@ -68,32 +68,52 @@ class UserController extends Controller
         $data = $request->validated();
 
         User::create([
-            "name" => $data["name"],
-            "email" => $data["email"],
-            "password" => Str::random(24),
-            "role" => $data["role"],
-            "ativo" => true,
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Str::random(24),
+            'role' => $data['role'],
+            'ativo' => false,
+            'activated_at' => null,
         ]);
 
         Password::sendResetLink(["email" => $data["email"]]);
 
-        return to_route("gestao-sistema.usuarios-beneficios")
-            ->with("success", "Usuário cadastrado! Um link para definir a senha foi enviado ao e-mail.");
+        return to_route('gestao-sistema.usuarios-beneficios')
+            ->with('success', 'Usuário cadastrado! Um link de ativação foi enviado ao e-mail para definição de senha.');
     }
 
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
         $data = $request->validated();
 
-        $user->update([
-            "name" => $data["name"] ?? $user->name,
-            "email" => $data["email"] ?? $user->email,
-            "role" => $data["role"] ?? $user->role,
-            "ativo" => array_key_exists("ativo", $data) ? (bool) $data["ativo"] : $user->ativo,
-        ]);
+        $update = [
+            'name' => $data['name'] ?? $user->name,
+            'email' => $data['email'] ?? $user->email,
+            'role' => $data['role'] ?? $user->role,
+        ];
+
+        if (array_key_exists('status', $data)) {
+            $update['ativo'] = $data['status'] === 'Ativo';
+            $update['activated_at'] = $data['status'] === 'Pendente' ? null : $user->activated_at;
+        }
+
+        $user->update($update);
 
         return to_route("gestao-sistema.usuarios-beneficios")
             ->with("success", "Usuário atualizado com sucesso!");
+    }
+
+    public function resendActivation(User $user): RedirectResponse
+    {
+        if ($user->ativo || ! is_null($user->activated_at)) {
+            return to_route('gestao-sistema.usuarios-beneficios')
+                ->with('error', 'Apenas contas pendentes podem receber novo link de ativação.');
+        }
+
+        Password::sendResetLink(['email' => $user->email]);
+
+        return to_route('gestao-sistema.usuarios-beneficios')
+            ->with('success', "Link de ativação reenviado para {$user->email}.");
     }
 
     public function deactivate(Request $request, User $user): RedirectResponse
@@ -122,13 +142,22 @@ class UserController extends Controller
     private function toClientShape(User $user): array
     {
         return [
-            "id" => $user->id,
-            "name" => $user->name,
-            "email" => $user->email,
-            "role" => $user->role->value,
-            "status" => $user->ativo ? "Ativo" : "Inativo",
-            "last_access" => $user->last_login_at?->toIso8601String(),
-            "created_at" => $user->created_at?->toIso8601String(),
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role->value,
+            'status' => $this->resolveStatus($user),
+            'last_access' => $user->last_login_at?->toIso8601String(),
+            'created_at' => $user->created_at?->toIso8601String(),
         ];
+    }
+
+    private function resolveStatus(User $user): string
+    {
+        if ($user->ativo) {
+            return 'Ativo';
+        }
+
+        return is_null($user->activated_at) ? 'Pendente' : 'Inativo';
     }
 }

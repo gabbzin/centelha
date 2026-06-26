@@ -47,6 +47,12 @@ Route::middleware(["auth", "role:admin"])->group(function () {
     Route::post("tags", [TagController::class, "store"])->name("tags.store");
     Route::put("tags/{tag}", [TagController::class, "update"])->name("tags.update");
     Route::delete("tags/{tag}", [TagController::class, "destroy"])->name("tags.destroy");
+    Route::get('gestao-sistema/usuarios-beneficios', [UserController::class, 'index'])->name('gestao-sistema.usuarios-beneficios');
+    Route::post('usuarios', [UserController::class, 'store'])->name('usuarios.store');
+    Route::put('usuarios/{user}', [UserController::class, 'update'])->name('usuarios.update');
+    Route::patch('usuarios/{user}', [UserController::class, 'update'])->name('usuarios.patch');
+    Route::delete('usuarios/{user}', [UserController::class, 'deactivate'])->name('usuarios.deactivate');
+    Route::post('usuarios/{user}/reenviar-ativacao', [UserController::class, 'resendActivation'])->name('usuarios.resend-activation');
 });
 
 Route::middleware(["auth"])->group(function () {
