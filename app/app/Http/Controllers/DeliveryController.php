@@ -247,9 +247,10 @@ class DeliveryController extends Controller
             'Content-Disposition' => "attachment; filename=\"relatorio-entregas-{$periodLabel}.pdf\"",
         ]);
     }
+
     private function getPdfTheme(): array
     {
-        $communityCenter = CommunityCenter::first();
+        $communityCenter = CommunityCenter::instance();
 
         $colors = $communityCenter?->colors ?? [];
 
