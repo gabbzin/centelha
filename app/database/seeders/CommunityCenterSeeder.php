@@ -14,9 +14,10 @@ class CommunityCenterSeeder extends Seeder
             'location' => '',
             'slogan' => 'Gestão inteligente e eficiência na comunicação',
             'rodape_text' => '© 2026 Centelha Administrative System. Todos os direitos reservados.',
-            'logo_path' => './logo.png',
-            'favicon_path' => './logo.png',
+            'logo_path' => 'logo.svg',
+            'favicon_path' => 'logo.png',
             'fontFamily' => 'Inter',
+            'singleton' => true,
             'settings' => [],
             'colors' => [
                 'primary' => '#1558D6',

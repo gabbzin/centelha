@@ -5,18 +5,21 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Constants\Messages;
+use App\Dto\FamilyData;
 use App\Http\Requests\StoreFamilyRequest;
 use App\Http\Requests\UpdateFamilyRequest;
 use App\Models\Family;
+use App\Services\FamilyRegistration;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class FamilyController extends Controller
 {
+    public function __construct(private readonly FamilyRegistration $registration) {}
+
     public function index(): Response
     {
         $search = request('search');
@@ -81,87 +84,14 @@ class FamilyController extends Controller
 
     public function store(StoreFamilyRequest $request): RedirectResponse
     {
-        $data = $request->validated();
-
-        DB::transaction(function () use ($data) {
-            $family = Family::create([
-                'responsible_name' => $data['name'],
-                'responsible_cpf' => $data['cpf'],
-                'responsible_birth_date' => $data['data_nascimento'],
-                'responsible_phone' => $data['telefone'],
-                'responsible_email' => $data['email'] ?? null,
-                'income_source' => $data['fonte_renda'] ?? null,
-                'total_income' => isset($data['renda_familiar']) ? (int) ($data['renda_familiar'] * 100) : 0,
-                'receives_government_aid' => ($data['recebe_auxilio'] ?? 'nao') === 'sim',
-                'government_aid_description' => $data['auxilios_recebidos'] ?? null,
-                'housing_condition' => $data['moradia'] ?? null,
-                'general_observations' => $data['general_observations'] ?? null,
-            ]);
-
-            $family->address()->create([
-                'zipcode' => $data['cep'],
-                'street' => $data['logradouro'],
-                'number' => $data['numero'],
-                'neighborhood' => $data['bairro'],
-                'city' => $data['cidade'],
-                'state' => $data['UF'],
-            ]);
-
-            foreach ($data['family_members'] ?? [] as $member) {
-                $family->members()->create([
-                    'name' => $member['name'],
-                    'cpf' => $member['cpf'],
-                    'birth_date' => $member['data_nascimento'],
-                    'relationship' => $member['relacao_parentesco'],
-                ]);
-            }
-        });
+        $this->registration->execute(FamilyData::fromRequest($request));
 
         return redirect()->route('family')->with('success', Messages::MSG_16);
     }
 
     public function update(UpdateFamilyRequest $request, Family $family): RedirectResponse
     {
-        $data = $request->validated();
-
-        DB::transaction(function () use ($data, $family) {
-            $family->update([
-                'responsible_name' => $data['name'],
-                'responsible_cpf' => $data['cpf'],
-                'responsible_birth_date' => $data['data_nascimento'],
-                'responsible_phone' => $data['telefone'],
-                'responsible_email' => $data['email'] ?? null,
-                'income_source' => $data['fonte_renda'] ?? null,
-                'total_income' => isset($data['renda_familiar']) ? (int) ($data['renda_familiar'] * 100) : 0,
-                'receives_government_aid' => ($data['recebe_auxilio'] ?? 'nao') === 'sim',
-                'government_aid_description' => $data['auxilios_recebidos'] ?? null,
-                'housing_condition' => $data['moradia'] ?? null,
-                'general_observations' => $data['general_observations'] ?? null,
-            ]);
-
-            $family->address()->updateOrCreate(
-                ['family_id' => $family->id],
-                [
-                    'zipcode' => $data['cep'],
-                    'street' => $data['logradouro'],
-                    'number' => $data['numero'],
-                    'neighborhood' => $data['bairro'],
-                    'city' => $data['cidade'],
-                    'state' => $data['UF'],
-                ]
-            );
-
-            $family->members()->delete();
-
-            foreach ($data['family_members'] ?? [] as $member) {
-                $family->members()->create([
-                    'name' => $member['name'],
-                    'cpf' => $member['cpf'] ?? null,
-                    'birth_date' => $member['data_nascimento'],
-                    'relationship' => $member['relacao_parentesco'],
-                ]);
-            }
-        });
+        $this->registration->execute(FamilyData::fromRequest($request), $family);
 
         return redirect()->route('family.info', $family->id)->with('success', Messages::MSG_14);
     }
