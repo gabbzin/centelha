@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AppearanceController;
 use App\Http\Controllers\Admin\ConfiguracoesGeraisController;
 use App\Http\Controllers\Admin\PageCustomizationController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\BenefitController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeliveryController;
@@ -35,9 +36,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('gestao-sistema/customizacao-tela/{pageKey}', [PageCustomizationController::class, 'show'])->name('gestao-sistema.customizacao-tela.edit');
     Route::put('gestao-sistema/customizacao-tela/{pageKey}', [PageCustomizationController::class, 'update'])->name('gestao-sistema.customizacao-tela.update');
 
-    Route::get('gestao-sistema/usuarios-beneficios', function () {
-        return Inertia::render('admin/gestao-sistema/usuarios-beneficios');
-    })->name('gestao-sistema.usuarios-beneficios');
+    Route::get('gestao-sistema/usuarios-beneficios', [UserController::class, 'index'])->name('gestao-sistema.usuarios-beneficios');
+    Route::post('usuarios', [UserController::class, 'store'])->name('usuarios.store');
+    Route::put('usuarios/{user}', [UserController::class, 'update'])->name('usuarios.update');
+    Route::patch('usuarios/{user}', [UserController::class, 'update'])->name('usuarios.patch');
+    Route::delete('usuarios/{user}', [UserController::class, 'deactivate'])->name('usuarios.deactivate');
 });
 
 Route::middleware(['auth'])->group(function () {

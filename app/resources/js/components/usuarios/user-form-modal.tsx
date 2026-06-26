@@ -46,13 +46,13 @@ export function UserFormModal({
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [role, setRole] = useState<UserRole>('Voluntário')
+  const [role, setRole] = useState<UserRole>('Operador')
   const [status, setStatus] = useState<UserStatus>('Ativo')
 
   const reset = useCallback(() => {
     setName('')
     setEmail('')
-    setRole('Voluntário')
+    setRole('Operador')
     setStatus('Ativo')
   }, [])
 
@@ -109,7 +109,9 @@ export function UserFormModal({
                 />
               </FormField>
 
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div
+                className={`grid grid-cols-1 gap-4 ${isEdit ? 'md:grid-cols-2' : ''}`}
+              >
                 <FormField label="Perfil" required>
                   <Select
                     onValueChange={(v) => setRole(v as UserRole)}
@@ -128,24 +130,33 @@ export function UserFormModal({
                   </Select>
                 </FormField>
 
-                <FormField label="Status" required>
-                  <Select
-                    onValueChange={(v) => setStatus(v as UserStatus)}
-                    value={status}
-                  >
-                    <SelectTrigger className="border-border w-full border">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {STATUS_OPTIONS_FORM.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormField>
+                {isEdit && (
+                  <FormField label="Status" required>
+                    <Select
+                      onValueChange={(v) => setStatus(v as UserStatus)}
+                      value={status}
+                    >
+                      <SelectTrigger className="border-border w-full border">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {STATUS_OPTIONS_FORM.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormField>
+                )}
               </div>
+
+              {!isEdit && (
+                <p className="text-muted-foreground text-xs">
+                  Uma senha de acesso será enviada por e-mail para o usuário
+                  concluir o cadastro.
+                </p>
+              )}
 
               <p className="text-destructive text-xs font-semibold tracking-wide uppercase">
                 Todos os campos com * são obrigatórios

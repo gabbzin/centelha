@@ -65,7 +65,7 @@ export function UsersTableRow({
             <Pencil className="size-4" />
           </button>
           <button
-            aria-label={`Excluir ${user.name}`}
+            aria-label={`Desativar ${user.name}`}
             className="bg-red-50 text-red-600 hover:bg-red-100 flex size-8 items-center justify-center rounded-md transition-colors"
             onClick={() => onDelete(user)}
             type="button"

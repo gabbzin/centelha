@@ -19,6 +19,7 @@ class User extends Authenticatable
         'password',
         'role',
         'ativo',
+        'last_login_at',
     ];
 
     protected $hidden = [
@@ -33,6 +34,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'role' => UserRole::class,
             'ativo' => 'boolean',
+            'last_login_at' => 'datetime',
         ];
     }
 

@@ -35,6 +35,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $request->user()->update(['last_login_at' => now()]);
+
         if (auth()->user()->isAdmin()) {
             return redirect()->route('gestao-sistema');
         }
