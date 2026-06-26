@@ -7,70 +7,7 @@ import {
   type LucideIcon,
   ShoppingBasket,
 } from 'lucide-react'
-import type { Benefit, BenefitCategory, User } from './types'
-
-export const MOCK_USERS: User[] = [
-  {
-    id: 8932,
-    name: 'Ana Dias',
-    email: 'ana.dias@centelha.org',
-    data_nascimento: '1985-04-12',
-    role: 'Administrador',
-    status: 'Ativo',
-    last_access: '2026-06-24T09:41:00',
-    created_at: '2024-01-15T10:00:00',
-  },
-  {
-    id: 8945,
-    name: 'Carlos Mendes',
-    email: 'carlos.mendes@centelha.org',
-    data_nascimento: '1979-09-03',
-    role: 'Agente de Saúde',
-    status: 'Inativo',
-    last_access: '2026-06-23T16:20:00',
-    created_at: '2024-02-08T10:00:00',
-  },
-  {
-    id: 8971,
-    name: 'Patrícia Lima',
-    email: 'patricia.lima@centelha.org',
-    data_nascimento: '1990-11-27',
-    role: 'Coordenador',
-    status: 'Ativo',
-    last_access: '2026-06-24T08:15:00',
-    created_at: '2024-03-22T10:00:00',
-  },
-  {
-    id: 8988,
-    name: 'Rafael Souza',
-    email: 'rafael.souza@centelha.org',
-    data_nascimento: '1996-02-18',
-    role: 'Voluntário',
-    status: 'Ativo',
-    last_access: '2026-06-22T14:02:00',
-    created_at: '2024-05-10T10:00:00',
-  },
-  {
-    id: 9002,
-    name: 'Mariana Costa',
-    email: 'mariana.costa@centelha.org',
-    data_nascimento: '2000-07-30',
-    role: 'Agente de Saúde',
-    status: 'Pendente',
-    last_access: null,
-    created_at: '2026-06-20T10:00:00',
-  },
-  {
-    id: 9010,
-    name: 'Bruno Oliveira',
-    email: 'bruno.oliveira@centelha.org',
-    data_nascimento: '1988-12-05',
-    role: 'Voluntário',
-    status: 'Ativo',
-    last_access: '2026-06-19T11:48:00',
-    created_at: '2025-01-12T10:00:00',
-  },
-]
+import type { Benefit, BenefitCategory } from './types'
 
 export const MOCK_BENEFITS: Benefit[] = [
   {

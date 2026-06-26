@@ -1,4 +1,4 @@
-import { Trash2 } from 'lucide-react'
+import { UserX } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
@@ -29,17 +29,17 @@ export function DeleteUserPopover({
   return (
     <Popover onOpenChange={setOpen} open={open}>
       <PopoverTrigger
-        aria-label={`Excluir ${userName}`}
+        aria-label={`Desativar ${userName}`}
         className="bg-red-50 text-red-600 hover:bg-red-100 flex size-8 items-center justify-center rounded-md transition-colors"
       >
-        <Trash2 className="size-4" />
+        <UserX className="size-4" />
       </PopoverTrigger>
       <PopoverContent align="end" className="w-64" side="top" sideOffset={8}>
         <PopoverHeader>
-          <PopoverTitle className="text-sm">Excluir usuário</PopoverTitle>
+          <PopoverTitle className="text-sm">Desativar usuário</PopoverTitle>
           <PopoverDescription className="text-xs">
-            Tem certeza que deseja excluir <strong>{userName}</strong>? Esta
-            ação não pode ser desfeita.
+            Tem certeza que deseja desativar <strong>{userName}</strong>? O
+            usuário perderá o acesso ao sistema.
           </PopoverDescription>
         </PopoverHeader>
         <div className="mt-2 flex justify-end gap-2">
@@ -57,7 +57,7 @@ export function DeleteUserPopover({
             size="sm"
             variant="destructive"
           >
-            Excluir
+            Desativar
           </Button>
         </div>
       </PopoverContent>

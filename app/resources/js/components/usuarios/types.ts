@@ -1,10 +1,6 @@
-export type UserRole =
-  | 'Administrador'
-  | 'Agente de Saúde'
-  | 'Voluntário'
-  | 'Coordenador'
+export type UserRole = 'Administrador' | 'Operador'
 
-export type UserStatus = 'Ativo' | 'Inativo' | 'Pendente'
+export type UserStatus = 'Ativo' | 'Inativo'
 
 export interface User {
   id: number
@@ -46,20 +42,15 @@ export interface PaginatedUsers {
 export const ROLE_OPTIONS: { value: UserRole | 'all'; label: string }[] = [
   { value: 'all', label: 'Todos os perfis' },
   { value: 'Administrador', label: 'Administrador' },
-  { value: 'Coordenador', label: 'Coordenador' },
-  { value: 'Agente de Saúde', label: 'Agente de Saúde' },
-  { value: 'Voluntário', label: 'Voluntário' },
+  { value: 'Operador', label: 'Operador' },
 ]
 
 export const ROLE_OPTIONS_FORM: { value: UserRole; label: string }[] = [
   { value: 'Administrador', label: 'Administrador' },
-  { value: 'Coordenador', label: 'Coordenador' },
-  { value: 'Agente de Saúde', label: 'Agente de Saúde' },
-  { value: 'Voluntário', label: 'Voluntário' },
+  { value: 'Operador', label: 'Operador' },
 ]
 
 export const STATUS_OPTIONS_FORM: { value: UserStatus; label: string }[] = [
   { value: 'Ativo', label: 'Ativo' },
   { value: 'Inativo', label: 'Inativo' },
-  { value: 'Pendente', label: 'Pendente' },
 ]

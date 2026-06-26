@@ -1,45 +1,61 @@
+import { router } from '@inertiajs/react'
 import { Plus, Users } from 'lucide-react'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { toaster } from '@/components/toasters/toast-alert'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { MOCK_USERS } from './data'
-import type { User } from './types'
-import { UserFormModal, type UserFormPayload } from './user-form-modal'
+import type { PaginatedUsers, User, UserRole, UserStatus } from './types'
+import { UserFormModal } from './user-form-modal'
 import { UsersFilterBar } from './users-filter-bar'
 import { UsersTable } from './users-table'
 import { ViewUserModal } from './view-user-modal'
 
-const PER_PAGE = 5
+interface UsersSectionProps {
+  users: PaginatedUsers
+}
 
-export function UsersSection() {
-  const [users, setUsers] = useState<User[]>(MOCK_USERS)
+export function UsersSection({ users }: UsersSectionProps) {
   const [search, setSearch] = useState('')
   const [role, setRole] = useState<string>('all')
-  const [currentPage, setCurrentPage] = useState(1)
 
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [userToEdit, setUserToEdit] = useState<User | null>(null)
   const [isViewOpen, setIsViewOpen] = useState(false)
   const [userToView, setUserToView] = useState<User | null>(null)
 
-  const filtered = useMemo(() => {
-    const term = search.trim().toLowerCase()
-    return users.filter((u) => {
-      const matchesSearch =
-        term === '' ||
-        u.name.toLowerCase().includes(term) ||
-        u.email.toLowerCase().includes(term)
-      const matchesRole = role === 'all' || u.role === role
-      return matchesSearch && matchesRole
-    })
-  }, [users, search, role])
+  const isFirstRender = useRef(true)
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE))
-  const safePage = Math.min(currentPage, totalPages)
-  const start = (safePage - 1) * PER_PAGE
-  const end = start + PER_PAGE
-  const pageData = filtered.slice(start, end)
+  const reload = useCallback((params: Record<string, string | number>) => {
+    router.get(route('gestao-sistema.usuarios-beneficios'), params, {
+      preserveState: true,
+      preserveScroll: true,
+      replace: true,
+    })
+  }, [])
+
+  const buildParams = useCallback(
+    (page: number) => {
+      const params: Record<string, string | number> = { page }
+      if (search.trim()) params.search = search.trim()
+      if (role !== 'all') params.role = role
+      return params
+    },
+    [search, role],
+  )
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
+    const t = setTimeout(() => reload(buildParams(1)), 300)
+    return () => clearTimeout(t)
+  }, [search, role, buildParams, reload])
+
+  const handlePageChange = useCallback(
+    (page: number) => reload(buildParams(page)),
+    [buildParams, reload],
+  )
 
   const handleAdd = useCallback(() => {
     setUserToEdit(null)
@@ -57,57 +73,63 @@ export function UsersSection() {
   }, [])
 
   const handleDelete = useCallback((user: User) => {
-    setUsers((prev) => prev.filter((u) => u.id !== user.id))
-    toaster.createSuccess('Sucesso', `Usuário ${user.name} excluído.`)
+    router.delete(route('usuarios.deactivate', user.id), {
+      preserveScroll: true,
+    })
   }, [])
 
   const handleSubmit = useCallback(
-    (data: UserFormPayload) => {
-      if (data.mode === 'edit' && userToEdit) {
-        setUsers((prev) =>
-          prev.map((u) =>
-            u.id === userToEdit.id
-              ? {
-                  ...u,
-                  name: data.name,
-                  email: data.email,
-                  role: data.role,
-                  status: data.status,
-                }
-              : u,
-          ),
+    (data: {
+      name: string
+      email: string
+      role: UserRole
+      status: UserStatus
+    }) => {
+      if (userToEdit) {
+        router.put(
+          route('usuarios.update', userToEdit.id),
+          {
+            name: data.name,
+            email: data.email,
+            role: data.role,
+            ativo: data.status === 'Ativo',
+          },
+          {
+            preserveScroll: true,
+            onSuccess: () => {
+              setIsFormOpen(false)
+              setUserToEdit(null)
+            },
+            onError: (errors) => {
+              const first = Object.values(errors)[0] as string | undefined
+              toaster.createError('Erro', first ?? 'Não foi possível atualizar.')
+            },
+          },
         )
-        toaster.createSuccess('Sucesso', 'Usuário atualizado.')
-      } else if (data.mode === 'create') {
-        const newId = Math.max(...users.map((u) => u.id), 0) + 1
-        const newUser: User = {
-          id: newId,
-          name: data.name,
-          email: data.email,
-          data_nascimento: data.data_nascimento,
-          role: data.role,
-          status: 'Ativo',
-          last_access: null,
-          created_at: new Date().toISOString(),
-        }
-        setUsers((prev) => [newUser, ...prev])
-        toaster.createSuccess('Sucesso', 'Usuário cadastrado.')
+      } else {
+        router.post(
+          route('usuarios.store'),
+          {
+            name: data.name,
+            email: data.email,
+            role: data.role,
+          },
+          {
+            preserveScroll: true,
+            onSuccess: () => {
+              setIsFormOpen(false)
+              setUserToEdit(null)
+            },
+            onError: (errors) => {
+              const first = Object.values(errors)[0] as string | undefined
+              toaster.createError('Erro', first ?? 'Não foi possível cadastrar.')
+            },
+          },
+        )
       }
-      setIsFormOpen(false)
-      setUserToEdit(null)
     },
-    [userToEdit, users],
+    [userToEdit],
   )
-
-  const handleSearchChange = useCallback((value: string) => {
-    setSearch(value)
-    setCurrentPage(1)
-  }, [])
-
-  const handleRoleChange = useCallback((value: string) => {
-    setRole(value)
-    setCurrentPage(1)
-  }, [])
 
   return (
     <Card className="rounded-2xl border border-border shadow-sm">
@@ -123,8 +145,8 @@ export function UsersSection() {
           </div>
 
           <UsersFilterBar
-            onRoleChange={handleRoleChange}
-            onSearchChange={handleSearchChange}
+            onRoleChange={setRole}
+            onSearchChange={setSearch}
             role={role}
             search={search}
           />
@@ -132,16 +154,16 @@ export function UsersSection() {
 
         <div className="mt-4">
           <UsersTable
-            currentPage={safePage}
-            endIndex={Math.min(end, filtered.length)}
+            currentPage={users.current_page}
+            endIndex={users.to ?? 0}
             onDelete={handleDelete}
             onEdit={handleEdit}
-            onPageChange={setCurrentPage}
+            onPageChange={handlePageChange}
             onView={handleView}
-            startIndex={filtered.length === 0 ? 0 : start + 1}
-            total={filtered.length}
-            totalPages={totalPages}
-            users={pageData}
+            startIndex={users.from ?? 0}
+            total={users.total}
+            totalPages={users.last_page}
+            users={users.data}
           />
         </div>
 
