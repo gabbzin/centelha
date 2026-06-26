@@ -2,22 +2,26 @@
 
 namespace Database\Factories;
 
-use App\Models\community_center;
+use App\Models\CommunityCenter;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<community_center>
+ * @extends Factory<CommunityCenter>
  */
 class CommunityCenterFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
+            'name' => fake()->company(),
+            'location' => fake()->city(),
+            'slogan' => fake()->optional()->sentence(),
+            'rodape_text' => fake()->optional()->sentence(),
+            'logo_path' => 'logo.svg',
+            'favicon_path' => 'logo.png',
+            'fontFamily' => 'Inter',
+            'singleton' => null,
+            'settings' => [],
             'colors' => [
                 'primary' => '#1558D6',
                 'background' => '#FFFFFF',
@@ -34,5 +38,10 @@ class CommunityCenterFactory extends Factory
                 'button' => '#094785',
             ],
         ];
+    }
+
+    public function singleton(): static
+    {
+        return $this->state(fn () => ['singleton' => true]);
     }
 }

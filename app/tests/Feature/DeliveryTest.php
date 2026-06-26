@@ -3,11 +3,13 @@
 namespace Tests\Feature;
 
 use App\Models\Benefit;
+use App\Models\CommunityCenter;
 use App\Models\Delivery;
 use App\Models\Family;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -202,5 +204,273 @@ class DeliveryTest extends TestCase
 
         $response->assertOk();
         $response->assertHeader('content-type', 'application/pdf');
+    }
+
+    public function test_cooldown_boundary_at_day_7_blocks_delivery()
+    {
+        $user = User::factory()->create();
+        $family = Family::factory()->create();
+        $benefit = Benefit::factory()->create(['stock' => 10]);
+
+        $family->deliveries()->create([
+            'code' => 'ENT-0001',
+            'benefit_id' => $benefit->id,
+            'quantity' => 1,
+            'location' => 'Centro Comunitário A',
+            'delivery_date' => now()->subDays(7),
+            'delivered_by' => $user->id,
+            'status' => 'Entregue',
+        ]);
+
+        $response = $this->withSession(['_token' => 'test-token'])
+            ->actingAs($user)
+            ->post('/entregas', [
+                '_token' => 'test-token',
+                'family_id' => $family->id,
+                'benefit_id' => $benefit->id,
+                'quantity' => 1,
+                'delivery_date' => now()->format('Y-m-d'),
+                'location' => 'Centro Comunitário A',
+            ]);
+
+        $response->assertSessionHasErrors(['benefit_id']);
+        $this->assertDatabaseCount('deliveries', 1);
+    }
+
+    public function test_cooldown_allows_delivery_at_day_8()
+    {
+        $user = User::factory()->create();
+        $family = Family::factory()->create();
+        $benefit = Benefit::factory()->create(['stock' => 10]);
+
+        $family->deliveries()->create([
+            'code' => 'ENT-0001',
+            'benefit_id' => $benefit->id,
+            'quantity' => 1,
+            'location' => 'Centro Comunitário A',
+            'delivery_date' => now()->subDays(8),
+            'delivered_by' => $user->id,
+            'status' => 'Entregue',
+        ]);
+
+        $response = $this->withSession(['_token' => 'test-token'])
+            ->actingAs($user)
+            ->post('/entregas', [
+                '_token' => 'test-token',
+                'family_id' => $family->id,
+                'benefit_id' => $benefit->id,
+                'quantity' => 1,
+                'delivery_date' => now()->format('Y-m-d'),
+                'location' => 'Centro Comunitário A',
+            ]);
+
+        $response->assertRedirect('/entregas');
+        $this->assertDatabaseCount('deliveries', 2);
+    }
+
+    public function test_cooldown_catches_backdated_delivery_near_recent_delivery()
+    {
+        // Janela simétrica: uma entrega datada de 3 dias atrás agora enxerga
+        // uma entrega real feita ontem (distância de 2 dias < 7).
+        $user = User::factory()->create();
+        $family = Family::factory()->create();
+        $benefit = Benefit::factory()->create(['stock' => 10]);
+
+        $family->deliveries()->create([
+            'code' => 'ENT-0001',
+            'benefit_id' => $benefit->id,
+            'quantity' => 1,
+            'location' => 'Centro Comunitário A',
+            'delivery_date' => now()->subDay(),
+            'delivered_by' => $user->id,
+            'status' => 'Entregue',
+        ]);
+
+        $this->withSession(['_token' => 'test-token'])
+            ->actingAs($user)
+            ->post('/entregas', [
+                '_token' => 'test-token',
+                'family_id' => $family->id,
+                'benefit_id' => $benefit->id,
+                'quantity' => 1,
+                'delivery_date' => now()->subDays(3)->format('Y-m-d'),
+                'location' => 'Centro Comunitário A',
+            ])
+            ->assertSessionHasErrors(['benefit_id']);
+
+        $this->assertDatabaseCount('deliveries', 1);
+    }
+
+    public function test_cooldown_uses_config_value_when_center_has_no_override()
+    {
+        // Sem CommunityCenter na base, cai no config. Definindo cooldown=5:
+        // uma entrega há 6 dias deve ser PERMITIDA (com o default 7 bloquearia).
+        config(['centelha.delivery.cooldown_days' => 5]);
+
+        $user = User::factory()->create();
+        $family = Family::factory()->create();
+        $benefit = Benefit::factory()->create(['stock' => 10]);
+
+        $family->deliveries()->create([
+            'code' => 'ENT-0001',
+            'benefit_id' => $benefit->id,
+            'quantity' => 1,
+            'location' => 'Centro Comunitário A',
+            'delivery_date' => now()->subDays(6),
+            'delivered_by' => $user->id,
+            'status' => 'Entregue',
+        ]);
+
+        $this->withSession(['_token' => 'test-token'])
+            ->actingAs($user)
+            ->post('/entregas', [
+                '_token' => 'test-token',
+                'family_id' => $family->id,
+                'benefit_id' => $benefit->id,
+                'quantity' => 1,
+                'delivery_date' => now()->format('Y-m-d'),
+                'location' => 'Centro Comunitário A',
+            ])
+            ->assertRedirect('/entregas');
+
+        $this->assertDatabaseCount('deliveries', 2);
+    }
+
+    public function test_cooldown_respects_community_center_override()
+    {
+        // Override do CommunityCenter (14) vence sobre o config (7 default).
+        // Uma entrega há 10 dias bloqueia com N=14, mas passaria com N=7.
+        CommunityCenter::factory()->singleton()->create(['delivery_cooldown_days' => 14]);
+
+        $user = User::factory()->create();
+        $family = Family::factory()->create();
+        $benefit = Benefit::factory()->create(['stock' => 10]);
+
+        $family->deliveries()->create([
+            'code' => 'ENT-0001',
+            'benefit_id' => $benefit->id,
+            'quantity' => 1,
+            'location' => 'Centro Comunitário A',
+            'delivery_date' => now()->subDays(10),
+            'delivered_by' => $user->id,
+            'status' => 'Entregue',
+        ]);
+
+        $this->withSession(['_token' => 'test-token'])
+            ->actingAs($user)
+            ->post('/entregas', [
+                '_token' => 'test-token',
+                'family_id' => $family->id,
+                'benefit_id' => $benefit->id,
+                'quantity' => 1,
+                'delivery_date' => now()->format('Y-m-d'),
+                'location' => 'Centro Comunitário A',
+            ])
+            ->assertSessionHasErrors(['benefit_id']);
+
+        $this->assertDatabaseCount('deliveries', 1);
+    }
+
+    public function test_authenticated_non_admin_can_store_delivery()
+    {
+        $user = User::factory()->create(['role' => 'operador']);
+        $family = Family::factory()->create();
+        $benefit = Benefit::factory()->create(['stock' => 5]);
+
+        $response = $this->withSession(['_token' => 'test-token'])
+            ->actingAs($user)
+            ->post('/entregas', [
+                '_token' => 'test-token',
+                'family_id' => $family->id,
+                'benefit_id' => $benefit->id,
+                'quantity' => 1,
+                'delivery_date' => now()->format('Y-m-d'),
+                'location' => 'Centro Comunitário A',
+            ]);
+
+        $response->assertRedirect('/entregas');
+        $this->assertDatabaseCount('deliveries', 1);
+    }
+
+    public function test_store_delivery_increments_cache_version()
+    {
+        Cache::put('deliveries.cache_version', 5);
+
+        $user = User::factory()->create();
+        $family = Family::factory()->create();
+        $benefit = Benefit::factory()->create(['stock' => 5]);
+
+        $this->withSession(['_token' => 'test-token'])
+            ->actingAs($user)
+            ->post('/entregas', [
+                '_token' => 'test-token',
+                'family_id' => $family->id,
+                'benefit_id' => $benefit->id,
+                'quantity' => 1,
+                'delivery_date' => now()->format('Y-m-d'),
+                'location' => 'Centro Comunitário A',
+            ]);
+
+        $this->assertSame(6, Cache::get('deliveries.cache_version'));
+    }
+
+    public function test_failed_stock_check_after_upload_cleans_up_receipt()
+    {
+        Storage::fake('minio');
+
+        $user = User::factory()->create();
+        $family = Family::factory()->create();
+        $benefit = Benefit::factory()->create(['stock' => 2]);
+
+        $this->withSession(['_token' => 'test-token'])
+            ->actingAs($user)
+            ->post('/entregas', [
+                '_token' => 'test-token',
+                'family_id' => $family->id,
+                'benefit_id' => $benefit->id,
+                'quantity' => 5,
+                'delivery_date' => now()->format('Y-m-d'),
+                'location' => 'Centro Comunitário A',
+                'receipt' => UploadedFile::fake()->create('comprovante.jpg', 100, 'image/jpeg'),
+            ])
+            ->assertSessionHasErrors(['quantity']);
+
+        $this->assertDatabaseCount('deliveries', 0);
+        $this->assertSame(0, count(Storage::disk('minio')->allFiles('deliveries/receipts')));
+    }
+
+    public function test_cooldown_failure_after_upload_cleans_up_receipt()
+    {
+        Storage::fake('minio');
+
+        $user = User::factory()->create();
+        $family = Family::factory()->create();
+        $benefit = Benefit::factory()->create(['stock' => 10]);
+
+        $family->deliveries()->create([
+            'code' => 'ENT-0001',
+            'benefit_id' => $benefit->id,
+            'quantity' => 1,
+            'location' => 'Centro Comunitário A',
+            'delivery_date' => now()->subDay(),
+            'delivered_by' => $user->id,
+            'status' => 'Entregue',
+        ]);
+
+        $this->withSession(['_token' => 'test-token'])
+            ->actingAs($user)
+            ->post('/entregas', [
+                '_token' => 'test-token',
+                'family_id' => $family->id,
+                'benefit_id' => $benefit->id,
+                'quantity' => 1,
+                'delivery_date' => now()->format('Y-m-d'),
+                'location' => 'Centro Comunitário A',
+                'receipt' => UploadedFile::fake()->create('comprovante.jpg', 100, 'image/jpeg'),
+            ])
+            ->assertSessionHasErrors(['benefit_id']);
+
+        $this->assertDatabaseCount('deliveries', 1);
+        $this->assertSame(0, count(Storage::disk('minio')->allFiles('deliveries/receipts')));
     }
 }
