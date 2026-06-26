@@ -46,6 +46,8 @@ class Messages
 
     const MSG_19 = 'Família desativada com sucesso.';
 
+    const MSG_20 = 'Família ativada com sucesso.';
+
     public static array $types = [
         self::MSG_01 => 'success',
         self::MSG_02 => 'success',
@@ -66,6 +68,7 @@ class Messages
         self::MSG_17 => 'error',
         self::MSG_18 => 'success',
         self::MSG_19 => 'success',
+        self::MSG_20 => 'success',
     ];
 
     public static function type(string $message): string

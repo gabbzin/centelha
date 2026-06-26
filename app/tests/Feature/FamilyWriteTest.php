@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Constants\Messages;
 use App\Models\Family;
 use App\Models\FamilyMember;
 use App\Models\User;
@@ -53,6 +54,7 @@ class FamilyWriteTest extends TestCase
             ->post('/family', $this->validFamilyPayload());
 
         $response->assertRedirect('/family');
+        $response->assertSessionHas('success', Messages::MSG_16);
 
         $this->assertDatabaseHas('families', [
             'responsible_name' => 'João Silva',
@@ -98,7 +100,8 @@ class FamilyWriteTest extends TestCase
         $this->withSession(['_token' => 'test-token'])
             ->actingAs($user)
             ->post('/family', $payload)
-            ->assertRedirect('/family');
+            ->assertRedirect('/family')
+            ->assertSessionHas('success', Messages::MSG_16);
 
         $this->assertDatabaseHas('families', [
             'responsible_name' => 'João Silva',
@@ -140,6 +143,7 @@ class FamilyWriteTest extends TestCase
             ->put("/family/{$family->id}", $payload);
 
         $response->assertRedirect("/family/details/{$family->id}");
+        $response->assertSessionHas('success', Messages::MSG_14);
 
         $this->assertDatabaseHas('families', [
             'id' => $family->id,
@@ -169,7 +173,8 @@ class FamilyWriteTest extends TestCase
         $this->withSession(['_token' => 'test-token'])
             ->actingAs($user)
             ->put("/family/{$family->id}", $payload)
-            ->assertRedirect("/family/details/{$family->id}");
+            ->assertRedirect("/family/details/{$family->id}")
+            ->assertSessionHas('success', Messages::MSG_14);
 
         $this->assertDatabaseHas('addresses', [
             'id' => $oldAddress->id,
@@ -206,7 +211,8 @@ class FamilyWriteTest extends TestCase
         $this->withSession(['_token' => 'test-token'])
             ->actingAs($user)
             ->put("/family/{$family->id}", $payload)
-            ->assertRedirect("/family/details/{$family->id}");
+            ->assertRedirect("/family/details/{$family->id}")
+            ->assertSessionHas('success', Messages::MSG_14);
 
         $this->assertDatabaseMissing('family_members', ['id' => $oldMember->id]);
         $this->assertDatabaseHas('family_members', [
@@ -238,7 +244,8 @@ class FamilyWriteTest extends TestCase
         $this->withSession(['_token' => 'test-token'])
             ->actingAs($user)
             ->put("/family/{$family->id}", $payload)
-            ->assertRedirect("/family/details/{$family->id}");
+            ->assertRedirect("/family/details/{$family->id}")
+            ->assertSessionHas('success', Messages::MSG_14);
 
         $this->assertDatabaseCount('families', 1);
     }

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Constants\Messages;
 use App\Models\Family;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,7 +20,8 @@ class FamilyStateTest extends TestCase
         $this->withSession(['_token' => 'test-token'])
             ->actingAs($user)
             ->patch("/family/{$family->id}/deactivate", ['_token' => 'test-token'])
-            ->assertRedirect('/family');
+            ->assertRedirect('/family')
+            ->assertSessionHas('success', Messages::MSG_19);
 
         $this->assertFalse($family->fresh()->is_active);
     }
@@ -32,7 +34,8 @@ class FamilyStateTest extends TestCase
         $this->withSession(['_token' => 'test-token'])
             ->actingAs($user)
             ->patch("/family/{$family->id}/activate", ['_token' => 'test-token'])
-            ->assertRedirect('/family');
+            ->assertRedirect('/family')
+            ->assertSessionHas('success', Messages::MSG_20);
 
         $this->assertTrue($family->fresh()->is_active);
     }
