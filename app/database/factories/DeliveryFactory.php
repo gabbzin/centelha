@@ -15,7 +15,7 @@ class DeliveryFactory extends Factory
     public function definition(): array
     {
         return [
-            'code' => 'ENT-' . str_pad((string) $this->faker->unique()->numberBetween(1, 9999), 4, '0', STR_PAD_LEFT),
+            'code' => 'ENT-'.str_pad((string) $this->faker->unique()->numberBetween(1, 9999), 4, '0', STR_PAD_LEFT),
             'family_id' => Family::factory(),
             'benefit_id' => Benefit::factory(),
             'quantity' => $this->faker->numberBetween(1, 5),

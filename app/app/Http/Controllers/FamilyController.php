@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Constants\Messages;
 use App\Http\Requests\StoreFamilyRequest;
 use App\Http\Requests\UpdateFamilyRequest;
 use App\Models\Family;
@@ -116,7 +117,7 @@ class FamilyController extends Controller
             }
         });
 
-        return redirect()->route('family');
+        return redirect()->route('family')->with('success', Messages::MSG_16);
     }
 
     public function update(UpdateFamilyRequest $request, Family $family): RedirectResponse
@@ -162,20 +163,20 @@ class FamilyController extends Controller
             }
         });
 
-        return redirect()->route('family.info', $family->id);
+        return redirect()->route('family.info', $family->id)->with('success', Messages::MSG_14);
     }
 
     public function deactivate(Family $family): RedirectResponse
     {
         $family->update(['is_active' => false]);
 
-        return redirect()->route('family');
+        return redirect()->route('family')->with('success', Messages::MSG_19);
     }
 
     public function activate(Family $family): RedirectResponse
     {
         $family->update(['is_active' => true]);
 
-        return redirect()->route('family');
+        return redirect()->route('family')->with('success', Messages::MSG_20);
     }
 }

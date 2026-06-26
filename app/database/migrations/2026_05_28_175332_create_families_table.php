@@ -17,14 +17,14 @@ return new class extends Migration
             $table->string('responsible_phone');
             $table->string('responsible_email')->nullable();
             $table->boolean('is_active')->default(true);
-            
+
             // Dados Socioeconômicos
             $table->integer('total_income')->default(0); // Valor em centavos
             $table->string('income_source')->nullable(); // Ex: Informal, Formal
             $table->boolean('receives_government_aid')->default(false);
             $table->string('government_aid_description')->nullable(); // Ex: Bolsa Família
             $table->string('housing_condition')->nullable(); // Própria, Alugada, Ocupação
-            
+
             // Observações Gerais
             $table->text('general_observations')->nullable();
             $table->timestamps();

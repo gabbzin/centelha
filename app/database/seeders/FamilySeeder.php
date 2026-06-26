@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
+use App\Models\Address;
 use App\Models\Family;
 use App\Models\FamilyMember;
 use App\Models\SpecificNeed;
-use App\Models\Address;
+use Illuminate\Database\Seeder;
 
 class FamilySeeder extends Seeder
 {
@@ -19,7 +19,7 @@ class FamilySeeder extends Seeder
             'Necessidade de Fraldas (Geriátrica)',
             'PCD / Mobilidade Reduzida',
             'Gestante',
-            'Acamado'
+            'Acamado',
         ];
 
         $specificNeeds = collect();
@@ -38,10 +38,10 @@ class FamilySeeder extends Seeder
             )
             ->has(
                 FamilyMember::factory()
-                ->count(rand(1, 4))
-                ->state(function (array $attributes, Family $family) {
-                    return ['family_id' => $family->id];
-                }),
+                    ->count(rand(1, 4))
+                    ->state(function (array $attributes, Family $family) {
+                        return ['family_id' => $family->id];
+                    }),
                 'members'
             )
             ->create()

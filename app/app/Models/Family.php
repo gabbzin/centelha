@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Casts\MaskedCpf;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,8 +32,9 @@ class Family extends Model
         'is_active' => 'boolean',
         'receives_government_aid' => 'boolean',
         'total_income' => 'integer',
-        'responsible_cpf' => \App\Casts\MaskedCpf::class,
+        'responsible_cpf' => MaskedCpf::class,
     ];
+
     public function address()
     {
         return $this->hasOne(Address::class);

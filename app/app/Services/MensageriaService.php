@@ -51,6 +51,7 @@ class MensageriaService
                 return str_replace('_', '-', $name);
             }
         }
+
         return null;
     }
 }
