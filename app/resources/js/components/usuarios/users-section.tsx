@@ -171,7 +171,7 @@ export function UsersSection({ users }: UsersSectionProps) {
           <Button
             className="gap-2 rounded-md px-4"
             onClick={handleAdd}
-            variant="default"
+            variant="primary"
           >
             <Plus className="size-4" />
             Novo usuário
