@@ -41,6 +41,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('usuarios/{user}', [UserController::class, 'update'])->name('usuarios.update');
     Route::patch('usuarios/{user}', [UserController::class, 'update'])->name('usuarios.patch');
     Route::delete('usuarios/{user}', [UserController::class, 'deactivate'])->name('usuarios.deactivate');
+    Route::post('usuarios/{user}/reenviar-ativacao', [UserController::class, 'resendActivation'])->name('usuarios.resend-activation');
 });
 
 Route::middleware(['auth'])->group(function () {

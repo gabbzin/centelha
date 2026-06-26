@@ -1,4 +1,4 @@
-import { Eye, Pencil, Trash2 } from 'lucide-react'
+import { Eye, Mail, Pencil, Trash2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { formatLastAccess, getInitials } from './data'
 import { RoleBadge } from './role-badge'
@@ -10,6 +10,7 @@ interface UsersTableRowProps {
   onView: (user: User) => void
   onEdit: (user: User) => void
   onDelete: (user: User) => void
+  onResendActivation?: (user: User) => void
 }
 
 export function UsersTableRow({
@@ -17,6 +18,7 @@ export function UsersTableRow({
   onView,
   onEdit,
   onDelete,
+  onResendActivation,
 }: UsersTableRowProps) {
   return (
     <tr className="border-border hover:bg-muted/30 border-t transition-colors">
@@ -64,6 +66,16 @@ export function UsersTableRow({
           >
             <Pencil className="size-4" />
           </button>
+          {user.status === 'Pendente' && onResendActivation && (
+            <button
+              aria-label={`Reenviar ativação para ${user.name}`}
+              className="bg-amber-50 text-amber-600 hover:bg-amber-100 flex size-8 items-center justify-center rounded-md transition-colors"
+              onClick={() => onResendActivation(user)}
+              type="button"
+            >
+              <Mail className="size-4" />
+            </button>
+          )}
           <button
             aria-label={`Desativar ${user.name}`}
             className="bg-red-50 text-red-600 hover:bg-red-100 flex size-8 items-center justify-center rounded-md transition-colors"

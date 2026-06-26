@@ -1,9 +1,10 @@
-import { Header } from '@/components/layout/header'
 import { Head, usePage } from '@inertiajs/react'
 import { CircleDollarSignIcon, IdCardIcon, MapPinHouseIcon } from 'lucide-react'
 import { useState } from 'react'
-import { FamilyForm } from './family-form'
+import { Header } from '@/components/layout/header'
 import type { Family, SharedData } from '@/types'
+import { FamilyForm } from './family-form'
+
 const STEPS = [
   { icon: IdCardIcon, title: '01 Identificação e Familia' },
   { icon: MapPinHouseIcon, title: '02 Endereço' },

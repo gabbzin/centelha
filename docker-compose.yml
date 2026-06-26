@@ -39,6 +39,28 @@ services:
     networks:
       - centelha
 
+  queue:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+      target: dev
+    container_name: centelha-queue
+    restart: unless-stopped
+    working_dir: /var/www/html
+    env_file:
+      - ./app/.env.docker
+    environment:
+      APP_ENV: local
+      PHP_OPCACHE_VALIDATE_TIMESTAMPS: "1"
+    volumes:
+      - ./app:/var/www/html:z
+    command: ["php", "artisan", "queue:work", "--tries=3", "--timeout=90", "--name=centelha-dev", "--sleep=3"]
+    depends_on:
+      pgsql:
+        condition: service_healthy
+    networks:
+      - centelha
+
   vite:
     image: node:22-bookworm
     container_name: centelha-vite

@@ -243,6 +243,7 @@ export default function Home({
                         className="text-sm text-white/70 transition hover:text-white"
                         href="#"
                         target="_blank"
+                        rel="noopener"
                       >
                         {link}
                       </a>

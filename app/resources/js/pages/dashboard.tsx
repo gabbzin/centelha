@@ -1,6 +1,11 @@
+import { usePage } from '@inertiajs/react'
+import { AlertCard } from '@/components/dashboard/cards/alert-card'
+import { TopItensCard } from '@/components/dashboard/cards/top-itens-card'
 import { FamilyIcon } from '@/components/dashboard/icons/family-icon'
 import { HandWithHeartIcon } from '@/components/dashboard/icons/hand-with-heart-icon'
 import { UserAddIcon } from '@/components/dashboard/icons/user-add-icon'
+import { DashboardMap as Map } from '@/components/dashboard/map'
+import SimpleBarChart from '@/components/dashboard/simple-bar-chart'
 import { StatsCard } from '@/components/dashboard/stats-card'
 import {
   Card,
@@ -17,12 +22,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { LayoutBase } from '@/layouts/layout'
-import { DashboardMap as Map } from '@/components/dashboard/map'
-import { AlertCard } from '@/components/dashboard/cards/alert-card'
-import { TopItensCard } from '@/components/dashboard/cards/top-itens-card'
-import SimpleBarChart from '@/components/dashboard/simple-bar-chart'
-import { usePage } from '@inertiajs/react'
 import type { SharedData } from '@/types'
+
 interface StatsCardData {
   value: number
   percentageChange: number

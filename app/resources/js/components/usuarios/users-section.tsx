@@ -4,8 +4,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { toaster } from '@/components/toasters/toast-alert'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import type { PaginatedUsers, User, UserRole, UserStatus } from './types'
-import { UserFormModal } from './user-form-modal'
+import type { PaginatedUsers, User } from './types'
+import { UserFormModal, type UserFormPayload } from './user-form-modal'
 import { UsersFilterBar } from './users-filter-bar'
 import { UsersTable } from './users-table'
 import { ViewUserModal } from './view-user-modal'
@@ -78,21 +78,26 @@ export function UsersSection({ users }: UsersSectionProps) {
     })
   }, [])
 
+  const handleResendActivation = useCallback((user: User) => {
+    router.post(
+      route('usuarios.resend-activation', user.id),
+      {},
+      {
+        preserveScroll: true,
+      },
+    )
+  }, [])
+
   const handleSubmit = useCallback(
-    (data: {
-      name: string
-      email: string
-      role: UserRole
-      status: UserStatus
-    }) => {
-      if (userToEdit) {
+    (data: UserFormPayload) => {
+      if (data.mode === 'edit' && userToEdit) {
         router.put(
           route('usuarios.update', userToEdit.id),
           {
             name: data.name,
             email: data.email,
             role: data.role,
-            ativo: data.status === 'Ativo',
+            status: data.status,
           },
           {
             preserveScroll: true,
@@ -165,6 +170,7 @@ export function UsersSection({ users }: UsersSectionProps) {
             onDelete={handleDelete}
             onEdit={handleEdit}
             onPageChange={handlePageChange}
+            onResendActivation={handleResendActivation}
             onView={handleView}
             startIndex={users.from ?? 0}
             total={users.total}

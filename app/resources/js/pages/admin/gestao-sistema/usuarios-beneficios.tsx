@@ -1,17 +1,15 @@
 import { Head } from '@inertiajs/react'
 import { FlashListener } from '@/components/toasters/flash-listener'
 import { BenefitsCatalogSection } from '@/components/usuarios/benefits-catalog-section'
-import { UsersSection } from '@/components/usuarios/users-section'
 import type { PaginatedUsers } from '@/components/usuarios/types'
+import { UsersSection } from '@/components/usuarios/users-section'
 import { LayoutBase } from '@/layouts/layout'
 
 interface UsuariosBeneficiosProps {
   users: PaginatedUsers
 }
 
-export default function UsuariosBeneficios({
-  users,
-}: UsuariosBeneficiosProps) {
+export default function UsuariosBeneficios({ users }: UsuariosBeneficiosProps) {
   return (
     <LayoutBase
       description="Gerencie os acessos do sistema, perfis administrativos e cadastre os benefícios sociais e insumos distribuídos às famílias."

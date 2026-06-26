@@ -1,8 +1,8 @@
+import { router } from '@inertiajs/react'
+import { Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LayoutBase } from '@/layouts/layout'
-import { router } from '@inertiajs/react'
-import { Settings } from 'lucide-react'
 
 interface AvailablePage {
   key: string
