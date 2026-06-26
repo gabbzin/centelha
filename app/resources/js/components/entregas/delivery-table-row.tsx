@@ -7,13 +7,8 @@ interface DeliveryTableRowProps {
   onClick?: () => void
 }
 
-const statusVariantMap: Record<
-  Delivery['status'],
-  'success_basic' | 'warning' | 'destructive_basic'
-> = {
+const statusVariantMap: Record<Delivery['status'], 'success_basic'> = {
   Entregue: 'success_basic',
-  Pendente: 'warning',
-  Cancelado: 'destructive_basic',
 }
 
 export function DeliveryTableRow({ delivery, onClick }: DeliveryTableRowProps) {

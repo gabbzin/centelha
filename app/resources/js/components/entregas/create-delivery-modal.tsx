@@ -1,3 +1,4 @@
+import { useForm } from '@inertiajs/react'
 import {
   CalendarDays,
   Check,
@@ -9,7 +10,6 @@ import {
   X,
 } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { router, usePage } from '@inertiajs/react'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -42,6 +42,23 @@ function formatCpf(value: string | null | undefined): string {
   return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6, 9)}-${digits.slice(9)}`
 }
 
+function toISODate(date: Date): string {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+interface DeliveryFormData {
+  family_id: string
+  benefit_id: string
+  quantity: number
+  delivery_date: string
+  location: string
+  notes: string
+  receipt: File | null
+}
+
 interface CreateDeliveryModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -55,40 +72,37 @@ export function CreateDeliveryModal({
   benefits,
   deliveredBy,
 }: CreateDeliveryModalProps) {
-  const { errors: pageErrors } = usePage().props as {
-    errors: Record<string, string>
-  }
+  const form = useForm<DeliveryFormData>({
+    family_id: '',
+    benefit_id: '',
+    quantity: 1,
+    delivery_date: '',
+    location: '',
+    notes: '',
+    receipt: null,
+  })
 
   const [beneficiarySearch, setBeneficiarySearch] = useState('')
   const [selectedBeneficiary, setSelectedBeneficiary] =
     useState<BeneficiaryOption | null>(null)
   const [beneficiaries, setBeneficiaries] = useState<BeneficiaryOption[]>([])
   const [showBeneficiaryList, setShowBeneficiaryList] = useState(false)
-  const [benefitId, setBenefitId] = useState('')
-  const [quantity, setQuantity] = useState(1)
   const [deliveryDate, setDeliveryDate] = useState('')
-  const [location, setLocation] = useState('')
-  const [notes, setNotes] = useState('')
-  const [receiptFile, setReceiptFile] = useState<File | null>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [loadingBeneficiaries, setLoadingBeneficiaries] = useState(false)
   const beneficiaryRef = useRef<HTMLDivElement>(null)
 
   const reset = useCallback(() => {
+    form.reset()
     setBeneficiarySearch('')
     setSelectedBeneficiary(null)
     setBeneficiaries([])
     setShowBeneficiaryList(false)
-    setBenefitId('')
-    setQuantity(1)
     setDeliveryDate('')
-    setLocation('')
-    setNotes('')
-    setReceiptFile(null)
     setIsDragging(false)
     setErrors({})
-  }, [])
+  }, [form])
 
   const handleOpenChange = useCallback(
     (next: boolean) => {
@@ -149,13 +163,52 @@ export function CreateDeliveryModal({
 
   const selectedBeneficiaryId = selectedBeneficiary?.value ?? ''
   const selectedBeneficiaryLabel = selectedBeneficiary?.label ?? ''
-  const selectedBenefit = benefitId
-    ? benefits.find((b) => String(b.id) === benefitId)
+  const selectedBenefit = form.data.benefit_id
+    ? benefits.find((b) => String(b.id) === form.data.benefit_id)
     : null
   const maxQuantity = selectedBenefit ? selectedBenefit.stock : 999
 
-  const increment = () => setQuantity((q) => (q >= maxQuantity ? q : q + 1))
-  const decrement = () => setQuantity((q) => Math.max(1, q - 1))
+  const increment = () =>
+    form.setData('quantity', Math.min(form.data.quantity + 1, maxQuantity))
+  const decrement = () =>
+    form.setData('quantity', Math.max(1, form.data.quantity - 1))
+
+  const handleBeneficiarySelect = useCallback(
+    (beneficiary: BeneficiaryOption) => {
+      setSelectedBeneficiary(beneficiary)
+      setBeneficiarySearch(beneficiary.label)
+      setShowBeneficiaryList(false)
+      form.setData('family_id', beneficiary.value)
+    },
+    [form],
+  )
+
+  const handleBeneficiaryClear = useCallback(() => {
+    setSelectedBeneficiary(null)
+    setBeneficiarySearch('')
+    form.setData('family_id', '')
+  }, [form])
+
+  const handleBenefitChange = useCallback(
+    (value: string) => {
+      form.setData('benefit_id', value)
+      const benefit = benefits.find((b) => String(b.id) === value)
+      if (benefit && form.data.quantity > benefit.stock) {
+        form.setData('quantity', Math.max(1, benefit.stock))
+      }
+    },
+    [form, benefits],
+  )
+
+  const handleDateChange = useCallback(
+    (value: string) => {
+      const masked = applyDateMask(value)
+      setDeliveryDate(masked)
+      const date = parseDate(masked)
+      form.setData('delivery_date', date ? toISODate(date) : '')
+    },
+    [form],
+  )
 
   const handleFileChange = (file: File | null) => {
     if (!file) return
@@ -166,7 +219,7 @@ export function CreateDeliveryModal({
       }))
       return
     }
-    setReceiptFile(file)
+    form.setData('receipt', file)
     setErrors((prev) => {
       const next = { ...prev }
       delete next.receipt
@@ -179,33 +232,6 @@ export function CreateDeliveryModal({
     setIsDragging(false)
     const file = e.dataTransfer.files[0]
     handleFileChange(file ?? null)
-  }
-
-  const validate = (): boolean => {
-    const nextErrors: Record<string, string> = {}
-    if (!selectedBeneficiaryId)
-      nextErrors.beneficiary = 'Selecione um beneficiário'
-    if (!benefitId) nextErrors.benefitType = 'Selecione um tipo de benefício'
-    if (benefitId && selectedBenefit && quantity > selectedBenefit.stock) {
-      nextErrors.quantity = `Quantidade excede o estoque disponível (${selectedBenefit.stock}).`
-    }
-    if (!deliveryDate) {
-      nextErrors.deliveryDate = 'Informe a data da entrega'
-    } else if (!isValidDeliveryDate(deliveryDate)) {
-      nextErrors.deliveryDate = 'Informe uma data válida e não futura'
-    }
-    if (!location) nextErrors.location = 'Informe o local de retirada'
-    setErrors(nextErrors)
-    return Object.keys(nextErrors).length === 0
-  }
-
-  const toISODate = (value: string): string => {
-    const date = parseDate(value)
-    if (!date) return ''
-    const year = date.getFullYear()
-    const month = String(date.getMonth() + 1).padStart(2, '0')
-    const day = String(date.getDate()).padStart(2, '0')
-    return `${year}-${month}-${day}`
   }
 
   const isValidDeliveryDate = (value: string): boolean => {
@@ -224,27 +250,41 @@ export function CreateDeliveryModal({
     return date <= today
   }
 
+  const validate = (): boolean => {
+    const nextErrors: Record<string, string> = {}
+    if (!form.data.family_id)
+      nextErrors.beneficiary = 'Selecione um beneficiário'
+    if (!form.data.benefit_id)
+      nextErrors.benefitType = 'Selecione um tipo de benefício'
+    if (
+      form.data.benefit_id &&
+      selectedBenefit &&
+      form.data.quantity > selectedBenefit.stock
+    ) {
+      nextErrors.quantity = `Quantidade excede o estoque disponível (${selectedBenefit.stock}).`
+    }
+    if (!deliveryDate) {
+      nextErrors.deliveryDate = 'Informe a data da entrega'
+    } else if (!isValidDeliveryDate(deliveryDate)) {
+      nextErrors.deliveryDate = 'Informe uma data válida e não futura'
+    }
+    if (!form.data.location) nextErrors.location = 'Informe o local de retirada'
+    setErrors(nextErrors)
+    return Object.keys(nextErrors).length === 0
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!validate()) return
 
-    const formData = new FormData()
-    formData.append('family_id', selectedBeneficiaryId)
-    formData.append('benefit_id', benefitId)
-    formData.append('quantity', String(quantity))
-    formData.append('delivery_date', toISODate(deliveryDate))
-    formData.append('location', location)
-    if (notes) formData.append('notes', notes)
-    if (receiptFile) formData.append('receipt', receiptFile)
-
-    router.post('/entregas', formData, {
+    form.post('/entregas', {
       forceFormData: true,
       preserveScroll: true,
       onSuccess: () => handleOpenChange(false),
     })
   }
 
-  const mergedErrors = { ...errors, ...pageErrors }
+  const mergedErrors = { ...errors, ...form.errors }
 
   return (
     <Dialog onOpenChange={handleOpenChange} open={open}>
@@ -269,7 +309,7 @@ export function CreateDeliveryModal({
                   <Input
                     className="pl-9"
                     onChange={(e) => {
-                      setSelectedBeneficiary(null)
+                      handleBeneficiaryClear()
                       setBeneficiarySearch(e.target.value)
                       setShowBeneficiaryList(true)
                     }}
@@ -284,10 +324,7 @@ export function CreateDeliveryModal({
                   {selectedBeneficiaryId ? (
                     <button
                       className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2"
-                      onClick={() => {
-                        setSelectedBeneficiary(null)
-                        setBeneficiarySearch('')
-                      }}
+                      onClick={handleBeneficiaryClear}
                       type="button"
                     >
                       <X className="size-4" />
@@ -313,11 +350,7 @@ export function CreateDeliveryModal({
                           <button
                             key={b.value}
                             className="hover:bg-accent hover:text-accent-foreground w-full rounded-sm px-2 py-2 text-left text-sm"
-                            onClick={() => {
-                              setSelectedBeneficiary(b)
-                              setBeneficiarySearch(b.label)
-                              setShowBeneficiaryList(false)
-                            }}
+                            onClick={() => handleBeneficiarySelect(b)}
                             type="button"
                           >
                             <span className="font-medium">{b.label}</span>
@@ -340,12 +373,16 @@ export function CreateDeliveryModal({
                   label="Tipo de Benefício"
                   required
                 >
-                  <Select onValueChange={setBenefitId} value={benefitId}>
+                  <Select
+                    onValueChange={handleBenefitChange}
+                    value={form.data.benefit_id}
+                  >
                     <SelectTrigger className="border-border w-full border">
                       <SelectValue placeholder="Selecione um tipo...">
-                        {benefitId
-                          ? (benefits.find((b) => String(b.id) === benefitId)
-                              ?.name ?? null)
+                        {form.data.benefit_id
+                          ? (benefits.find(
+                              (b) => String(b.id) === form.data.benefit_id,
+                            )?.name ?? null)
                           : null}
                       </SelectValue>
                     </SelectTrigger>
@@ -375,19 +412,19 @@ export function CreateDeliveryModal({
                     <button
                       aria-label="Diminuir quantidade"
                       className="text-foreground/70 hover:bg-muted flex w-10 items-center justify-center transition-colors disabled:cursor-not-allowed disabled:opacity-40"
-                      disabled={quantity <= 1}
+                      disabled={form.data.quantity <= 1}
                       onClick={decrement}
                       type="button"
                     >
                       <Minus className="size-4" />
                     </button>
                     <div className="border-input flex flex-1 items-center justify-center border-x text-sm font-medium">
-                      {quantity}
+                      {form.data.quantity}
                     </div>
                     <button
                       aria-label="Aumentar quantidade"
                       className="text-foreground/70 hover:bg-muted flex w-10 items-center justify-center transition-colors disabled:cursor-not-allowed disabled:opacity-40"
-                      disabled={quantity >= maxQuantity}
+                      disabled={form.data.quantity >= maxQuantity}
                       onClick={increment}
                       type="button"
                     >
@@ -407,9 +444,7 @@ export function CreateDeliveryModal({
                     <CalendarDays className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
                     <Input
                       className="pl-9"
-                      onChange={(e) =>
-                        setDeliveryDate(applyDateMask(e.target.value))
-                      }
+                      onChange={(e) => handleDateChange(e.target.value)}
                       placeholder="dd/mm/aaaa"
                       value={deliveryDate}
                     />
@@ -422,9 +457,9 @@ export function CreateDeliveryModal({
                   required
                 >
                   <Input
-                    onChange={(e) => setLocation(e.target.value)}
+                    onChange={(e) => form.setData('location', e.target.value)}
                     placeholder="Informe o local de retirada"
-                    value={location}
+                    value={form.data.location}
                   />
                 </FormField>
               </div>
@@ -438,10 +473,10 @@ export function CreateDeliveryModal({
 
               <FormField label="Observações Adicionais">
                 <Textarea
-                  onChange={(e) => setNotes(e.target.value)}
+                  onChange={(e) => form.setData('notes', e.target.value)}
                   placeholder="Informações relevantes sobre a entrega..."
                   rows={4}
-                  value={notes}
+                  value={form.data.notes}
                 />
               </FormField>
 
@@ -464,7 +499,7 @@ export function CreateDeliveryModal({
                   className={cn(
                     'border-foreground/20 bg-muted/20 hover:bg-muted/40 mt-3 flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed px-6 py-10 text-center transition-colors',
                     isDragging && 'border-primary bg-primary/5',
-                    receiptFile && 'border-primary/50 bg-primary/5',
+                    form.data.receipt && 'border-primary/50 bg-primary/5',
                   )}
                   onDragLeave={() => setIsDragging(false)}
                   onDragOver={(e) => {
@@ -495,8 +530,8 @@ export function CreateDeliveryModal({
                     </span>
                   </p>
                   <p className="text-foreground/60 text-xs">
-                    {receiptFile
-                      ? receiptFile.name
+                    {form.data.receipt
+                      ? form.data.receipt.name
                       : 'PNG, JPG ou PDF (Máx. 5MB)'}
                   </p>
                 </label>
@@ -518,9 +553,14 @@ export function CreateDeliveryModal({
             >
               Cancelar
             </Button>
-            <Button className="gap-2 px-5" type="submit" variant="default">
+            <Button
+              className="gap-2 px-5"
+              disabled={form.processing}
+              type="submit"
+              variant="default"
+            >
               <Check className="size-4" />
-              Confirmar Entrega
+              {form.processing ? 'Confirmando...' : 'Confirmar Entrega'}
             </Button>
           </div>
         </form>

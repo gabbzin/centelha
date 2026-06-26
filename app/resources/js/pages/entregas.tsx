@@ -1,7 +1,9 @@
-import { Head } from '@inertiajs/react'
+import { usePage } from '@inertiajs/react'
 import { DeliveryHistorySection } from '@/components/entregas/delivery-history-section'
 import type { BenefitOption, Delivery } from '@/components/entregas/types'
-import { Header } from '@/components/layout/header'
+import { FlashListener } from '@/components/toasters/flash-listener'
+import { LayoutBase } from '@/layouts/layout'
+import type { SharedData } from '@/types'
 
 export interface PaginatedDeliveries {
   data: Delivery[]
@@ -21,26 +23,36 @@ interface EntregasPageProps {
     endDate: string
   }
   benefits: BenefitOption[]
+  previewSettings?: Record<string, unknown>
 }
 
 export default function Entregas({
   deliveries,
   filters,
   benefits,
+  previewSettings,
 }: EntregasPageProps) {
+  const { pageSettings: sharedSettings } = usePage<SharedData>().props
+  const pageSettings = previewSettings ?? sharedSettings
+  const texts = (pageSettings?.texts as Record<string, string>) ?? {}
+  const t = (key: string, fallback: string) => texts[key] ?? fallback
+
   return (
-    <>
-      <Head title="Entregas" />
-      <div className="bg-surface min-h-screen">
-        <Header />
-        <main className="max-w-lm mx-auto w-full px-8 pt-8 pb-12">
-          <DeliveryHistorySection
-            benefits={benefits}
-            deliveries={deliveries}
-            filters={filters}
-          />
-        </main>
-      </div>
-    </>
+    <LayoutBase
+      descriptionPage={t(
+        'page_description',
+        'Controle e histórico de entregas de benefícios',
+      )}
+      tagTitle={t('page_title', 'Entregas')}
+      titlePage={t('section_title', 'Histórico de Entregas')}
+    >
+      <FlashListener />
+      <DeliveryHistorySection
+        benefits={benefits}
+        deliveries={deliveries}
+        filters={filters}
+        texts={texts}
+      />
+    </LayoutBase>
   )
 }

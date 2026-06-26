@@ -42,6 +42,11 @@ class PageCustomizationController extends Controller
                 'label' => 'Controle de Estoque',
                 'description' => 'Personalize títulos e textos do módulo de benefícios',
             ],
+            [
+                'key' => 'entregas',
+                'label' => 'Entregas',
+                'description' => 'Personalize títulos e textos da tela de entregas',
+            ],
         ];
 
         return Inertia::render('admin/gestao-sistema/customizacao-tela/index', [
@@ -49,7 +54,7 @@ class PageCustomizationController extends Controller
         ]);
     }
 
-    private const ALLOWED_PAGES = ['dashboard', 'home', 'login', 'familia', 'beneficios'];
+    private const ALLOWED_PAGES = ['dashboard', 'home', 'login', 'familia', 'beneficios', 'entregas'];
 
     public function show(string $pageKey): Response
     {

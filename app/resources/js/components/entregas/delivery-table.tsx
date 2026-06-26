@@ -12,6 +12,7 @@ interface DeliveryTableProps {
   totalPages: number
   onPageChange: (page: number) => void
   onRowClick?: (delivery: Delivery) => void
+  emptyState?: string
 }
 
 export function DeliveryTable({
@@ -23,6 +24,7 @@ export function DeliveryTable({
   totalPages,
   onPageChange,
   onRowClick,
+  emptyState = 'Nenhuma entrega encontrada.',
 }: DeliveryTableProps) {
   return (
     <Card className="rounded-xl border">
@@ -54,7 +56,7 @@ export function DeliveryTable({
 
         {total === 0 && (
           <div className="text-foreground/60 flex flex-col items-center justify-center py-12 text-sm">
-            Nenhuma entrega encontrada.
+            {emptyState}
           </div>
         )}
 

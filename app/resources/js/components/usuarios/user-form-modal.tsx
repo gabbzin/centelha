@@ -64,9 +64,16 @@ export function UserFormModal({
         showCloseButton={false}
       >
         {isEdit && userToEdit ? (
-          <EditUserForm onCancel={() => onOpenChange(false)} onSubmit={onSubmit} userToEdit={userToEdit} />
+          <EditUserForm
+            onCancel={() => onOpenChange(false)}
+            onSubmit={onSubmit}
+            userToEdit={userToEdit}
+          />
         ) : (
-          <CreateUserForm onCancel={() => onOpenChange(false)} onSubmit={onSubmit} />
+          <CreateUserForm
+            onCancel={() => onOpenChange(false)}
+            onSubmit={onSubmit}
+          />
         )}
       </DialogContent>
     </Dialog>
@@ -139,10 +146,7 @@ function CreateUserForm({
           </FormField>
 
           <FormField label="Perfil" required>
-            <Select
-              onValueChange={(v) => setRole(v as UserRole)}
-              value={role}
-            >
+            <Select onValueChange={(v) => setRole(v as UserRole)} value={role}>
               <SelectTrigger className="border-border w-full border">
                 <SelectValue />
               </SelectTrigger>
@@ -157,8 +161,8 @@ function CreateUserForm({
           </FormField>
 
           <p className="text-muted-foreground text-xs">
-            Uma senha de acesso será enviada por e-mail para o usuário
-            concluir o cadastro.
+            Uma senha de acesso será enviada por e-mail para o usuário concluir
+            o cadastro.
           </p>
 
           <FormField label="Senha do administrador" required>

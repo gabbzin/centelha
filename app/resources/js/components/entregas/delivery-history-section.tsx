@@ -1,6 +1,6 @@
+import { router, usePage } from '@inertiajs/react'
 import { ChevronDown, FileText, Plus } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
-import { router, usePage } from '@inertiajs/react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -10,8 +10,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { CreateDeliveryModal } from './create-delivery-modal'
+import { normalizeDelivery } from './data'
 import { DeliveryDetailsModal } from './delivery-details-modal'
-import { formatInputDate, normalizeDelivery } from './data'
 import { DeliveryFilterBar } from './delivery-filter-bar'
 import { DeliveryTable } from './delivery-table'
 import type { BenefitOption, Delivery, PaginatedDeliveries } from './types'
@@ -24,15 +24,16 @@ interface DeliveryHistorySectionProps {
     endDate: string
   }
   benefits: BenefitOption[]
+  texts?: Record<string, string>
 }
-
-const PAGE_SIZE = 8
 
 export function DeliveryHistorySection({
   deliveries,
   filters,
   benefits,
+  texts = {},
 }: DeliveryHistorySectionProps) {
+  const t = (key: string, fallback: string) => texts[key] ?? fallback
   const { auth } = usePage().props as { auth: { user: { name: string } } }
 
   const [search, setSearch] = useState(filters.search ?? '')
@@ -59,6 +60,7 @@ export function DeliveryHistorySection({
         {
           preserveState: true,
           preserveScroll: true,
+          replace: true,
           only: ['deliveries', 'filters'],
         },
       )
@@ -72,7 +74,7 @@ export function DeliveryHistorySection({
     }, 400)
 
     return () => clearTimeout(timer)
-  }, [search, startDate, endDate])
+  }, [reload])
 
   const handleSearchChange = useCallback((value: string) => {
     setSearch(value)
@@ -118,7 +120,7 @@ export function DeliveryHistorySection({
     <section className="space-y-4">
       <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <h1 className="text-2xl font-bold uppercase tracking-tight">
-          Histórico de Entregas
+          {t('section_title', 'Histórico de Entregas')}
         </h1>
 
         <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
@@ -128,14 +130,14 @@ export function DeliveryHistorySection({
             variant="primary"
           >
             <Plus className="size-4" />
-            Registrar nova entrega
+            {t('new_button', 'Registrar nova entrega')}
           </Button>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button className="gap-2 rounded-md px-4" variant="outline">
                 <FileText className="size-4" />
-                Exportar PDF (Mês Atual)
+                {t('export_button', 'Exportar PDF (Mês Atual)')}
                 <ChevronDown className="size-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -143,13 +145,16 @@ export function DeliveryHistorySection({
               <DropdownMenuItem onClick={handleExportCurrentMonth}>
                 <span className="flex items-center gap-2">
                   <FileText className="size-4" />
-                  Exportar PDF (Mês Atual)
+                  {t('export_current_month', 'Exportar PDF (Mês Atual)')}
                 </span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={handleExportSelectedPeriod}>
                 <span className="flex items-center gap-2">
                   <FileText className="size-4" />
-                  Exportar PDF (Período Selecionado)
+                  {t(
+                    'export_selected_period',
+                    'Exportar PDF (Período Selecionado)',
+                  )}
                 </span>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -160,7 +165,7 @@ export function DeliveryHistorySection({
       <Card className="rounded-xl border">
         <CardHeader className="pb-2">
           <CardTitle className="text-base font-bold uppercase tracking-wide">
-            Entregas Realizadas
+            {t('card_title', 'Entregas Realizadas')}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -170,12 +175,17 @@ export function DeliveryHistorySection({
             onSearchChange={handleSearchChange}
             onStartDateChange={handleStartDateChange}
             search={search}
+            searchPlaceholder={t(
+              'search_placeholder',
+              'Buscar por benefício, data, local...',
+            )}
             startDate={startDate}
           />
 
           <DeliveryTable
             currentPage={deliveries.current_page}
             deliveries={normalizedDeliveries}
+            emptyState={t('empty_state', 'Nenhuma entrega encontrada.')}
             endIndex={deliveries.to ?? 0}
             onPageChange={handlePageChange}
             onRowClick={handleRowClick}

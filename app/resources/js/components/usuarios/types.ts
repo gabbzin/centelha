@@ -1,12 +1,19 @@
-export type UserRole = 'Administrador' | 'Operador'
+export type UserRole = 'admin' | 'operador'
 
 export type UserStatus = 'Ativo' | 'Inativo'
+
+export const USER_ROLE_LABELS: Record<UserRole, string> = {
+  admin: 'Administrador',
+  operador: 'Operador',
+}
+
+export const userRoleLabel = (role: UserRole): string =>
+  USER_ROLE_LABELS[role] ?? role
 
 export interface User {
   id: number
   name: string
   email: string
-  data_nascimento: string | null
   role: UserRole
   status: UserStatus
   last_access: string | null
@@ -41,13 +48,13 @@ export interface PaginatedUsers {
 
 export const ROLE_OPTIONS: { value: UserRole | 'all'; label: string }[] = [
   { value: 'all', label: 'Todos os perfis' },
-  { value: 'Administrador', label: 'Administrador' },
-  { value: 'Operador', label: 'Operador' },
+  { value: 'admin', label: 'Administrador' },
+  { value: 'operador', label: 'Operador' },
 ]
 
 export const ROLE_OPTIONS_FORM: { value: UserRole; label: string }[] = [
-  { value: 'Administrador', label: 'Administrador' },
-  { value: 'Operador', label: 'Operador' },
+  { value: 'admin', label: 'Administrador' },
+  { value: 'operador', label: 'Operador' },
 ]
 
 export const STATUS_OPTIONS_FORM: { value: UserStatus; label: string }[] = [

@@ -21,6 +21,7 @@ const PAGE_LABELS: Record<string, string> = {
   login: 'Login',
   familia: 'Gestão de Famílias',
   beneficios: 'Controle de Estoque',
+  entregas: 'Entregas',
 }
 const PREVIEW_MOCK = {
   dashboard: {
@@ -211,6 +212,8 @@ function PreviewRenderer({
       return <FamilyPreview previewSettings={previewSettings} />
     case 'beneficios':
       return <BeneficiosPreview previewSettings={previewSettings} />
+    case 'entregas':
+      return <EntregasPreview previewSettings={previewSettings} />
     default:
       return (
         <p className="text-muted-foreground text-sm">Preview não disponível</p>
@@ -352,6 +355,107 @@ function BeneficiosPreview({
             ))}
           </tbody>
         </table>
+      </div>
+    </div>
+  )
+}
+
+function EntregasPreview({
+  previewSettings,
+}: {
+  previewSettings: Record<string, unknown>
+}) {
+  const texts = (previewSettings?.texts as Record<string, string>) ?? {}
+  const t = (key: string, fallback: string) => texts[key] ?? fallback
+  const mockItems = [
+    {
+      code: 'ENT-0001',
+      date: '10/06/2026',
+      benefit: 'Cesta básica',
+      status: 'Entregue',
+    },
+    {
+      code: 'ENT-0002',
+      date: '09/06/2026',
+      benefit: 'Gás',
+      status: 'Entregue',
+    },
+  ]
+
+  return (
+    <div className="space-y-4 p-2">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-heading text-xl font-bold">
+            {t('section_title', 'Histórico de Entregas')}
+          </h1>
+        </div>
+        <span className="bg-primary shrink-0 rounded px-3 py-1.5 text-xs font-medium text-white">
+          {t('new_button', 'Registrar nova entrega')}
+        </span>
+      </div>
+
+      <div className="rounded-xl border p-4">
+        <h2 className="text-heading text-base font-semibold uppercase">
+          {t('card_title', 'Entregas Realizadas')}
+        </h2>
+
+        <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="border-input flex flex-1 items-center gap-2 rounded-lg border px-3 py-2 text-sm text-gray-400">
+            🔍 {t('search_placeholder', 'Buscar por benefício, data, local...')}
+          </div>
+          <div className="flex items-center gap-2 text-sm text-gray-400">
+            <span>Período De:</span>
+            <div className="border-input rounded border px-2 py-1">
+              dd/mm/aaaa
+            </div>
+            <span>Até:</span>
+            <div className="border-input rounded border px-2 py-1">
+              dd/mm/aaaa
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-4 rounded-lg border">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-muted/50 border-b">
+                <th className="text-muted-foreground px-4 py-2 text-left font-medium">
+                  Nº Entrega
+                </th>
+                <th className="text-muted-foreground px-4 py-2 text-left font-medium">
+                  Data
+                </th>
+                <th className="text-muted-foreground px-4 py-2 text-left font-medium">
+                  Benefício
+                </th>
+                <th className="text-muted-foreground px-4 py-2 text-left font-medium">
+                  Status
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {mockItems.map((item) => (
+                <tr key={item.code} className="last:border-0 border-b">
+                  <td className="px-4 py-2 font-medium">{item.code}</td>
+                  <td className="text-muted-foreground px-4 py-2">
+                    {item.date}
+                  </td>
+                  <td className="px-4 py-2">{item.benefit}</td>
+                  <td className="px-4 py-2">
+                    <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
+                      {item.status}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="border-muted mt-3 rounded border border-dashed p-3 text-center text-xs text-gray-400">
+          Estado vazio: “{t('empty_state', 'Nenhuma entrega encontrada.')}”
+        </div>
       </div>
     </div>
   )

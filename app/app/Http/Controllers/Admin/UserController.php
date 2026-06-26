@@ -102,13 +102,11 @@ class UserController extends Controller
 
     private function toClientShape(User $user): array
     {
-        $roleLabel = $user->role === UserRole::Admin ? 'Administrador' : 'Operador';
-
         return [
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
-            'role' => $roleLabel,
+            'role' => $user->role->value,
             'status' => $user->ativo ? 'Ativo' : 'Inativo',
             'last_access' => $user->last_login_at?->toIso8601String(),
             'created_at' => $user->created_at?->toIso8601String(),

@@ -245,7 +245,7 @@ export default function FamilyInfoPage({
             <ArrowLeftIcon /> Voltar
           </Button>
         </Link>
-        <Button variant={'primary'}>
+        <Button onClick={() => router.visit('/entregas')} variant={'primary'}>
           <PlusIcon /> Registrar nova entrega
         </Button>
       </footer>

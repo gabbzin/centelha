@@ -9,6 +9,7 @@ interface DeliveryFilterBarProps {
   onStartDateChange: (value: string) => void
   endDate: string
   onEndDateChange: (value: string) => void
+  searchPlaceholder?: string
 }
 
 export function DeliveryFilterBar({
@@ -18,6 +19,7 @@ export function DeliveryFilterBar({
   onStartDateChange,
   endDate,
   onEndDateChange,
+  searchPlaceholder = 'Buscar por benefício, data, local...',
 }: DeliveryFilterBarProps) {
   return (
     <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
@@ -26,7 +28,7 @@ export function DeliveryFilterBar({
         <Input
           className="pl-9"
           onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Buscar por benefício, data, local..."
+          placeholder={searchPlaceholder}
           value={search}
         />
       </div>

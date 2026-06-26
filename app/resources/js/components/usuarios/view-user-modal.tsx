@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { formatLastAccess, getInitials } from './data'
 import { RoleBadge } from './role-badge'
 import { StatusBadge } from './status-badge'
-import type { User } from './types'
+import { type User, userRoleLabel } from './types'
 
 interface ViewUserModalProps {
   user: User | null
@@ -67,7 +67,9 @@ export function ViewUserModal({
                   </div>
                   <div>
                     <p className="text-foreground/60 text-xs">Perfil</p>
-                    <p className="text-sm font-semibold">{user.role}</p>
+                    <p className="text-sm font-semibold">
+                      {userRoleLabel(user.role)}
+                    </p>
                   </div>
                 </div>
 

@@ -80,6 +80,7 @@ class HandleInertiaRequests extends Middleware
             'family.register' => 'familia',
             'family.edit' => 'familia',
             'beneficios' => 'beneficios',
+            'entregas' => 'entregas',
             default => null,
         };
     }

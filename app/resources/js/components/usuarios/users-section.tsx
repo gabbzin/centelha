@@ -102,7 +102,10 @@ export function UsersSection({ users }: UsersSectionProps) {
             },
             onError: (errors) => {
               const first = Object.values(errors)[0] as string | undefined
-              toaster.createError('Erro', first ?? 'Não foi possível atualizar.')
+              toaster.createError(
+                'Erro',
+                first ?? 'Não foi possível atualizar.',
+              )
             },
           },
         )
@@ -122,7 +125,10 @@ export function UsersSection({ users }: UsersSectionProps) {
             },
             onError: (errors) => {
               const first = Object.values(errors)[0] as string | undefined
-              toaster.createError('Erro', first ?? 'Não foi possível cadastrar.')
+              toaster.createError(
+                'Erro',
+                first ?? 'Não foi possível cadastrar.',
+              )
             },
           },
         )
