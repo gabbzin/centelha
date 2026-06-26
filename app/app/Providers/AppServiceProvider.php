@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Models\CommunityCenter;
-use App\Services\DashboardDataProvider;
-use App\Services\DeliveryOrchestrator;
-use App\Services\FamilyRegistration;
 use App\Services\StorageService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\View;
@@ -34,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
         Model::preventSilentlyDiscardingAttributes();
 
         View::composer('app', function ($view) {
-            $view->with('communityCenter', CommunityCenter::instance());
+            $view->with('communityCenter', CommunityCenter::first());
         });
     }
 }

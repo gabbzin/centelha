@@ -26,6 +26,8 @@ export interface CommunityCenter {
   favicon_path: string | null
   logo_url: string
   favicon_url: string
+  has_custom_logo: boolean
+  has_custom_favicon: boolean
   fontFamily: string
   settings: Record<string, unknown>
   colors: Record<string, string>

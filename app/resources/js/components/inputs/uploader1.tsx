@@ -7,11 +7,15 @@ import {
 
 interface Uploader1Props {
   onFilesChange?: (files: FileWithPreview[]) => void
+  onRemove?: () => void
   currentFaviconUrl?: string
+  hasCustomFavicon?: boolean
 }
 export default function Uploader1({
   onFilesChange,
+  onRemove,
   currentFaviconUrl,
+  hasCustomFavicon,
 }: Uploader1Props) {
   const [{ files }, { removeFile, openFileDialog, getInputProps }] =
     useFileUpload({
@@ -39,13 +43,17 @@ export default function Uploader1({
               src={previewUrl}
               width={32}
             />
-          ) : (
+          ) : hasCustomFavicon && currentFaviconUrl ? (
             <div aria-hidden="true" className="rounded-lg bg-zinc-200 py-1">
               <img
                 alt="Favicon atual"
                 className="size-9"
-                src={currentFaviconUrl ?? '/logo.png'}
+                src={currentFaviconUrl}
               />
+            </div>
+          ) : (
+            <div aria-hidden="true" className="rounded-lg bg-zinc-200 py-1">
+              <img alt="Favicon padrão" className="size-9" src="/logo.png" />
             </div>
           )}
         </div>
@@ -67,7 +75,10 @@ export default function Uploader1({
             <div className="inline-flex text-xs">
               <Button
                 aria-label={`Remove ${fileName}`}
-                onClick={() => removeFile(files[0]?.id)}
+                onClick={() => {
+                  removeFile(files[0]?.id)
+                  onRemove?.()
+                }}
                 size={'icon-lg'}
                 variant={'destructive'}
               >

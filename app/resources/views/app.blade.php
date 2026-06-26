@@ -8,7 +8,7 @@
 
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
-        <link rel="icon" type="image/png" href="{{ $communityCenter?->favicon_url }}" />
+        <link rel="icon" type="image/png" href="{{ $communityCenter?->favicon_url ?? asset('logo.png') }}" />
 
         @routes
         @viteReactRefresh
@@ -19,3 +19,4 @@
         @inertia
     </body>
 </html>
+# test

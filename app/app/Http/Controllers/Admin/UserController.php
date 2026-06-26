@@ -11,6 +11,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -55,7 +56,7 @@ class UserController extends Controller
             'ativo' => true,
         ]);
 
-        \Illuminate\Support\Facades\Password::sendResetLink(['email' => $data['email']]);
+        Password::sendResetLink(['email' => $data['email']]);
 
         return to_route('gestao-sistema.usuarios-beneficios')
             ->with('success', 'Usuário cadastrado! Um link para definir a senha foi enviado ao e-mail.');

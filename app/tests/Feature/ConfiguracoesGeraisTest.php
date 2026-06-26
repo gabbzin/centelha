@@ -15,23 +15,23 @@ class ConfiguracoesGeraisTest extends TestCase
 
     private function createCommunityCenter(array $overrides = []): CommunityCenter
     {
-        return CommunityCenter::firstOrCreate(
-            ['name' => 'Centelha'],
-            array_merge([
+        return CommunityCenter::factory()
+            ->singleton()
+            ->create(array_merge([
+                'name' => 'Centelha',
                 'location' => '',
                 'slogan' => 'Slogan',
                 'rodape_text' => '',
-                'logo_path' => './logo.png',
-                'favicon_path' => './logo.png',
+                'logo_path' => 'logo.svg',
+                'favicon_path' => 'logo.png',
                 'fontFamily' => 'Inter',
                 'settings' => [],
-            ], $overrides)
-        );
+            ], $overrides));
     }
 
     public function test_admin_can_upload_logo(): void
     {
-        Storage::fake('public');
+        Storage::fake('minio');
 
         $user = User::factory()->create(['role' => 'admin']);
         $this->createCommunityCenter();
@@ -49,18 +49,18 @@ class ConfiguracoesGeraisTest extends TestCase
 
         $this->assertNotNull($center->logo_path);
         $this->assertStringStartsWith('logos/', $center->logo_path);
-        Storage::disk('public')->assertExists($center->logo_path);
+        Storage::disk('minio')->assertExists($center->logo_path);
     }
 
     public function test_uploading_new_logo_deletes_old_one(): void
     {
-        Storage::fake('public');
+        Storage::fake('minio');
 
         $user = User::factory()->create(['role' => 'admin']);
         $center = $this->createCommunityCenter([
             'logo_path' => 'logos/old-hash.png',
         ]);
-        Storage::disk('public')->put('logos/old-hash.png', 'old-content');
+        Storage::disk('minio')->put('logos/old-hash.png', 'old-content');
 
         $this->withSession(['_token' => 'test-token'])
             ->actingAs($user)
@@ -73,19 +73,19 @@ class ConfiguracoesGeraisTest extends TestCase
 
         $center->refresh();
 
-        Storage::disk('public')->assertMissing('logos/old-hash.png');
-        Storage::disk('public')->assertExists($center->logo_path);
+        Storage::disk('minio')->assertMissing('logos/old-hash.png');
+        Storage::disk('minio')->assertExists($center->logo_path);
     }
 
     public function test_remove_logo_flag_deletes_file_and_clears_path(): void
     {
-        Storage::fake('public');
+        Storage::fake('minio');
 
         $user = User::factory()->create(['role' => 'admin']);
         $center = $this->createCommunityCenter([
             'logo_path' => 'logos/logo-hash.png',
         ]);
-        Storage::disk('public')->put('logos/logo-hash.png', 'content');
+        Storage::disk('minio')->put('logos/logo-hash.png', 'content');
 
         $this->withSession(['_token' => 'test-token'])
             ->actingAs($user)
@@ -99,12 +99,12 @@ class ConfiguracoesGeraisTest extends TestCase
         $center->refresh();
 
         $this->assertNull($center->logo_path);
-        Storage::disk('public')->assertMissing('logos/logo-hash.png');
+        Storage::disk('minio')->assertMissing('logos/logo-hash.png');
     }
 
     public function test_admin_can_upload_favicon(): void
     {
-        Storage::fake('public');
+        Storage::fake('minio');
 
         $user = User::factory()->create(['role' => 'admin']);
         $this->createCommunityCenter();
@@ -122,18 +122,18 @@ class ConfiguracoesGeraisTest extends TestCase
 
         $this->assertNotNull($center->favicon_path);
         $this->assertStringStartsWith('favicons/', $center->favicon_path);
-        Storage::disk('public')->assertExists($center->favicon_path);
+        Storage::disk('minio')->assertExists($center->favicon_path);
     }
 
     public function test_remove_favicon_flag_deletes_file_and_clears_path(): void
     {
-        Storage::fake('public');
+        Storage::fake('minio');
 
         $user = User::factory()->create(['role' => 'admin']);
         $center = $this->createCommunityCenter([
             'favicon_path' => 'favicons/favicon-hash.png',
         ]);
-        Storage::disk('public')->put('favicons/favicon-hash.png', 'content');
+        Storage::disk('minio')->put('favicons/favicon-hash.png', 'content');
 
         $this->withSession(['_token' => 'test-token'])
             ->actingAs($user)
@@ -147,7 +147,7 @@ class ConfiguracoesGeraisTest extends TestCase
         $center->refresh();
 
         $this->assertNull($center->favicon_path);
-        Storage::disk('public')->assertMissing('favicons/favicon-hash.png');
+        Storage::disk('minio')->assertMissing('favicons/favicon-hash.png');
     }
 
     public function test_logo_url_accessor_returns_default_when_path_is_null(): void
@@ -166,29 +166,115 @@ class ConfiguracoesGeraisTest extends TestCase
 
     public function test_logo_url_accessor_returns_storage_url_for_uploaded_file(): void
     {
-        Storage::fake('public');
+        Storage::fake('minio');
 
         $center = $this->createCommunityCenter(['logo_path' => 'logos/hash.png']);
+        Storage::disk('minio')->put('logos/hash.png', 'content');
 
-        $this->assertStringContainsString('/storage/logos/hash.png', $center->logo_url);
+        $this->assertStringContainsString('/logos/hash.png', $center->logo_url);
     }
 
     public function test_logo_file_path_returns_null_for_missing_file(): void
     {
-        Storage::fake('public');
+        Storage::fake('minio');
 
         $center = $this->createCommunityCenter(['logo_path' => 'logos/missing.png']);
 
         $this->assertNull($center->logoFilePath());
     }
 
-    public function test_logo_file_path_returns_real_path_for_existing_file(): void
+    public function test_logo_file_path_returns_url_for_existing_minio_file(): void
     {
-        Storage::fake('public');
+        Storage::fake('minio');
 
         $center = $this->createCommunityCenter(['logo_path' => 'logos/hash.png']);
-        Storage::disk('public')->put('logos/hash.png', 'content');
+        Storage::disk('minio')->put('logos/hash.png', 'content');
 
-        $this->assertNotNull($center->logoFilePath());
+        $this->assertStringContainsString('/logos/hash.png', $center->logoFilePath());
+    }
+
+    public function test_remove_logo_flag_returns_default_url(): void
+    {
+        Storage::fake('minio');
+
+        $user = User::factory()->create(['role' => 'admin']);
+        $center = $this->createCommunityCenter([
+            'logo_path' => 'logos/logo-hash.png',
+        ]);
+        Storage::disk('minio')->put('logos/logo-hash.png', 'content');
+
+        $this->withSession(['_token' => 'test-token'])
+            ->actingAs($user)
+            ->put('/gestao-sistema/configuracoes-gerais', [
+                '_token' => 'test-token',
+                'name' => $center->name,
+                'fontFamily' => $center->fontFamily,
+                'remove_logo' => '1',
+            ]);
+
+        $center->refresh();
+
+        $this->assertNull($center->logo_path);
+        $this->assertStringEndsWith('logo.svg', $center->logo_url);
+        Storage::disk('minio')->assertMissing('logos/logo-hash.png');
+    }
+
+    public function test_remove_favicon_flag_returns_default_url(): void
+    {
+        Storage::fake('minio');
+
+        $user = User::factory()->create(['role' => 'admin']);
+        $center = $this->createCommunityCenter([
+            'favicon_path' => 'favicons/favicon-hash.png',
+        ]);
+        Storage::disk('minio')->put('favicons/favicon-hash.png', 'content');
+
+        $this->withSession(['_token' => 'test-token'])
+            ->actingAs($user)
+            ->put('/gestao-sistema/configuracoes-gerais', [
+                '_token' => 'test-token',
+                'name' => $center->name,
+                'fontFamily' => $center->fontFamily,
+                'remove_favicon' => '1',
+            ]);
+
+        $center->refresh();
+
+        $this->assertNull($center->favicon_path);
+        $this->assertStringEndsWith('logo.png', $center->favicon_url);
+        Storage::disk('minio')->assertMissing('favicons/favicon-hash.png');
+    }
+
+    public function test_default_paths_are_treated_as_static(): void
+    {
+        foreach (['logo.svg', './logo.svg', 'logo.png', './logo.png'] as $index => $path) {
+            $center = CommunityCenter::factory()->create([
+                'name' => "Centelha {$index}",
+                'logo_path' => $path,
+            ]);
+
+            $this->assertFalse($center->has_custom_logo, "Failed for path: {$path}");
+            $this->assertStringEndsWith(ltrim($path, './'), $center->logo_url);
+        }
+    }
+
+    public function test_custom_paths_are_detected_correctly(): void
+    {
+        Storage::fake('minio');
+
+        $center = $this->createCommunityCenter(['logo_path' => 'logos/hash.png']);
+        Storage::disk('minio')->put('logos/hash.png', 'content');
+
+        $this->assertTrue($center->has_custom_logo);
+        $this->assertStringContainsString('/logos/hash.png', $center->logo_url);
+    }
+
+    public function test_logo_url_for_missing_minio_file_returns_default(): void
+    {
+        Storage::fake('minio');
+
+        $center = $this->createCommunityCenter(['logo_path' => 'logos/missing.png']);
+
+        $this->assertStringEndsWith('logo.svg', $center->logo_url);
     }
 }

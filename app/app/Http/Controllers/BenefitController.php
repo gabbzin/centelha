@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBenefitRequest;
 use App\Http\Requests\UpdateBenefitRequest;
 use App\Models\Benefit;
+use App\Services\DashboardDataProvider;
 use App\Services\StorageService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -68,6 +69,8 @@ class BenefitController extends Controller
 
         $benefit->update(['code' => $benefit->generateCode()]);
 
+        DashboardDataProvider::bumpVersion();
+
         return redirect()->route('beneficios');
     }
 
@@ -107,6 +110,8 @@ class BenefitController extends Controller
 
         $benefit->update($updateData);
 
+        DashboardDataProvider::bumpVersion();
+
         return redirect()->route('beneficios');
     }
 
@@ -115,6 +120,8 @@ class BenefitController extends Controller
         $this->storage->delete(self::IMAGE_DISK, $benefit->image_path);
 
         $benefit->delete();
+
+        DashboardDataProvider::bumpVersion();
 
         return redirect()->route('beneficios');
     }

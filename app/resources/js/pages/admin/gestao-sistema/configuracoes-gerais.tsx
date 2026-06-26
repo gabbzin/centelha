@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import type { FileWithPreview } from '@/hooks/inputs/use-file-upload'
 import { LayoutBase } from '@/layouts/layout'
+import { getFontByValue } from '@/settings/fonts'
 import type { SharedData } from '@/types'
 
 // Componente principal
@@ -30,7 +31,7 @@ export default function ConfiguracoesGerais() {
           platformName: communityCenter?.name ?? '',
           slogan: communityCenter?.slogan ?? '',
           footerText: communityCenter?.rodape_text ?? '',
-          font: communityCenter?.fontFamily ?? 'poppins',
+          font: getFontByValue(communityCenter?.fontFamily).value,
           social_links:
             communityCenter?.social_links?.map((s) => ({
               value: s.value,

@@ -2,18 +2,12 @@ import { usePage } from '@inertiajs/react'
 import type { SharedData } from '@/types'
 import { Logo } from '../logo'
 
-function hasCustomLogo(
-  logoPath: string | null | undefined,
-): logoPath is string {
-  return !!logoPath && logoPath.includes('/')
-}
-
 export default function AppLogo() {
   const { communityCenter } = usePage<SharedData>().props
 
   return (
     <a className="flex items-center gap-3.5" href={route('dashboard')}>
-      {hasCustomLogo(communityCenter?.logo_path) ? (
+      {communityCenter?.has_custom_logo ? (
         <img
           alt={communityCenter?.name ?? 'Logo'}
           className="h-10 w-auto object-contain"

@@ -14,11 +14,15 @@ import { Label } from '../ui/label'
 
 interface Uploader2Props {
   onFilesChange?: (files: FileWithPreview[]) => void
+  onRemove?: () => void
   currentLogoUrl?: string
+  hasCustomLogo?: boolean
 }
 export default function Uploader2({
   onFilesChange,
+  onRemove,
   currentLogoUrl,
+  hasCustomLogo,
 }: Uploader2Props) {
   const maxSize = convertMB(2)
   const [
@@ -34,6 +38,7 @@ export default function Uploader2({
     },
   ] = useFileUpload({
     accept: 'image/svg+xml,image/png,image/jpeg,image/jpg,image/gif',
+    maxFiles: 1,
     maxSize,
     onFilesChange,
   })
@@ -66,7 +71,7 @@ export default function Uploader2({
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center px-4 py-3 text-center">
-              {currentLogoUrl ? (
+              {hasCustomLogo && currentLogoUrl ? (
                 <div className="mb-2 flex h-11 shrink-0 items-center justify-center bg-transparent">
                   <img
                     alt="Logo atual"
@@ -104,7 +109,10 @@ export default function Uploader2({
           <div className="absolute top-4 right-4">
             <Button
               aria-label="Remove image"
-              onClick={() => removeFile(files[0]?.id)}
+              onClick={() => {
+                removeFile(files[0]?.id)
+                onRemove?.()
+              }}
               size={'icon'}
               variant={'destructive'}
             >
