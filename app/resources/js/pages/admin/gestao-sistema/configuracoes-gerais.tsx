@@ -86,8 +86,10 @@ function FormContent({
     // Chamada da API
     router.put(route('gestao-sistema.configuracoes-gerais.update'), formData, {
       preserveState: true,
-      onSuccess: () =>
-        toaster.createSuccess('Sucesso', 'Configurações salvas!'),
+      onSuccess: () => {
+        toaster.createSuccess('Sucesso', 'Configurações salvas!')
+        router.reload({ only: ['communityCenter'] })
+      },
       onError: () => toaster.createError('Erro', 'Algo deu errado.'),
     })
   }
