@@ -7,9 +7,13 @@ import { LayoutBase } from '@/layouts/layout'
 
 interface UsuariosBeneficiosProps {
   users: PaginatedUsers
+  tags: PaginatedTags
 }
 
-export default function UsuariosBeneficios({ users }: UsuariosBeneficiosProps) {
+export default function UsuariosBeneficios({
+  users,
+  tags,
+}: UsuariosBeneficiosProps) {
   return (
     <LayoutBase
       description="Gerencie os acessos do sistema, perfis administrativos e cadastre os benefícios sociais e insumos distribuídos às famílias."
@@ -20,7 +24,7 @@ export default function UsuariosBeneficios({ users }: UsuariosBeneficiosProps) {
       <Head title="Usuários e Benefícios" />
       <div className="space-y-6">
         <UsersSection users={users} />
-        <BenefitsCatalogSection />
+        <TagsSection tags={tags} />
       </div>
     </LayoutBase>
   )

@@ -8,6 +8,7 @@ use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,27 +21,45 @@ class UserController extends Controller
 {
     public function index(Request $request): Response
     {
-        $search = $request->input('search');
-        $role = $request->input('role', 'all');
+        $search = $request->input("search");
+        $role = $request->input("role", "all");
 
         $users = User::query()
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
-                    $q->where('name', 'ilike', "%{$search}%")
-                        ->orWhere('email', 'ilike', "%{$search}%");
+                    $q->where("name", "like", "%{$search}%")
+                        ->orWhere("email", "like", "%{$search}%");
                 });
             })
-            ->when($role && $role !== 'all', function ($query, $role) {
-                $query->where('role', $role);
+            ->when($role && $role !== "all", function ($query, $role) {
+                $query->where("role", $role);
             })
-            ->orderBy('id', 'desc')
+            ->orderBy("id", "desc")
             ->paginate(5)
             ->withQueryString();
 
         $users->getCollection()->transform(fn (User $user) => $this->toClientShape($user));
 
-        return Inertia::render('admin/gestao-sistema/usuarios-beneficios', [
-            'users' => $users,
+        $tagSearch = $request->input("tag_search");
+
+        $tags = Tag::query()
+            ->when($tagSearch, function ($query, $tagSearch) {
+                $query->where("name", "like", "%{$tagSearch}%");
+            })
+            ->orderBy("id", "desc")
+            ->paginate(8)
+            ->withQueryString()
+            ->through(fn (Tag $tag) => [
+                "id" => $tag->id,
+                "name" => $tag->name,
+                "color" => $tag->color,
+                "icon" => $tag->icon,
+                "created_at" => $tag->created_at?->toIso8601String(),
+            ]);
+
+        return Inertia::render("admin/gestao-sistema/usuarios-beneficios", [
+            "users" => $users,
+            "tags" => $tags,
         ]);
     }
 
@@ -57,7 +76,7 @@ class UserController extends Controller
             'activated_at' => null,
         ]);
 
-        Password::sendResetLink(['email' => $data['email']]);
+        Password::sendResetLink(["email" => $data["email"]]);
 
         return to_route('gestao-sistema.usuarios-beneficios')
             ->with('success', 'Usuário cadastrado! Um link de ativação foi enviado ao e-mail para definição de senha.');
@@ -80,8 +99,8 @@ class UserController extends Controller
 
         $user->update($update);
 
-        return to_route('gestao-sistema.usuarios-beneficios')
-            ->with('success', 'Usuário atualizado com sucesso!');
+        return to_route("gestao-sistema.usuarios-beneficios")
+            ->with("success", "Usuário atualizado com sucesso!");
     }
 
     public function resendActivation(User $user): RedirectResponse
@@ -100,24 +119,24 @@ class UserController extends Controller
     public function deactivate(Request $request, User $user): RedirectResponse
     {
         if ($request->user()->is($user)) {
-            return to_route('gestao-sistema.usuarios-beneficios')
-                ->with('error', 'Você não pode desativar o seu próprio usuário.');
+            return to_route("gestao-sistema.usuarios-beneficios")
+                ->with("error", "Você não pode desativar o seu próprio usuário.");
         }
 
         if ($user->role === UserRole::Admin && $this->activeAdminsCount() <= 1) {
-            return to_route('gestao-sistema.usuarios-beneficios')
-                ->with('error', 'Não é possível desativar o único administrador ativo.');
+            return to_route("gestao-sistema.usuarios-beneficios")
+                ->with("error", "Não é possível desativar o único administrador ativo.");
         }
 
-        $user->update(['ativo' => false]);
+        $user->update(["ativo" => false]);
 
-        return to_route('gestao-sistema.usuarios-beneficios')
-            ->with('success', "Usuário {$user->name} desativado.");
+        return to_route("gestao-sistema.usuarios-beneficios")
+            ->with("success", "Usuário {$user->name} desativado.");
     }
 
     private function activeAdminsCount(): int
     {
-        return User::where('role', UserRole::Admin)->where('ativo', true)->count();
+        return User::where("role", UserRole::Admin)->where("ativo", true)->count();
     }
 
     private function toClientShape(User $user): array

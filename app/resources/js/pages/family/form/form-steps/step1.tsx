@@ -4,27 +4,49 @@ import { useHookFormMask } from 'use-mask-input'
 import { DatePicker } from '@/components/inputs/date-picker'
 import { InputLabel } from '@/components/inputs/input-label'
 import { InputSelect } from '@/components/inputs/input-select'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
-export function Step1() {
-  // Puxando contexto do form
+
+interface Step1Props {
+  availableTags?: Array<{
+    id: number
+    name: string
+    color: string
+    icon: string | null
+  }>
+}
+
+export function Step1({ availableTags = [] }: Step1Props) {
   const {
     control,
     register,
     formState: { errors },
+    watch,
+    setValue,
   } = useFormContext()
 
-  // Implementação da máscara
   const registerWithMask = useHookFormMask(register)
 
-  // Criação de novos inputs
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'family_members',
   })
+
+  const selectedTags: number[] = watch('tags') ?? []
+
+  const handleTagToggle = (tagId: number) => {
+    const current = selectedTags.includes(tagId)
+      ? selectedTags.filter((id) => id !== tagId)
+      : [...selectedTags, tagId]
+    setValue('tags', current, { shouldValidate: true })
+  }
+
   const eightteenYearsAgo = new Date(
     Date.now() - 1000 * 60 * 60 * 24 * 365 * 18,
   )
+
   return (
     <div className="grid grid-cols-1 gap-2 p-1 md:grid-cols-2">
       <div className="col-span-2">
@@ -76,6 +98,37 @@ export function Step1() {
           today={eightteenYearsAgo}
         />
       </div>
+
+      {availableTags.length > 0 && (
+        <div className="col-span-2 space-y-2">
+          <Label className="text-heading text-xs font-semibold">
+            Necessidades Específicas
+          </Label>
+          <div className="flex flex-wrap gap-2">
+            {availableTags.map((tag) => {
+              const isSelected = selectedTags.includes(tag.id)
+              return (
+                <button
+                  key={tag.id}
+                  className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-all ${
+                    isSelected
+                      ? 'border-foreground bg-accent'
+                      : 'border-border hover:border-foreground/50'
+                  }`}
+                  onClick={() => handleTagToggle(tag.id)}
+                  type="button"
+                >
+                  <span
+                    className="h-2.5 w-2.5 rounded-full"
+                    style={{ backgroundColor: tag.color }}
+                  />
+                  {tag.name}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
 
       <div className="col-span-2 flex items-center justify-end text-xs font-bold text-[#094785] uppercase">
         Membros adicionados: {fields.length}

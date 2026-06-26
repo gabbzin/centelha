@@ -51,6 +51,7 @@ export const familySchema = z.object({
   recebe_auxilio: z.enum(['sim', 'nao']).optional(),
   auxilios_recebidos: z.string().optional(),
   general_observations: z.string().optional(),
+  tags: z.array(z.number()).optional(),
 })
 export type FormData = z.infer<typeof familySchema>
 export const defaultValues: FormData = {
@@ -72,6 +73,7 @@ export const defaultValues: FormData = {
   recebe_auxilio: undefined,
   auxilios_recebidos: '',
   general_observations: '',
+  tags: [],
 }
 
 function strip(value: string | null | undefined): string {
@@ -107,5 +109,6 @@ export function familyToFormData(family: Family): FormData {
     recebe_auxilio: family.receives_government_aid ? 'sim' : 'nao',
     auxilios_recebidos: family.government_aid_description ?? '',
     general_observations: family.general_observations ?? '',
+  tags: (family.tags ?? []).map((t) => t.id),
   }
 }

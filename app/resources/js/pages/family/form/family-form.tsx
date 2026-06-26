@@ -25,7 +25,7 @@ import {
 } from './schema/family-schema'
 
 const STEP_FIELDS: Array<Array<keyof FormData>> = [
-  ['name', 'cpf', 'telefone', 'email', 'data_nascimento', 'family_members'],
+  ['name', 'cpf', 'telefone', 'email', 'data_nascimento', 'family_members', 'tags'],
   ['cep', 'logradouro', 'numero', 'cidade', 'UF', 'bairro', 'moradia'],
   ['fonte_renda', 'renda_familiar', 'recebe_auxilio', 'auxilios_recebidos'],
 ]
@@ -56,6 +56,7 @@ interface FamilyFormProps {
   onNext: () => void
   onPrev: () => void
   family?: Family
+  availableTags?: Array<{ id: number; name: string; color: string; icon: string | null }>
 }
 
 export function FamilyForm({
@@ -64,6 +65,7 @@ export function FamilyForm({
   onNext,
   onPrev,
   family,
+  availableTags = [],
 }: FamilyFormProps) {
   const form = useForm<FormData>({
     mode: 'onTouched',
@@ -125,7 +127,11 @@ export function FamilyForm({
           </CardHeader>
           <CardContent className="min-h-0 flex-1 overflow-y-auto bg-background">
             <FormProvider {...form}>
-              <form onSubmit={onSubmit}>{STEPS[step].component}</form>
+              <form onSubmit={onSubmit}>
+                {step === 0 && <Step1 availableTags={availableTags} />}
+                {step === 1 && <Step2 />}
+                {step === 2 && <Step3 />}
+              </form>
             </FormProvider>
           </CardContent>
         </Card>

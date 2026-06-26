@@ -44,9 +44,9 @@ class Messages
 
     const MSG_18 = 'Informações da família atualizadas com sucesso.';
 
-    const MSG_19 = 'Família desativada com sucesso.';
+    const MSG_19 = 'Família desativada com sucesso!';
 
-    const MSG_20 = 'Família ativada com sucesso.';
+    const MSG_20 = 'Família ativada com sucesso!';
 
     public static array $types = [
         self::MSG_01 => 'success',

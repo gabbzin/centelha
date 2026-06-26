@@ -144,6 +144,31 @@ export default function FamilyInfoPage({
 
               <Separator className={'my-1'} />
 
+              {family.tags && family.tags.length > 0 && (
+                <section>
+                  <HeadingCard
+                    icon={<ArchiveIcon className="size-4" />}
+                    title="Necessidades"
+                  />
+                  <div className="flex flex-wrap gap-2">
+                    {family.tags.map((tag) => (
+                      <span
+                        key={tag.id}
+                        className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium"
+                        style={{
+                          backgroundColor: `${tag.color}20`,
+                          color: tag.color,
+                        }}
+                      >
+                        {tag.name}
+                      </span>
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              <Separator className={'my-1'} />
+
               {family.general_observations && (
                 <>
                   <Separator className={'my-1'} />

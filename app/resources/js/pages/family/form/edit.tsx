@@ -12,8 +12,9 @@ const STEPS = [
 ]
 interface EditFamilyPageProps {
   family: Family
+  availableTags: Array<{ id: number; name: string; color: string; icon: string | null }>
 }
-export default function EditFamilyPage({ family }: EditFamilyPageProps) {
+export default function EditFamilyPage({ family, availableTags }: EditFamilyPageProps) {
   const { pageSettings } = usePage<SharedData>().props
   const texts = (pageSettings?.texts as Record<string, string>) ?? {}
   const [currentStep, setCurrentStep] = useState(0)
@@ -41,6 +42,7 @@ export default function EditFamilyPage({ family }: EditFamilyPageProps) {
 
           <main className="bg-surface flex h-full flex-col justify-between p-8">
             <FamilyForm
+              availableTags={availableTags}
               family={family}
               onNext={() => setCurrentStep((s) => s + 1)}
               onPrev={() => setCurrentStep((s) => s - 1)}
